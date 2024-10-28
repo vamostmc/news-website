@@ -1,0 +1,44 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand title-admin" routerLink="/admin">News Admin</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" routerLink="/admin">
+              <i class="fa-solid fa-house"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fa-solid fa-envelope"></i> Messages
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fa-solid fa-bell"></i> Notifications
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto userAdmin">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-user icon-user"></i>Xin chào, {{ userNameAdmin }}
+            </a>
+            <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarUser">
+              <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Profile</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fa-solid fa-lock"></i> Password</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item logout" href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+            </ul>
+            
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  

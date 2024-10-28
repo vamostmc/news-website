@@ -1,0 +1,211 @@
+.navbar {
+    margin-bottom: 0;
+}
+
+.sidebar {
+  min-height: 100vh;
+  background-color: #343a40;
+  color: #fff;
+}
+
+.sidebar a {
+  color: #fff;
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  background-color: #495057;
+  text-decoration: none;
+}
+
+.content {
+  padding: 20px;
+}
+
+.table-container {
+  margin-top: 20px;
+}
+
+.btn-add {
+  margin-bottom: 20px;
+}
+
+#navbarNav{
+    margin-left: 95px;
+}
+
+.title-admin{
+    margin-left: 20px;
+}
+
+.nav-item{
+    margin-right: 20px;
+}
+
+
+.dashboard-card {
+    margin: 20px 0;
+    border-radius: 10px; /* Bo tròn góc */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+    transition: transform 0.3s; /* Hiệu ứng khi hover */
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px); /* Nâng card lên khi hover */
+}
+
+
+
+.card-header {
+    padding: 10px 15px;
+    background-color: #15487f; /* Màu nền cho tiêu đề card */
+    color: white; /* Màu chữ trắng */
+    border-top-left-radius: 10px; /* Bo tròn góc trên bên trái */
+    border-top-right-radius: 10px; /* Bo tròn góc trên bên phải */
+}
+
+.card-body {
+    background-color: #ffffff; /* Màu nền trắng cho nội dung */
+}
+
+.list-group-item {
+    background-color: #f8f9fa; /* Màu nền cho từng item */
+    border: none; /* Không viền */
+    padding: 20px 22px; /* Padding cho item */
+    
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền */
+}
+
+.list-group-item:hover {
+    background-color: #e2e6ea; /* Màu nền khi hover */
+}
+
+.recent-posts, .recent-comments {
+    margin-top: 30px; /* Khoảng cách cho các phần */
+}
+
+.recent-posts .card, .recent-comments .card {
+    border-radius: 10px; /* Bo tròn góc cho card */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng cho card */
+}
+
+.list-group {
+    border-radius: 10px; /* Bo tròn góc cho danh sách */
+    overflow: hidden; /* Ẩn các góc nhọn */
+    
+}
+
+.notification-header {
+    font-size: 1.1em;         /* Kích thước chữ lớn hơn */
+    font-weight: bold;        /* Đậm */
+    color: #333;              /* Màu chữ tối */
+    font-family: Arial, sans-serif; 
+  }
+
+  .time-ago {
+    font-size: 15px;
+    font-weight: normal;       /* Viết thường */
+    font-style: italic;        /* Có thể thêm nghiêng nếu muốn */
+    color: #888;              /* Màu chữ khác, có thể điều chỉnh theo ý muốn */
+  }
+
+
+  
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Di chuyển nội dung sang bên phải */
+  margin: 10px 0; /* Khoảng cách trên và dưới */
+  margin-right: 10px;
+}
+
+.pagination-controls button {
+  background-color: #007bff; /* Màu nền */
+  color: white; /* Màu chữ */
+  border: none; /* Bỏ viền */
+  border-radius: 5px; /* Bo góc */
+  padding: 3px 8px; /* Padding cho nút */
+  margin: 0 5px; /* Khoảng cách giữa các nút */
+  cursor: pointer; /* Hiển thị con trỏ tay khi hover */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển đổi màu nền */
+}
+
+.pagination-controls button:hover {
+  background-color: #0056b3; /* Màu nền khi hover */
+}
+
+.pagination-controls button:disabled {
+  background-color: #cccccc; /* Màu nền cho nút disabled */
+  cursor: not-allowed; /* Hiển thị con trỏ không được phép khi hover */
+}
+
+.pagination-controls span {
+  margin: 0 10px; /* Khoảng cách bên trái và bên phải */
+  font-weight: bold; /* In đậm chữ */
+  font-size: 16px; /* Kích thước chữ */
+}
+
+
+
+
+
+.notification-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Khoảng cách giữa các thông báo */
+  margin: 20px; /* Khoảng cách chung cho container */
+}
+
+.notification {
+  display: flex;
+  align-items: center; /* Căn giữa theo chiều dọc */
+  padding: 10px 15px; /* Padding cho thông báo */
+  border-radius: 5px; /* Bo góc cho thông báo */
+  color: white; /* Màu chữ trắng */
+  position: relative; /* Để đặt nút đóng đúng vị trí */
+}
+
+.success {
+  background-color: #4CAF50; /* Màu nền cho success */
+}
+
+.info {
+  background-color: #2196F3; /* Màu nền cho info */
+}
+
+.warning {
+  background-color: #FFC107; /* Màu nền cho warning */
+}
+
+.icon {
+  font-size: 20px; /* Kích thước icon */
+  margin-right: 10px; /* Khoảng cách giữa icon và nội dung */
+}
+
+.content {
+  flex: 1; /* Cho phép nội dung mở rộng */
+}
+
+.close-btn {
+  background: none; /* Không có nền */
+  border: none; /* Không có viền */
+  color: white; /* Màu chữ trắng */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+  font-size: 18px; /* Kích thước chữ cho nút đóng */
+  position: absolute; /* Đặt nút đóng */
+  right: 10px; /* Khoảng cách bên phải */
+  top: 10px; /* Khoảng cách trên */
+}
+
+
+
+
+
+
+
+
+
+

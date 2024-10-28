@@ -1,0 +1,181 @@
+<app-navbar-admin></app-navbar-admin>
+
+<div class="container-fluid">
+    <div class="row">
+      
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar">
+        <app-menu-admin></app-menu-admin>
+      </div>
+
+      <div class="col-md-10 content">
+        <h2 class="my-4">Quản lý người dùng</h2>
+        <button class="btn btn-primary mb-4" (click)="selectedAddForm()" >Thêm mới</button>
+          
+        <div class="table-container">
+          <table class="table table-hover table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th>STT</th>
+                <th class="user">ID người dùng</th>
+                <th>Tên đầy đủ</th>
+                <th>Tên tài khoản</th>
+                <th class="roles" >Vai trò</th>
+                <th>Ngày sinh</th>
+                <th>Ngày tạo</th>
+                <th class="address">Địa chỉ</th>
+                <th>Trạng thái</th>
+                <th>Hành Động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of userView | paginate: { itemsPerPage: 5, currentPage: p  }; let i = index;  ">
+                <td> {{ (p - 1) * 5 + (i + 1) }}</td>
+                <td > {{ user.id }}</td>
+                <td> {{ user.fullName }}</td>
+                <td> {{ user.userName }}</td>
+                <td> {{ getRoleDisplayName(user.userRoleList || []) }} </td>
+                <td> {{ user.dateUser | date:'yyyy-MM-dd' }}</td>
+                <td> {{ user.creationDate | date:'yyyy-MM-dd' }}</td>
+                <td> {{ user.address }}</td>
+                <td (click)="$event.stopPropagation()">
+                  <div id="wrapper" *ngIf="user.id">
+                    <input type="checkbox" (change)="updateStatus(user.id,$event)" [checked]="user.isActive" class="switch-toggle" id="light-dark" >
+                 </div>
+                </td>
+                <td>
+                  <div class="d-flex flex-column justify-content-center align-items-center">
+                    <button *ngIf="user.id" (click)="selectedEditUser(user.id)" class="btn btn-success btn-sm me-3px btn-show" data-bs-toggle="modal" data-bs-target="#editPostModal">
+                      <i class="fa-solid fa-pen-to-square"></i> Sửa
+                    </button>
+                    <button *ngIf="user.id" (click)="deleteUser(user.id)" class="btn btn-danger btn-sm btn-show">
+                      <i class="fa-solid fa-trash"></i> Xóa
+                    </button>
+                  </div>
+                </td>  
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination-controls">
+            <pagination-controls 
+              [maxSize]="4" 
+              [directionLinks]="true" 
+              [autoHide]="false"    
+              (pageChange)="p = $event">
+              [id]="'custom-pagination'">
+          </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Start Add User -->
+<div class="overlay" *ngIf="showAddUser" (click)="hideForm()"></div>
+
+<div class="form-container" *ngIf="showAddUser">
+  <div class="form-header">
+      <span class="form-title">Thêm mới người dùng</span>
+      <button class="close-btn" (click)="hideForm()">X</button>
+  </div>
+  <div class="form-body" [formGroup]="postForm">
+      <div class="form-left">
+          <div class="image-upload">
+              <!-- <label for="product-image">Hình ảnh người dùng:</label> -->
+              <img id="product-image" src="https://via.placeholder.com/150" alt="Product Image" />
+              
+          </div>
+      </div>
+      <div class="form-right">
+          <div class="tab-content">
+            <div class="form-section">
+              <label for="full-name">Tên đầy đủ:</label>
+              <input type="text" id="full-name" formControlName="fullName" placeholder="Nhập tên đầy đủ của người dùng" />
+              
+              <label for="username">Tên tài khoản (username):</label>
+              <input type="text" id="username" formControlName="userName" placeholder="Tên tài khoản dùng để đăng nhập" />
+              
+              <label for="password">Mật khẩu:</label>
+              <input type="password" id="password" formControlName="password" placeholder="Mật khẩu dùng để đăng nhập" />
+              
+              <label for="confirm-password">Xác nhận mật khẩu:</label>
+              <input type="password" id="confirm-password" formControlName="confirmPassword" placeholder="Xác nhận mật khẩu đăng nhập" />
+              
+              <label for="role">Vai trò:</label>
+              <select formControlName="userRole" id="role">
+                <option value="Customer">Khách hàng</option>
+                <option value="Manager">Quản lý</option>
+              </select>
+              
+              <label for="date-user">Ngày sinh:</label>
+              <input type="date" formControlName="dateUser" id="date-user" />
+              
+              <label for="address">Địa chỉ:</label>
+              <input list="provinces" formControlName="address" id="address" placeholder="Nhập hoặc chọn tỉnh thành" />
+            </div>
+          </div>
+          
+      </div>
+  </div>
+  <div class="form-footer">
+      <button type="submit" (click)="addUser()" class="submit-btn" >Lưu</button>
+  </div>
+</div> 
+<!-- End Add User -->
+
+
+
+
+<!-- Start Edit User -->
+<div class="overlay" *ngIf="showEditUser" (click)="hideForm()"></div>
+
+<div class="form-container" *ngIf="showEditUser">
+  <div class="form-header">
+      <span class="form-title">Sửa thông tin người dùng</span>
+      <button class="close-btn" (click)="hideForm()">X</button>
+  </div>
+  <div class="form-body" [formGroup]="editForm">
+      <div class="form-left">
+          <div class="image-upload">
+              <!-- <label for="product-image">Hình ảnh người dùng:</label> -->
+              <img id="product-image" src="https://via.placeholder.com/150" alt="Product Image" />
+              
+          </div>
+      </div>
+      <div class="form-right">
+          <div class="tab-content">
+            <div class="form-section">
+              <label for="full-name">Tên đầy đủ:</label>
+              <input type="text" id="full-name" formControlName="fullName" placeholder="Nhập tên đầy đủ của người dùng" />
+              
+              <label for="username">Tên tài khoản (username):</label>
+              <input type="text" id="username" formControlName="userName" placeholder="Tên tài khoản dùng để đăng nhập" />
+              
+              <label for="role">Vai trò:</label>
+              <select formControlName="userRoleList" id="role">
+                <option value="Customer">Khách hàng</option>
+                <option value="Manager">Quản lý</option>
+              </select>
+
+              <label for="postStatus" class="post-status-label">Trạng thái người dùng: </label>
+                  <div id="statusWrapper" class="custom-checkbox-wrapper">
+                      <input type="checkbox" formControlName="isActive"  class="switch-toggle-new" id="light-dark" >
+                  </div>
+              
+              <label for="date-user">Ngày sinh:</label>
+              <input type="date" formControlName="dateUser" id="date-user" />
+              
+              <label for="address">Địa chỉ:</label>
+              <input list="provinces" formControlName="address" id="address" placeholder="Nhập hoặc chọn tỉnh thành" />
+            </div>
+          </div>
+          
+      </div>
+  </div>
+  <div class="form-footer">
+      <button type="submit" (click)="updateUser()" class="submit-btn" >Lưu</button>
+  </div>
+</div> 
+<!-- End Edit User  -->
+

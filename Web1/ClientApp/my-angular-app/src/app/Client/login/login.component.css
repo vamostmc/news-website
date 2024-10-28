@@ -1,0 +1,80 @@
+.login-wrap {
+    background: #fff;
+    border-radius: 10px;
+    padding: 40px;
+}
+
+.icon {
+    color: #007bff;
+    font-size: 3rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.form-control {
+    height: 45px;
+    border-radius: 30px;
+    padding-left: 20px;
+}
+
+.checkbox-wrap input {
+    margin-right: 10px;
+}
+
+.submit {
+    background-color: #007bff;
+    border-radius: 30px;
+}
+
+.shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.login-check {
+    margin-top: 50px;
+}
+
+.w-50.text-md-right a {
+    margin-left: 80px; /* Điều chỉnh số lượng px theo ý muốn */
+}
+
+
+
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f9fa;
+  }
+  .login-card {
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+  }
+  .login-card h2 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: bold;
+  }
+  .login-btn {
+    background-color: #0d6efd;
+    color: white;
+  }
+  .login-btn:hover {
+    background-color: #0b5ed7;
+  }
+  .form-floating .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }

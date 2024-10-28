@@ -1,0 +1,92 @@
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.menu-container a {
+  padding: 12px 15px;
+  text-decoration: none;
+  color: #f8f9fa;
+  background-color: #343a40;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+  text-align: left; /* Align icons and text to the left */
+  display: flex; /* Flexbox for icon and text alignment */
+  align-items: center; /* Vertically center icon and text */
+}
+
+.menu-container a i {
+  margin-right: 10px; /* Space between icon and text */
+  font-size: 18px; /* Adjust icon size */
+}
+
+.menu-container a:hover {
+  background-color: #495057;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu-container a:active {
+  background-color: #6c757d;
+  color: #e9ecef;
+}
+
+/* Active link styling */
+.menu-container a.active {
+  background-color: #007bff; /* Highlight active menu item with blue background */
+  color: #fff; /* White text for active menu */
+}
+
+.menu-container a.active i {
+  color: #fff; /* White icon for active menu */
+}
+
+.menu-container h4 {
+  color: #f8f9fa;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
+
+
+.menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: block;
+  position: absolute;
+  background-color: #495057;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  
+  /* Ẩn nội dung dropdown và di chuyển nó lên trên */
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown-content a {
+  color: yellow;
+  padding: 5px 6px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Hiệu ứng khi hover vào menu */
+.dropdown:hover .dropdown-content {
+  /* Hiển thị dropdown */
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -1,0 +1,162 @@
+<!-- Content Add Tin Tuc -->
+<app-navbar-admin></app-navbar-admin>
+
+<div class="container-fluid">
+    <div class="row">
+       <!-- Sidebar -->
+       <div class="col-md-2 sidebar">
+        <app-menu-admin></app-menu-admin>
+      </div>
+      
+      <!-- Content Add Tin Tuc -->
+      <div class="col-md-10 content">
+          <h2 class="my-4">Mô tả chi tiết bài viết</h2>
+          <button class="btn-back" (click)="goBack()">
+            <i class="fas fa-arrow-left"></i> Quay lại
+            
+          </button>
+
+          <div class="progress_bar text-center">
+            <ul class="progress_bar-steps" data-cur_step_index="0">
+              <li class="progress_bar-step" [ngClass]="{'active': currentStep >= 1}">
+                <span>1</span>
+              </li>
+              <li class="progress_bar-step" [ngClass]="{'active': currentStep >= 2}">
+                <span>2</span>
+              </li>
+              <li class="progress_bar-step" [ngClass]="{'active': currentStep >= 3}">
+                <span>3</span>
+              </li>
+              <li class="progress_bar-step" [ngClass]="{'active': currentStep >= 4}">
+                <span>4</span>
+              </li>
+              <li class="progress_bar-progress" [style.width]="progressWidth + '%'"></li>
+            </ul>
+          </div>
+
+          <div class="body-form">
+            <!-- Nội dung từng bước -->
+            <form [formGroup]="postForm" >
+              <div *ngIf="currentStep === 1" class="step-content">
+                <h3>Sửa thông tin cơ bản</h3>
+                
+                <!-- Bootstrap row to split content -->
+                <div class="form-body" [formGroup]="postForm">
+                  <div class="form-left">
+                    
+                    <div id="statusWrapper" class="custom-checkbox-wrapper">
+                      <label for="postStatus" class="post-status-label">Trạng thái bài viết</label>
+                      <input type="checkbox" formControlName="TrangThai" class="switch-toggle-new" id="light-dark" >
+                    </div>
+                    <div class="image-upload">
+                      <img *ngIf="imagePreview" [src]="imagePreview" id="post-image" alt="Post Image" style="width: 300px; max-height: 300px; object-fit: cover;" />
+                      <img  *ngIf="!imagePreview && selectImage" id="post-image" [src]="getFullImageUrl(selectImage)" alt="Post Image" />
+                      <input type="file" id="upload-image" formControlName="HinhAnh" (change)="onFileChange($event)" required />
+                      <label for="upload-image" class="custom-file-upload">
+                          <i class="fas fa-camera camera-icon"></i> <!-- Biểu tượng máy ảnh -->
+                        <span>Chọn hình ảnh</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                    <div class="form-right">
+                        <!-- Start Tab Thông Tin -->
+                        <div class="tab-content" >
+                            <div class="form-section">
+                                <label for="postTitle" class="form-label">Tiêu đề bài viết</label>
+                                <input type="text" class="form-control" id="postTitle" formControlName="TieuDe" placeholder="Nhập tiêu đề" required />
+              
+                                <label for="postCategory" class="form-label">Danh mục</label>
+                                <select class="form-select" id="postCategory" formControlName="DanhmucId" required>
+                                    <option value="" disabled selected>Chọn danh mục</option>
+                                    <option *ngFor="let danhmuc of danhmucs" [value]="danhmuc.danhmucId">{{ danhmuc.tenDanhMuc }}</option>
+                                </select>
+              
+                                <label for="postDate" class="form-label">Ngày đăng</label>
+                                <input type="date" class="form-control" id="postDate" formControlName="NgayDang" required />
+              
+                                <label for="updateDate" class="form-label">Ngày cập nhật</label>
+                                <input type="date" class="form-control" id="updateDate" formControlName="NgayCapNhat" required />
+                            
+                                <label for="postContent" class="form-label">Mô tả ngắn</label>
+                                <textarea class="form-control" id="postContent" formControlName="MoTaNgan" rows="3" placeholder="Nhập mô tả ngắn" required></textarea>
+                                
+                                <label for="viewCount" class="form-label">Lượng khách truy cập</label>
+                                <input type="number" class="form-control" id="viewCount" formControlName="LuongKhachTruyCap" value="0" required />
+                            </div>
+                        </div>
+                        <!-- End Tab Thông tin -->
+                    </div>
+
+                    
+                </div>
+              </div>
+
+            </form>
+
+            <div *ngIf="currentStep === 2" class="step-content">
+              <!-- Bước 2: Thêm chi tiết nội dung bài viết -->
+              <h3>Thêm chi tiết nội dung bài viết</h3>
+              <form [formGroup]="postForm">
+                <div class="editor-container">
+                  <editor
+                    formControlName="NoiDung"
+                    [init]="editorConfig" 
+                  ></editor>
+                  
+                </div>
+              </form>
+            </div>
+            <div *ngIf="currentStep === 3" class="step-content">
+              <!-- Bước 3: Xác nhận lại thông tin -->
+              <h3>Xác nhận thông tin</h3>
+              
+              <!-- Hiển thị thông tin đã nhập để xác nhận -->
+            </div>
+          
+            <div *ngIf="currentStep === 4" class="step-content">
+              <!-- Bước 4: Hoàn tất -->
+              <h3>Hoàn tất quá trình</h3>
+              <p>Bài viết đã được cập nhật thành công!</p>
+
+              <!-- Loading -->
+              <div *ngIf="loading" class="loading-overlay">
+                <div class="spinner-container">
+                  <div class="spinner"></div>
+                  <p>Vui lòng chờ ...</p>
+                </div>
+              </div>
+            </div>
+          
+            <!-- Nút điều hướng giữa các bước -->
+            <div class="progress_bar-nav">
+              <button class="prev" [disabled]="currentStep === 1 || currentStep === 4" (click)="previousStep()">Trước</button>
+              <button class="next" [ngClass]="{'active': currentStep !== steps.length}" (click)="nextStep()">Sau</button>
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
+
+      
+    
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

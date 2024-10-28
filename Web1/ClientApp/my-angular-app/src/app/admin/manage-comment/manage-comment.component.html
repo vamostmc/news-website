@@ -1,0 +1,170 @@
+<app-navbar-admin></app-navbar-admin>
+
+<div class="container-fluid">
+    <div class="row">
+      
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar">
+        <app-menu-admin></app-menu-admin>
+      </div>
+
+      <div class="col-md-10 content">
+        <h2 class="my-4">Quản lý bình luận</h2>
+        <button class="btn btn-primary mb-4" (click)="selectedAdd()">Thêm bình luận mới</button>
+          
+        <div class="table-container">
+          <table class="table table-hover table-bordered">
+            <thead class="table-dark text-center">
+              <tr>
+                <th>STT</th>
+                <th>ID</th>
+                <th>Người bình luận</th>
+                <th class="Title-comment">Bài tin tức bình luận</th>
+                <th class="body-comment">Nội dung</th>
+                <th>Ngày bình luận</th>
+                <th>Trạng thái</th>
+                <th>Hành Động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let comment of comments | paginate: { itemsPerPage: 5, currentPage: p  }; let i = index;">
+                <td>{{ (p - 1) * 5 + (i + 1) }}</td>
+                <td>{{ comment.binhluanId }}</td>
+                <td>{{ comment.userName ? comment.userName : 'Tài khoản bị xóa' }}</td>
+                <td>{{ comment.tieuDeTinTuc }}</td>
+                <td>{{ comment.noiDung.substring(0, 100) }}{{ comment.noiDung.length > 100 ? '...' : '' }}</td>
+
+                <td>{{ comment.ngayGioBinhLuan | date:'yyyy-MM-dd hh:mm a' }}</td>
+                <td>
+                    <div id="wrapper">
+                      <input type="checkbox" (change)="UpdateStatus(comment.binhluanId, $event)" [checked]="comment.trangThai" class="switch-toggle" id="light-dark" >
+                   </div>
+                </td>
+                <td>
+                  <div class="d-flex flex-column justify-content-center align-items-center">
+                    <button (click)="selectedEdit(comment.binhluanId)" class="btn btn-success btn-sm me-3px btn-show" data-bs-toggle="modal" data-bs-target="#editPostModal">
+                      <i class="fa-solid fa-pen-to-square"></i> Sửa
+                    </button>
+                    <button (click)="Delete(comment.binhluanId)" class="btn btn-danger btn-sm btn-show">
+                      <i class="fa-solid fa-trash"></i> Xóa
+                    </button>
+                  </div>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+          <div class="pagination-controls">
+            <pagination-controls 
+              [maxSize]="4" 
+              [directionLinks]="true" 
+              [autoHide]="false"    
+              (pageChange)="p = $event">
+              [id]="'custom-pagination'">
+          </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  
+<!-- Start Add Comment -->
+<div class="overlay" *ngIf="showAddComment" (click)="hideForm()"></div>
+
+<div class="form-container" *ngIf="showAddComment">
+  <div class="form-header">
+      <span class="form-title">Thêm mới bình luận</span>
+      <button class="close-btn" (click)="hideForm()">X</button>
+  </div>
+  <div class="form-body" [formGroup]="postForm">
+      <div class="form-left">
+          <div class="image-upload">
+              <!-- <label for="product-image">Hình ảnh người dùng:</label> -->
+              <img id="product-image" src="https://via.placeholder.com/150" alt="Product Image" />
+              
+          </div>
+      </div>
+      <div class="form-right">
+          <div class="tab-content">
+            <div class="form-section">
+              <label for="tintucId">Bài tin tức bình luận:</label>
+              <input id="tintucId" formControlName="tintucId" placeholder="Nhập ID tin tức hoặc tên bài viết" type="text" required>
+            
+              <label for="userId">Người dùng bình luận:</label>
+              <input id="userId" formControlName="userId" placeholder="Nhập ID người dùng hoặc tên người dùng" type="text" required>
+            
+              <label for="ngayGioBinhLuan">Ngày giờ bình luận:</label>
+              <input id="ngayGioBinhLuan" formControlName="ngayGioBinhLuan" type="datetime-local" required>
+            
+              <label for="noiDung">Nội dung bình luận:</label>
+              <textarea id="noiDung" formControlName="noiDung" required></textarea>
+
+              <label for="postStatus" class="post-status-label">Trạng thái bình luận: </label>
+              <div id="statusWrapper" class="custom-checkbox-wrapper">
+                  <input type="checkbox" formControlName="trangThai"  class="switch-toggle-new" id="light-dark" >
+              </div>
+            </div>
+          </div>
+          
+      </div>
+  </div>
+  <div class="form-footer">
+      <button type="submit" (click)="AddComment()"  class="submit-btn" >Lưu</button>
+  </div>
+</div> 
+<!-- End Add Comment -->
+
+
+
+
+
+
+<!-- Start Edit Comment -->
+<div class="overlay" *ngIf="showEditComment" (click)="hideForm()"></div>
+
+<div class="form-container" *ngIf="showEditComment">
+  <div class="form-header">
+      <span class="form-title">Sửa bình luận</span>
+      <button class="close-btn" (click)="hideForm()">X</button>
+  </div>
+  <div class="form-body" [formGroup]="editForm">
+      <div class="form-left">
+          <div class="image-upload">
+              <!-- <label for="product-image">Hình ảnh người dùng:</label> -->
+              <img id="product-image" src="https://via.placeholder.com/150" alt="Product Image" />
+              
+          </div>
+      </div>
+      <div class="form-right">
+          <div class="tab-content">
+            <div class="form-section">
+              <label for="tintucId">Bài tin tức bình luận:</label>
+              <input id="tintucId" formControlName="tieuDeTinTuc" [readonly]="true"  placeholder="Nhập ID tin tức hoặc tên bài viết">
+            
+              <label for="userId">Người dùng bình luận:</label>
+              <input id="userId" formControlName="userName" [readonly]="true"  placeholder="Nhập ID người dùng hoặc tên người dùng">
+            
+              <label for="ngayGioBinhLuan">Ngày giờ bình luận:</label>
+              <input id="ngayGioBinhLuan" formControlName="ngayGioBinhLuan" type="datetime-local" required>
+            
+              <label for="noiDung">Nội dung bình luận:</label>
+              <textarea id="noiDung" formControlName="noiDung" required></textarea>
+
+              <label for="postStatus" class="post-status-label">Trạng thái bình luận: </label>
+              <div id="statusWrapper" class="custom-checkbox-wrapper">
+                  <input type="checkbox" formControlName="trangThai"  class="switch-toggle-new" id="light-dark" >
+              </div>
+            </div>
+          </div>
+          
+      </div>
+  </div>
+  <div class="form-footer">
+      <button type="submit" (click)="EditComment()"  class="submit-btn" >Lưu</button>
+  </div>
+</div> 
+<!-- End Edit Comment -->

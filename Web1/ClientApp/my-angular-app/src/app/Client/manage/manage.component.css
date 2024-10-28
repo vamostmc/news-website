@@ -1,0 +1,116 @@
+.container {
+    width: 80%; /* Đặt chiều rộng cho container */
+    margin: 0 auto; /* Căn giữa container */
+}
+
+.card {
+    
+    float: left;
+    margin-left: 20px;
+}
+
+.card-body {
+    width: 200px;
+}
+
+.title-list {
+    margin-top: 50px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.btn {
+    margin-right: 2px; /* Khoảng cách giữa các nút */
+    background-color: rgb(184, 184, 210);
+}
+
+.edit-student-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto; /* Đặt khoảng cách từ trên xuống */
+    padding: 20px;
+    border: 1px solid #ccc; /* Viền cho form */
+    border-radius: 8px; /* Bo góc cho form */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho form */
+    max-width: 400px; /* Chiều rộng tối đa cho form */
+    background-color: #f9f9f9; /* Màu nền cho form */
+  }
+  
+  .edit-title {
+    margin-bottom: 20px;
+    color: #333; /* Màu chữ tiêu đề */
+  }
+  
+  .edit-student-form {
+    width: 100%; /* Đặt chiều rộng của form bằng 100% */
+  }
+  
+  .form-group {
+    margin-bottom: 15px; /* Khoảng cách giữa các trường */
+  }
+  
+  .form-group label {
+    display: block; /* Đặt label thành block để tạo khoảng cách */
+    margin-bottom: 5px; /* Khoảng cách dưới label */
+  }
+  
+  .form-group input {
+    width: 100%; /* Đặt chiều rộng của input bằng 100% */
+    padding: 10px; /* Padding cho input */
+    border: 1px solid #ccc; /* Viền cho input */
+    border-radius: 4px; /* Bo góc cho input */
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: space-between; /* Căn giữa các nút */
+  }
+  
+  .btn-update,
+  .btn-cancel {
+    padding: 10px 15px; /* Padding cho nút */
+    border: none; /* Xóa viền mặc định */
+    border-radius: 4px; /* Bo góc cho nút */
+    cursor: pointer; /* Đổi con trỏ khi hover */
+  }
+  
+  .btn-update {
+    background-color: rgb(184, 184, 210); /* Màu nền cho nút cập nhật */
+    color: white; /* Màu chữ cho nút cập nhật */
+  }
+  
+  .btn-cancel {
+    background-color: rgb(184, 184, 210); /* Màu nền cho nút hủy */
+    color: white; /* Màu chữ cho nút hủy */
+  }
+  
+  .btn-update:hover {
+    background-color: #218838; /* Màu nền khi hover nút cập nhật */
+  }
+  
+  .btn-cancel:hover {
+    background-color: #c82333; /* Màu nền khi hover nút hủy */
+  }
+  
+  .btn-add {
+    margin-top: 20px;
+    margin-left: 35px;
+    width: 100px;
+    background-color: #007bff; /* Màu nền nút thêm */
+    color: white; /* Màu chữ nút thêm */
+    padding: 10px 15px; /* Padding cho nút */
+    border: none; /* Không có viền */
+    border-radius: 4px; /* Bo góc cho nút */
+    cursor: pointer; /* Chuyển đổi con trỏ khi hover */
+    margin-bottom: 20px; /* Khoảng cách dưới nút */
+  }
+  
+  .btn-add i {
+    margin-right: 5px; /* Khoảng cách giữa biểu tượng và chữ */
+  }
+  
+  .btn-add:hover {
+    background-color: #0056b3; /* Màu nền khi hover */
+  }

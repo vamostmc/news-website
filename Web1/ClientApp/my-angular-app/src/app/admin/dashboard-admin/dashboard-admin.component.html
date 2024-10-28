@@ -1,0 +1,127 @@
+<app-navbar-admin></app-navbar-admin>
+
+  <!-- Main Layout -->
+  <div class="container-fluid">
+    <div class="row">
+      
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar">
+          <app-menu-admin></app-menu-admin>
+      </div>
+      
+      
+  
+      <!-- Content -->
+      <div class="col-md-10 content">
+          <h2 class="my-4">Tổng quát</h2>
+          <!-- Phần trên - Thống kê -->
+          <div class="row">
+              <!-- Tổng số bài tin tức -->
+              <div class="col-md-4">
+                  <div class="card dashboard-card">
+                      <div class="card-header">
+                          <h5><i class="fas fa-file-alt"></i> Tổng số bài viết</h5>
+                      </div>
+                      <div class="card-body text-center">
+                          <h2> {{ tintucs.length }}</h2>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- Tổng số bình luận -->
+              <div class="col-md-4">
+                  <div class="card dashboard-card">
+                      <div class="card-header">
+                          <h5><i class="fas fa-comments"></i> Tổng số bình luận</h5>
+                      </div>
+                      <div class="card-body text-center">
+                          <h2>{{ comments.length }}</h2>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Tổng số người dùng đăng kí -->
+              <div class="col-md-4">
+                  <div class="card dashboard-card">
+                      <div class="card-header">
+                          <h5><i class="fas fa-users"></i> Lượng người dùng</h5>
+                      </div>
+                      <div class="card-body text-center">
+                          <h2>{{ totalCustomer }}</h2>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      
+          <!-- Start Dasdboard Tin Tuc -->
+          <div class="recent-posts">
+              <div class="card">
+                  <div class="card-header">
+                      <h5><i class="fas fa-newspaper"></i> Bài viết mới cập nhật</h5>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item notification-item" *ngFor="let noti of notificationsTinTuc | paginate: { itemsPerPage: 4, currentPage: pTinTuc }">
+                      <div class="notification-header">
+                        {{ noti.message }}
+                        <span class="time-ago">(Cách đây: {{ getTimeAgo(noti.timestamp) }})</span>
+                      </div>
+                      <div class="notification-footer">
+                        
+                        <span class="notification-timestamp">Cập nhật lúc: {{ noti.timestamp | date:'hh:mm a, yyyy-MM-dd' }}</span>
+                      </div>
+                    </li>
+                    <div class="pagination-controls">
+                        <button (click)="onPageChangeTinTuc(pTinTuc - 1)" [disabled]="pTinTuc === 1">
+                            <i class="fas fa-angle-double-left"></i> <!-- Icon cho nút "Trước" -->
+                        </button>
+                        <span>Trang {{ pTinTuc }}</span>
+                        <button (click)="onPageChangeTinTuc(pTinTuc + 1)" [disabled]="pTinTuc * itemsPerPage >= notificationsTinTuc.length">
+                            <i class="fas fa-angle-double-right"></i> <!-- Icon cho nút "Sau" -->
+                        </button>
+                    </div>
+                  </ul> 
+              </div>
+          </div>
+          <!-- End Dasdboard Tin Tuc -->
+
+          <!-- Start Dasdboard Comment -->
+          <div class="recent-comments">
+              <div class="card">
+                  <div class="card-header">
+                      <h5><i class="fas fa-comment-dots"></i> Bình luận mới cập nhật</h5>
+                  </div>
+                  
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item notification-item" *ngFor="let noti of notificationsBinhLuan | paginate: { itemsPerPage: 4, currentPage: pBinhLuan }">
+                      <div class="notification-header">
+                        {{ noti.message }}
+                        <span class="time-ago">(Cách đây: {{ getTimeAgo(noti.timestamp) }})</span>
+                      </div>
+                      <div class="notification-footer">
+                        
+                        <span class="notification-timestamp">Cập nhật lúc: {{ noti.timestamp | date:'hh:mm a, yyyy-MM-dd' }}</span>
+                      </div>
+                    </li>
+                    <div class="pagination-controls">
+                        <button (click)="onPageChangeBinhLuan(pBinhLuan - 1)" [disabled]="pBinhLuan === 1">
+                            <i class="fas fa-angle-double-left"></i> <!-- Icon cho nút "Trước" -->
+                        </button>
+                        <span>Trang {{ pBinhLuan }}</span>
+                        <button (click)="onPageChangeBinhLuan(pBinhLuan + 1)" [disabled]="pBinhLuan * itemsPerPage >= notificationsBinhLuan.length">
+                            <i class="fas fa-angle-double-right"></i> <!-- Icon cho nút "Sau" -->
+                        </button>
+                    </div>
+                    
+                  </ul> 
+              </div>
+          </div>
+          <!-- End Dashboard Comment -->
+
+      </div>
+  
+    </div>
+  </div>
+  
+
+
+ 

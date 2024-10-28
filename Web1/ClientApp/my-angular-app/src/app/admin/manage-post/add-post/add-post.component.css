@@ -1,0 +1,534 @@
+/* Start Menu Admin */
+.navbar {
+    margin-bottom: 0;
+  }
+  
+  .sidebar {
+    height: 61rem;
+    overflow-y: auto;
+    
+    background-color: #343a40;
+    color: #fff;
+  }
+  .sidebar a {
+    color: #fff;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+  }
+  .sidebar a:hover {
+    background-color: #495057;
+    text-decoration: none;
+  }
+  /* End Menu Admin */
+  
+
+
+
+
+
+
+
+
+
+
+
+/* Giảm chiều rộng của thanh công cụ */
+.tox-toolbar {
+    max-width: 100px; /* Giới hạn chiều rộng để buộc công cụ xuống dòng */
+    flex-wrap: wrap; /* Cho phép các phần tử trong thanh công cụ xuống dòng */
+}
+  
+  /* Căn chỉnh nội dung */
+  .editor-container {
+    max-width: 1100px; /* Giới hạn chiều rộng của container */
+    margin: 0 auto; /* Căn giữa */
+    margin-top: 30px;
+}
+
+
+
+.editor-container editor {
+  height: 100%; /* Đảm bảo editor chiếm toàn bộ chiều cao của container */
+}
+
+
+.main-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.content-left {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.notify-wrapper {
+  margin-left: auto;
+  padding-right: px; /* Khoảng cách từ mép phải màn hình */
+  margin-top: 20px;
+  width: 450px;
+  max-width: 500px;
+}
+
+.input-wrapper {
+  display: flex; /* Sử dụng flexbox để căn chỉnh các phần tử */
+  align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+.input-wrapper-upload {
+  position: relative; /* Đặt vị trí cho wrapper */
+  margin-bottom: 10px; /* Khoảng cách giữa các trường */
+}
+
+.error-icon-upload {
+  position: absolute; /* Đặt vị trí tuyệt đối */
+  left: 19%; /* Di chuyển biểu tượng sang bên trái */
+  top: 50%; /* Căn giữa theo chiều dọc */
+  transform: translateY(-50%); /* Căn chính xác theo chiều dọc */
+  color: red; /* Màu cho biểu tượng lỗi */
+}
+
+.error-icon {
+  color: #f44336; /* Đặt màu cho biểu tượng */
+  font-size: 1em; /* Kích thước biểu tượng */
+  margin-left: 5px; /* Khoảng cách giữa biểu tượng và label */
+  margin-bottom: 7px;
+}
+
+
+
+
+
+
+
+
+
+.article-list {
+    max-width: 800px; /* Giới hạn chiều rộng của danh sách */
+    margin: 20px auto; /* Căn giữa danh sách */
+    padding: 15px; /* Padding cho danh sách */
+    background-color: #f9f9f9; /* Nền sáng cho danh sách */
+    border-radius: 8px; /* Bo tròn các góc */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho danh sách */
+  }
+  
+  .article-item {
+    margin-bottom: 20px; /* Khoảng cách giữa các bài viết */
+    padding: 10px; /* Padding cho từng bài viết */
+    border: 1px solid #e0e0e0; /* Đường viền cho bài viết */
+    border-radius: 5px; /* Bo tròn các góc bài viết */
+    background-color: #ffffff; /* Nền trắng cho bài viết */
+  }
+  
+  .article-header {
+    display: flex; /* Sử dụng Flexbox để căn chỉnh tiêu đề và ngày */
+    justify-content: space-between; /* Tách biệt tiêu đề và ngày đăng */
+    align-items: center; /* Căn giữa theo chiều dọc */
+  }
+  
+  .article-date {
+    font-size: 0.9em; /* Kích thước chữ nhỏ hơn cho ngày đăng */
+    color: #888; /* Màu chữ nhạt cho ngày đăng */
+  }
+  
+  .article-summary {
+    margin: 10px 0; /* Khoảng cách cho tóm tắt bài viết */
+    color: #555; /* Màu chữ cho tóm tắt */
+  }
+  
+  .view-details-btn {
+    padding: 8px 12px; /* Padding cho nút */
+    border: none; /* Không có viền */
+    border-radius: 4px; /* Bo tròn các góc nút */
+    background-color: #007bff; /* Màu nền nút */
+    color: white; /* Màu chữ nút */
+    cursor: pointer; /* Con trỏ khi di chuột qua nút */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+  }
+  
+  .view-details-btn:hover {
+    background-color: #0056b3; /* Màu nền khi di chuột qua */
+  }
+  
+
+  .progress_bar {
+    text-align: center;
+    margin: auto;
+    justify-content: center;
+    margin-left: 18%;
+  }
+
+
+
+  .progress_bar-steps {
+    display: flex;
+    gap: 23%;
+    position: relative;
+    width: 78%;
+    margin-bottom: 20px;
+    
+  }
+  
+  .progress_bar-steps::before {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 5px;
+    width: 88%;
+    background: rgb(223, 221, 221);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: -1;
+  }
+  
+  .progress_bar-progress {
+    display: block;
+    position: absolute;
+    height: 5px;
+    background: green; /* Màu xanh lá cây cho thanh tiến trình */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: -1;
+    transition: width 0.5s ease;
+  }
+  
+  .progress_bar-step {
+    background: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    height: 50px;
+    width: 50px;
+    color: green; /* Màu chữ xanh lá cây */
+    border: 5px solid rgb(223, 221, 221);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    
+  }
+  
+  .progress_bar-step.active {
+    background: green; /* Màu bao phủ xanh lá cây khi đã hoàn thành */
+    color: white;      /* Đổi màu chữ khi hoàn thành */
+    border-color: green; /* Viền xanh lá cây */
+  }
+  
+  .step-content {
+    margin: 20px 0;
+    margin-right: 0%;
+  }
+  
+  .progress_bar-nav {
+    display: flex;
+    gap: 15px;
+    justify-content: center;    /* Căn giữa theo chiều ngang */
+    align-items: center;        /* Căn giữa theo chiều dọc */
+    margin-top: 30px;
+    margin-bottom: 60px;
+  }
+  
+  .progress_bar-nav button {
+    border-radius: 8px;
+    width: 100px;
+    height: 40px;
+    border: none;
+    background: lightgreen; /* Màu nền cho nút */
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .progress_bar-nav button:hover {
+    opacity: 0.8;
+  }
+  
+  .progress_bar-nav button[disabled] {
+    cursor: not-allowed;
+    background: grey; /* Màu nền cho nút khi bị vô hiệu hóa */
+  }
+  
+
+
+
+
+
+
+
+
+.body-form {
+  text-align: center;
+  margin: auto;
+}
+
+/* Định dạng cho body của form */
+.form-body {
+  display: flex;
+  
+}
+
+
+.form-left {
+  margin-top: 16px;
+  width: 30%;
+  padding-left: 5px;
+ 
+}
+
+.image-upload {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.image-upload img {
+  width: 50%; /* Giảm kích thước hình ảnh */
+  border-radius: 10px;
+  margin-top: -20px;
+  margin-bottom: 10px;
+  border: 2px solid #ddd; /* Đường viền cho hình ảnh */
+}
+
+.image-upload input {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Định dạng cho phần bên phải */
+.form-right {
+  margin-top: 14px;
+  width: 66%;
+}
+
+/* Định dạng cho tab */
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #f0f0f0; /* Màu nền cho nút tab */
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 5px; /* Bo tròn góc nút tab */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển đổi */
+}
+
+.tab-button:hover {
+  background-color: #e0e0e0; /* Hiệu ứng hover cho nút tab */
+}
+
+.tab-button.active {
+  background-color: #28a745; /* Màu nền cho nút tab đang hoạt động */
+  color: white;
+}
+
+/* Định dạng cho từng phần trong form */
+.form-section {
+  margin-bottom: 15px;
+}
+
+.form-section label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555; /* Màu chữ cho label */
+}
+
+.form-section input,
+.form-section select,
+.form-section textarea {
+  width: 90%;
+  padding: 10px; /* Padding lớn hơn cho input */
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s; /* Hiệu ứng chuyển đổi */
+}
+
+.description-label {
+  display: block; /* Giúp quản lý khoảng cách dễ hơn */
+  margin-bottom: 20px; /* Tùy chỉnh khoảng cách để lùi chữ xuống */
+  margin-top: 15px;
+}
+
+.add-detail-box {
+  width: 480px;  /* Chiều rộng của hình chữ nhật */
+  height: 200px; /* Chiều cao của hình chữ nhật */
+  background-color: #f9f9f9; /* Màu nền nhạt */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px dashed green; /* Viền nét đứt màu xanh lá cây */
+  border-radius: 15px; /* Làm viền bo tròn */
+  cursor: pointer;
+  text-align: center;
+  font-size: 24px; /* Kích thước chữ lớn hơn */
+  color: #333; /* Màu chữ */
+  transition: background-color 0.3s ease;
+}
+
+.add-detail-box:hover {
+  background-color: #f0f0f0; /* Hiệu ứng khi hover */
+}
+
+.add-detail-box i {
+  margin-right: 10px; /* Khoảng cách giữa icon và chữ */
+  font-size: 28px; /* Kích thước của icon dấu + */
+  color: green; /* Màu của icon */
+}
+
+.form-label {
+  text-align: left;
+}
+
+
+
+
+
+/* Định dạng cho nhãn trạng thái bài viết */
+.post-status-label {
+  font-size: 16px; /* Kích thước chữ */
+  margin-right: 10px; /* Khoảng cách giữa nhãn và checkbox */
+  vertical-align: middle; /* Đảm bảo nhãn căn chỉnh với checkbox */
+  font-weight: bolder;
+  margin-bottom: 5px;
+}
+
+/* Wrapper cho checkbox */
+.custom-checkbox-wrapper {
+  display: flex; /* Sử dụng flexbox để dễ dàng căn chỉnh */
+  flex-direction: column; /* Đặt chiều hướng theo cột */
+  align-items: flex-start;
+  margin-left: 25%;
+}
+
+/* Định dạng cho toggle switch */
+.switch-toggle-new {
+  position: relative;
+  width: 65px; /* Đặt độ rộng cho toggle */
+  height: 23px; /* Chiều cao cho toggle */
+  background-color: #ccc; /* Màu nền của toggle */
+  border-radius: 25px; /* Bo tròn các cạnh */
+  appearance: none; /* Ẩn checkbox mặc định */
+  
+  -webkit-appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+/* Nút tròn bên trong toggle switch */
+.switch-toggle-new::before {
+  content: "";
+  position: absolute;
+  top: 3px; /* Đặt nút bên trong */
+  left: 4px; /* Đặt nút bên trong */
+  width: 16px; /* Kích thước nút tròn */
+  height: 16px; /* Kích thước nút tròn */
+  background-color: #fff; /* Màu nền cho nút */
+  border-radius: 50%; /* Bo tròn nút */
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Đổ bóng cho nút */
+}
+
+/* Khi checkbox được chọn */
+.switch-toggle-new:checked {
+  background-color: #007BFF; /* Màu nền khi được chọn */
+}
+
+/* Di chuyển nút tròn khi bật */
+.switch-toggle-new:checked::before {
+  transform: translateX(39px); /* Di chuyển nút tròn khi bật */
+}
+
+
+.form-section input:focus,
+.form-section select:focus,
+.form-section textarea:focus {
+  border-color: #28a745; /* Đổi màu viền khi focus */
+}
+
+textarea {
+  height: 100px;
+}
+
+
+#upload-image {
+  display: none; /* Ẩn ô nhập file */
+}
+
+.custom-file-upload {
+  display: flex; /* Sử dụng flexbox để căn giữa icon và văn bản */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  cursor: pointer; /* Thay đổi con trỏ khi hover */
+  padding: 10px 15px; /* Khoảng cách bên trong cho nhãn */
+  border: 2px solid #ccc; /* Viền cho nhãn */
+  border-radius: 8px; /* Bo tròn góc */
+  background-color: #f9f9f9; /* Màu nền mặc định */
+  width: 182px; /* Đặt chiều rộng cố định cho nhãn */
+  margin: 10px auto; /* Tạo khoảng cách trên và dưới, căn giữa */
+  
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng chuyển đổi */
+}
+
+.custom-file-upload:hover {
+  background-color: #e0e0e0; /* Màu nền khi hover */
+  transform: scale(1.05); /* Phóng to một chút khi hover */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+}
+
+.camera-icon {
+  margin-right: 8px; /* Khoảng cách giữa icon và văn bản */
+  font-size: 20px; /* Kích thước biểu tượng máy ảnh */
+  color: #555; /* Màu sắc của icon */
+  transition: color 0.3s ease; /* Hiệu ứng chuyển đổi màu sắc */
+}
+
+
+
+
+
+
+
+.btn-back {
+  
+  background-color: #007bff; /* Màu nền */
+  color: white; /* Màu chữ */
+  border: none; /* Không có viền */
+  border-radius: 5px; /* Bo tròn góc */
+  padding: 10px 15px; /* Khoảng cách bên trong */
+  font-size: 16px; /* Kích thước chữ */
+  display: flex; /* Để căn chỉnh biểu tượng và chữ */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  cursor: pointer; /* Hiển thị con trỏ khi di chuột */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền khi hover */
+  margin-bottom: 15px;
+  margin-top: 0px;
+  width: 115px;
+}
+
+.btn-back i {
+  margin-right: 5px; /* Khoảng cách giữa biểu tượng và chữ */
+}
+
+.btn-back:hover {
+  background-color: #0056b3; /* Màu nền khi hover */
+}
+
+
+
+
+
+
+
+
+  

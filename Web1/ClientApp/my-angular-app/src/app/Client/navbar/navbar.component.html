@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">Vamos</a>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/success">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/">View</a>
+          </li>
+          <li class="nav-item" *ngIf="userRole === 'Manager'">
+            <a class="nav-link" routerLink="/manage">Manage</a>
+          </li>
+        </ul>
+        <form class="d-flex align-items-center">
+            <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
+            <button class="btn btn-outline-success me-2" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+          
+            <div class="user-info ms-2">
+              <span *ngIf="checkUser()" class="greeting me-2">Xin chào,</span>
+              <img *ngIf="checkUser()" (click)="toggleMenu($event)" src="https://www.tenforums.com/attachments/user-accounts-family-safety/322690d1615743307-user-account-image-log-user.png" alt="Avatar" class="avatar me-2">
+              <span *ngIf="checkUser()" class="user-name">{{ username }}</span>
+              <!-- <button *ngIf="checkUser()" class="btn btn-outline-danger ms-2" (click)="logOut()">Logout</button> -->
+            </div>
+
+            <!-- Dropdown menu -->
+            <div *ngIf="isDropdownOpen" class="dropdown-menu position-absolute">
+              <button class="dropdown-item">
+                <i class="fa-solid fa-street-view icon-spacing"></i> Role: {{ userRole }}
+              </button>
+              <button class="dropdown-item" (click)="logOut()">
+                <i class="fa-solid fa-right-from-bracket icon-spacing"></i> Logout
+              </button>
+            </div>
+            
+            <button *ngIf="!checkUser()" class="btn btn-outline-success ms-2" routerLink="/login" type="button">Login</button>
+            <button *ngIf="!checkUser()" class="btn btn-outline-success ms-2" routerLink="/register" type="button">Register</button>
+            
+          </form>
+      </div>
+    </div>
+</nav>

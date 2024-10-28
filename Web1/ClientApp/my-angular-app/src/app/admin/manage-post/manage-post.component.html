@@ -1,0 +1,268 @@
+
+<app-navbar-admin></app-navbar-admin>
+
+  <!-- Main Layout -->
+  <div class="container-fluid">
+    <div class="row">
+      
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar">
+        <app-menu-admin></app-menu-admin>
+      </div>
+      <!-- End Sidebar -->
+
+      <!-- Loading -->
+      <div *ngIf="loading" class="loading-overlay">
+        <div class="spinner-container">
+          <div class="spinner"></div>
+          <p>Vui lòng chờ ...</p>
+        </div>
+      </div>
+
+  
+      <!-- Show Tin Tuc -->
+      <div class="col-md-10 content" >
+        <h2>Quản lý bài viết</h2>
+        <div class="d-flex justify-content-between align-items-center .controls-container mb-3">
+          
+          <!-- Add Button on the left -->
+          <button class="btn btn-primary btn-add"  (click)="SelectedAddForm()">
+            <i class="fa-solid fa-plus"></i> Thêm bài viết
+          </button>
+      
+          <!-- Button Group on the right -->
+          <div class="d-flex align-items-center button-group">
+      
+            <div class="input-group position-relative">
+              <div class="form-outline" data-mdb-input-init>
+                <input
+                  [(ngModel)]="searchTerm"
+                  (input)="onSearchChange()"
+                  id="search-input"
+                  type="search"
+                  class="form-control custom-input"
+                  placeholder="Search"
+                  spellcheck="false"
+                />
+              </div>
+              <button id="search-button" type="button" (click)="searchTintuc(searchTerm)" class="btn btn-primary">
+                <i class="fas fa-search"></i>
+              </button>
+            
+              <!-- Danh sách gợi ý sẽ xuất hiện ngay bên dưới input -->
+              <ul *ngIf="tintucSearch.length > 0" class="suggestions-list position-absolute w-100">
+                <li *ngFor="let tinsearch of tintucSearch" (click)="selectedInfo(tinsearch.tintucId)" class="list-group-item d-flex align-items-center" >
+                  <img [src]="getFullImageUrl(tinsearch.hinhAnh)" alt="image" class="suggestion-image">
+                  <div class="ml-2">
+                    <span>{{ tinsearch.tieuDe }}</span>
+                    <br>
+                    <span><i class="dm-font">{{ tinsearch.tenDanhMuc || 'Chưa có danh mục' }}</i></span>
+                  </div>
+                </li>
+              </ul>
+              <div class="overlay-search" *ngIf="showSearchTintucs" (click)="hideForm()"></div>
+            </div>
+            
+            
+            <!-- Lọc nâng cao -->
+            <div class="filter-container">
+              <button class="btn btn-primary" (click)="toggleFilter()" id="filter-button">
+                <i class="fas fa-filter"></i> Lọc
+              </button>
+              <span class="filter-count" *ngIf="filterCount > 0">{{ filterCount }}</span>
+              <div class="overlay-filter" *ngIf="showFilterOptions" (click)="hideForm()"></div>
+
+              <div class="filter-dropdown" *ngIf="showFilterOptions">
+                <form [formGroup]="filterForm">
+                  <div class="filter-group">
+                    <label for="categoryFilter">Danh mục:</label>
+                    <select id="categoryFilter" formControlName="FilterCategory" (change)="updateFilterCount()">
+                      <option value="" >Tất cả</option>
+                      <option *ngFor="let danhmuc of danhmucs" [value]="danhmuc.danhmucId">{{ danhmuc.tenDanhMuc }}</option>
+                    </select>
+                  </div>
+              
+                  <div class="filter-group date-filter">
+                    <label for="dateStartFilter">Ngày đăng bài:</label>
+                    <div class="date-inputs">
+                      <input type="date" id="dateStartFilter" formControlName="FilterStartDate" (change)="updateFilterCount()">
+                      <label for="dateEndFilter" class="date-label">-</label>
+                      <input type="date" id="dateEndFilter" formControlName="FilterEndDate" (change)="updateFilterCount()">
+                    </div>
+                  </div>
+              
+                  <div class="filter-group date-filter">
+                    <label for="updateStartDate">Ngày cập nhật:</label>
+                    <div class="date-inputs">
+                      <input type="date" id="updateStartDate" formControlName="FilterStartUpdateDate" (change)="updateFilterCount()">
+                      <label for="updateEndDate" class="date-label">-</label>
+                      <input type="date" id="updateEndDate" formControlName="FilterEndUpdateDate" (change)="updateFilterCount()">
+                    </div>
+                  </div>
+              
+                  <div class="filter-group date-filter">
+                    <label for="commentStartFilter">Số lượng bình luận:</label>
+                    <div class="date-inputs">
+                      <input type="number" id="commentStartFilter" formControlName="FilterStartComment" (change)="updateFilterCount()">
+                      <label for="commentEndFilter" class="date-label">-</label>
+                      <input type="number" id="commentEndFilter" formControlName="FilterEndComment" (change)="updateFilterCount()">
+                    </div>
+                  </div>
+                
+                  <button type="button" class="btn btn-success btn-filter" (click)="applyFilters()">Áp Dụng</button>
+                  <button type="button" class="btn btn-secondary btn-filter" (click)="resetFilters()">Đặt Lại</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Table Show of Posts -->
+        <div class="table-container">
+          <table class="table table-hover table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th>STT</th>
+                <th>Hình ảnh</th>
+                <th class="danh-muc">Danh mục</th>
+                <th>Tiêu Đề</th>
+                <th>Ngày Đăng Bài</th>
+                <th>Ngày Cập Nhật</th>
+                <th>Số Lượng Bình Luận</th>
+                <th>Trạng thái</th>
+                <th>Hành Động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tintuc of tintucView | paginate: { itemsPerPage: 5, currentPage: p }" (click)="selectedInfo(tintuc.tintucId)">
+                <td>{{ tintuc.tintucId }}</td>
+                <td>
+                  <img [src]="getFullImageUrl(tintuc.hinhAnh)" alt="Hình ảnh" style="max-width: 100px; max-height: 100px;"/>
+                </td>
+                <td>{{ tintuc.tenDanhMuc || 'Không có' }}</td>
+                <td>{{ tintuc.tieuDe }}</td>
+                <td>{{ tintuc.ngayDang | date:'yyyy-MM-dd' }}</td>
+                <td>{{ tintuc.ngayCapNhat | date:'yyyy-MM-dd' }}</td>
+                <td>{{ tintuc.soLuongComment }}</td>
+
+                <td (click)="$event.stopPropagation()">
+                  
+                  <div id="wrapper">
+                    <input type="checkbox" [checked]="tintuc.trangThai" (change)="SelectStatus(tintuc.tintucId, $event)" class="switch-toggle" id="light-dark" >
+                 </div>
+                 
+                </td>
+
+                <td (click)="$event.stopPropagation()">
+                  <div class="action-buttons">
+                    <button class="btn btn-info btn-sm btn-show white-text" (click)="selectedInfo(tintuc.tintucId)">
+                      <i class="fa-solid fa-eye"></i> Xem
+                    </button>
+                    <button class="btn btn-success btn-sm  btn-show" (click)="selectedEdit(tintuc.tintucId)" data-bs-toggle="modal" data-bs-target="#editPostModal">
+                      <i class="fa-solid fa-pen-to-square"></i> Sửa
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-show" (click)="delete(tintuc.tintucId)"><i class="fa-solid fa-trash"></i> Xóa</button>
+                  </div>
+                </td>
+              </tr>
+              <!-- Thêm các bài viết khác -->
+            </tbody>
+          </table>
+          <div class="pagination-controls">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
+        </div>
+        <!-- End Show of Posts-->
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+<!-- Start Info Tintuc-->
+<div class="overlay-new-form" *ngIf="showInfoTintucs" (click)="hideForm()"></div>
+
+<div class="new-form-container" *ngIf="showInfoTintucs">
+  <div class="new-form-header">
+    <span class="new-form-title">Thông tin tin tức</span>
+    <button class="new-close-btn" (click)="hideForm()">X</button>
+  </div>
+
+  <div class="new-form-body" *ngIf="selectedTintuc">
+    
+    <div class="new-tabs">
+      <button class="tab-button-new" [ngClass]="{'active': selectedTab === 'thong-tin'}" (click)="selectTab('thong-tin')">Thông tin</button>
+      <button class="tab-button-new" [ngClass]="{'active': selectedTab === 'mo-ta'}" (click)="selectTab('mo-ta')">Mô tả chi tiết</button>
+    </div>
+
+    <div class="new-form-content" *ngIf="selectedTab === 'thong-tin'">
+      <!-- Left Section: Image -->
+      <div class="new-form-left">
+        <div class="new-image-upload" *ngIf="selectedTab === 'thong-tin'" >
+          <img id="new-post-image" [src]="getFullImageUrl(selectedTintuc.hinhAnh)" alt="Post Image" class="new-news-image" />
+        </div>
+        <span class="new-form-label" *ngIf="selectedTab === 'thong-tin'">Hình ảnh tin tức</span>
+      </div>
+  
+      <!-- Right Section: Info -->
+      <div class="new-form-right">
+        <div class="new-tab-content">
+          <div class="new-form-section">
+            <!-- Tiêu đề bài viết -->
+            <label class="new-form-label">Tiêu đề bài viết:</label>
+            <div class="new-form-value">{{ selectedTintuc.tieuDe }}</div>
+            
+            <!-- Danh mục -->
+            <label class="new-form-label">Danh mục:</label>
+            <div class="new-form-value">{{ selectedTintuc.tenDanhMuc || 'Không có' }}</div>
+  
+            <!-- Ngày đăng -->
+            <label class="new-form-label">Ngày đăng:</label>
+            <div class="new-form-value">{{ selectedTintuc.ngayDang | date:'dd/MM/yyyy' }}</div>
+  
+            <!-- Ngày cập nhật -->
+            <label class="new-form-label">Ngày cập nhật:</label>
+            <div class="new-form-value">{{ selectedTintuc.ngayCapNhat | date:'dd/MM/yyyy' }}</div>
+            
+            <!-- Mô tả chi tiết -->
+            <label class="new-form-label">Mô tả ngắn:</label>
+            <div class="new-form-value">{{ selectedTintuc.moTaNgan }}</div>
+            
+            <!-- Lượng khách truy cập -->
+            <label class="new-form-label">Lượng khách truy cập:</label>
+            <div class="new-form-value">{{ selectedTintuc.luongKhachTruyCap }}</div>
+            
+            <!-- Số lượng bình luận -->
+            <label class="new-form-label">Số lượng bình luận:</label>
+            <div class="new-form-value">{{ selectedTintuc.soLuongComment }}</div>
+  
+            <!-- Trạng thái -->
+            <label class="new-form-label">Trạng thái:</label>
+            <div class="new-form-value" *ngIf="selectedTintuc.trangThai">Hiển thị</div>
+            <div class="new-form-value" *ngIf="!selectedTintuc.trangThai">Không hiển thị</div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Mo ta -->
+    <div class="detail-new fullscreen-content" *ngIf="selectedTab === 'mo-ta' && selectedTintuc">
+      <label class="new-form-label">Nội dung:</label>
+      <div class="new-form-value" *ngIf="selectedTintuc.noiDung" [innerHTML]="selectedTintuc.noiDung"></div>
+      <div class="new-form-value" *ngIf="!selectedTintuc.noiDung">Chưa có nội dung</div>
+    </div>
+    
+  </div>
+  
+  <div class="new-form-footer">
+      <button type="button" class="new-submit-btn" (click)="hideForm()">Đóng</button>
+  </div>
+</div>
+
+
+
+
+

@@ -1,0 +1,21 @@
+.register-check{
+    margin-top: 30px;
+}
+
+.form-control {
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+}
+
+.form-label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 0.2rem; /* Giảm khoảng cách giữa các trường input */
+}
+
+.form-group:first-child {
+    margin-top: 0; /* Đặt khoảng cách phía trên bằng 0 */
+}

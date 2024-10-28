@@ -1,0 +1,413 @@
+/* Start Menu Admin */
+.navbar {
+  margin-bottom: 0;
+}
+
+.sidebar {
+  height: 100vh;
+  overflow-y: auto;
+  
+  background-color: #343a40;
+  color: #fff;
+}
+.sidebar a {
+  color: #fff;
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+}
+.sidebar a:hover {
+  background-color: #495057;
+  text-decoration: none;
+}
+/* End Menu Admin */
+
+/* Container chính */
+.category-management {
+  padding: 20px;
+}
+
+/* Lưới hiển thị danh mục */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+/* Card danh mục */
+.category-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Hình ảnh danh mục */
+.category-image img {
+  width: 100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+/* Thông tin danh mục */
+.category-info {
+  padding: 15px;
+  text-align: center;
+}
+
+.category-info h3 {
+  margin: 10px 0 5px;
+  font-size: 18px;
+}
+
+.category-info p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Nút hành động */
+.category-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.category-actions button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.category-actions button:hover {
+  background-color: #0056b3;
+}
+
+/* Nút Thêm Danh Mục */
+.add-category-btn {
+  margin-top: 20px;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 18px;
+}
+
+.add-category-btn:hover {
+  background-color: #218838;
+}
+
+.me-3px {
+  margin-right: 3px; /* Khoảng cách 3px bên phải */
+}
+
+.table th, .table td {
+  text-align: center; /* Căn giữa nội dung trong các ô */
+}
+
+
+.table tr {
+  transition: background-color 0.2s ease; /* Hiệu ứng chuyển màu nền khi hover */
+}
+
+.table tr:hover {
+  background-color: #f1f1f1; /* Màu nền khi hover vào hàng */
+}
+
+.selected {
+  background-color: #e9ecef; /* Màu nền cho hàng đã chọn */
+}
+
+
+
+
+
+
+
+
+
+/* CSS cho nền mờ */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Màu nền mờ */
+  z-index: 999; /* Đặt z-index cao để nằm trên tất cả các phần tử khác */
+}
+
+/* CSS cho form */
+.form-container {
+  position: fixed; /* Đặt vị trí là fixed để nằm chính giữa */
+  top: 50%; /* Đặt khoảng cách từ trên xuống */
+  left: 50%; /* Đặt khoảng cách từ trái sang */
+  transform: translate(-50%, -50%); /* Dịch chuyển để căn giữa */
+  width: 900px; /* Đặt chiều rộng cho form */
+  padding: 30px;
+  background-color: #ffffff; /* Màu nền trắng */
+  border-radius: 15px; /* Bo tròn các góc */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Đổ bóng nhẹ */
+  z-index: 1000; /* Đặt z-index cao hơn overlay */
+}
+
+/* Định dạng cho header của form */
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-title {
+  font-size: 24px; /* Kích thước chữ lớn hơn */
+  font-weight: bold;
+  color: #333; /* Màu chữ tối */
+}
+
+.close-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 20px; /* Kích thước chữ lớn hơn */
+  cursor: pointer;
+  color: #ff4d4d; /* Màu đỏ cho nút đóng */
+}
+
+.close-btn:hover {
+  color: #ff0000; /* Màu đỏ đậm khi hover */
+}
+
+/* Định dạng cho body của form */
+.form-body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-left {
+  width: 40%;
+  padding-right: 20px;
+}
+
+.image-upload {
+  text-align: center;
+}
+
+.image-upload img {
+  width: 80%; /* Giảm kích thước hình ảnh */
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 2px solid #ddd; /* Đường viền cho hình ảnh */
+}
+
+.image-upload input {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Định dạng cho phần bên phải */
+.form-right {
+  width: 55%;
+}
+
+/* Định dạng cho tab */
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #f0f0f0; /* Màu nền cho nút tab */
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 5px; /* Bo tròn góc nút tab */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển đổi */
+}
+
+.tab-button:hover {
+  background-color: #e0e0e0; /* Hiệu ứng hover cho nút tab */
+}
+
+.tab-button.active {
+  background-color: #28a745; /* Màu nền cho nút tab đang hoạt động */
+  color: white;
+}
+
+/* Định dạng cho từng phần trong form */
+.form-section {
+  margin-bottom: 15px;
+}
+
+.form-section label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555; /* Màu chữ cho label */
+}
+
+.form-section input,
+.form-section select,
+.form-section textarea {
+  width: 100%;
+  padding: 10px; /* Padding lớn hơn cho input */
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s; /* Hiệu ứng chuyển đổi */
+}
+
+.form-section input:focus,
+.form-section select:focus,
+.form-section textarea:focus {
+  border-color: #28a745; /* Đổi màu viền khi focus */
+}
+
+textarea {
+  height: 100px;
+}
+
+/* Định dạng cho footer của form */
+.form-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Hiệu ứng chuyển đổi */
+}
+
+.submit-btn:hover {
+  background-color: #218838; /* Màu nền khi hover */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Start check-box */
+.switch-toggle {
+  position: relative;
+  width: 54px;
+  height: 25px;
+  background: #ccc;
+  border-radius: 15px; /* Bo tròn các mép cho hình chữ nhật */
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  appearance: none; /* Ẩn đi dấu tích mặc định của checkbox */
+  -webkit-appearance: none; /* Ẩn cho trình duyệt webkit */
+  outline: none; /* Xóa bỏ viền khi nhấn */
+  border: none; /* Không hiện đường viền */
+}
+
+.switch-toggle::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%; /* Giữ hình tròn cho nút bên trong */
+  transition: 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.switch-toggle:checked {
+  background-color: #007BFF; /* Đổi màu nền khi nhấn */
+}
+
+.switch-toggle:checked::before {
+  left: 34px;
+}
+/* End check-box */
+
+
+
+
+
+
+
+
+
+
+
+
+.form-section input[type="checkbox"] {
+  width: auto; /* Đặt chiều rộng tự động cho checkbox */
+  padding: 0; /* Xóa padding nếu có */
+  margin-bottom: 0; /* Xóa margin nếu cần */
+  border: none; /* Xóa viền */
+  border-radius: 25px; /* Bo tròn riêng cho checkbox */
+  height: 21px;
+  width: 52px; /* Thay đổi kích thước nhỏ hơn */
+  appearance: none; /* Ẩn checkbox mặc định */
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-color: #ccc;
+  transition: background-color 0.3s;
+}
+
+/* Định dạng cho toggle switch */
+.switch-toggle-new {
+  position: relative;
+  width: 40px; /* Đặt độ rộng nhỏ cho toggle */
+  height: 19px; /* Chiều cao nhỏ hơn */
+  background-color: #ccc;
+  border-radius: 20px; /* Bo tròn các cạnh */
+  appearance: none; /* Xóa checkbox mặc định */
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border: none;
+}
+
+
+/* Nút tròn bên trong checkbox */
+.form-section input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Khi checkbox được chọn */
+.form-section input[type="checkbox"]:checked {
+  background-color: #007BFF;
+}
+
+.form-section input[type="checkbox"]:checked::before {
+  transform: translateX(30px); /* Di chuyển nút tròn khi bật */
+}

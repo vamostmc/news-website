@@ -1,0 +1,212 @@
+<app-navbar-admin></app-navbar-admin>
+
+<div class="container-fluid">
+  <div class="row">
+    
+    <!-- Sidebar -->
+    <div class="col-md-2 sidebar">
+      <app-menu-admin></app-menu-admin>
+    </div>
+    
+    <!-- Content -->
+    <div class="col-md-10 content">
+      <h2 class="my-4">Quản lý danh mục tin tức</h2>
+      <button class="btn btn-primary mb-4" (click)="selectedAdd()">Thêm mới</button>
+        
+      <div class="table-container">
+        <table class="table table-hover table-bordered">
+          <thead class="table-dark">
+            <tr>
+              <th>STT</th>
+              <th class="danh-muc">Tên danh mục</th>
+              <th>Số lượng bài viết</th>
+              <th>Trạng thái</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let danhmuc of danhmucView">
+              <td>{{ danhmuc.danhmucId }}</td>
+              <td>{{ danhmuc.tenDanhMuc }}</td>
+              
+              <td>{{ danhmuc.soLuongTinTuc }}</td>
+              <td (click)="$event.stopPropagation()">
+                  
+                <div id="wrapper">
+                  <input type="checkbox" [checked]="danhmuc.trangThai" (change)="UpdateStatusDM(danhmuc.danhmucId,$event)" class="switch-toggle" id="light-dark" >
+               </div>
+              </td>
+              
+              <td>
+                <div class="d-flex justify-content-center">
+                  <button class="btn btn-success btn-sm me-3px" (click)="selectedEdit(danhmuc.danhmucId)" data-bs-toggle="modal" data-bs-target="#editPostModal">
+                    <i class="fa-solid fa-pen-to-square"></i> Sửa
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteDanhMuc(danhmuc.danhmucId)">
+                    <i class="fa-solid fa-trash"></i> Xóa
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Start Add DanhMuc -->
+<div class="overlay" *ngIf="showAddDanhmuc" (click)="hideForm()"></div>
+
+<div class="form-container" *ngIf="showAddDanhmuc">
+  <div class="form-header">
+      <span class="form-title">Thêm mới danh mục</span>
+      <button class="close-btn" (click)="hideForm()">X</button>
+  </div>
+  <div class="form-body" [formGroup]="postForm">
+      <div class="form-left">
+          <div class="image-upload">
+              <label for="product-image">Hình ảnh danh mục:</label>
+              <img id="product-image" src="https://via.placeholder.com/150" alt="Product Image" />
+              
+          </div>
+      </div>
+      <div class="form-right">
+          <div class="tabs">
+              <button class="tab-button" [ngClass]="{'active': selectedTab === 'thong-tin'}" (click)="selectTab('thong-tin')">Thông tin</button>
+              <button class="tab-button" [ngClass]="{'active': selectedTab === 'mo-ta'}" (click)="selectTab('mo-ta')">Mô tả chi tiết</button>
+          </div>
+          <div class="tab-content" *ngIf="selectedTab === 'thong-tin'">
+              <div class="form-section">
+                  <label for="product-code">Danh mục:</label>
+                  <input type="text" id="product-code" formControlName="tenDanhMuc" placeholder="Nhập tên danh mục mới" />
+
+                  <label for="postStatus" class="post-status-label">Trạng thái danh mục: </label>
+                  <div id="statusWrapper" class="custom-checkbox-wrapper">
+                      <input type="checkbox" formControlName="trangThai"  class="switch-toggle-new" id="light-dark" >
+                  </div>
+              </div>
+          </div>
+          <div class="tab-content" *ngIf="selectedTab === 'mo-ta'">
+              <div class="form-section">
+                  <label for="product-description">Mô tả chi tiết:</label>
+                  <textarea id="product-description" placeholder="Nhập mô tả sản phẩm"></textarea>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="form-footer">
+      <button type="submit" (click)="addDanhMuc()" class="submit-btn" >Lưu</button>
+  </div>
+</div> 
+<!-- End Add DanhMuc  -->
+
+
+
+
+<!-- Start Edit DanhMuc -->
+<div class="overlay" *ngIf="showEditDanhmuc" (click)="hideForm()"></div>
+<div class="form-container" *ngIf="showEditDanhmuc">
+  <div class="form-header">
+      <span class="form-title">Sửa danh mục</span>
+      <button class="close-btn" (click)="hideForm()">X</button>
+  </div>
+  <div class="form-body" [formGroup]="postForm">
+      <div class="form-left">
+          <div class="image-upload">
+              <label for="product-image">Hình ảnh danh mục:</label>
+              <img id="product-image" src="https://via.placeholder.com/150" alt="Product Image" />
+              
+          </div>
+      </div>
+      <div class="form-right">
+          <div class="tabs">
+              <button class="tab-button" [ngClass]="{'active': selectedTab === 'thong-tin'}" (click)="selectTab('thong-tin')">Thông tin</button>
+              <button class="tab-button" [ngClass]="{'active': selectedTab === 'mo-ta'}" (click)="selectTab('mo-ta')">Mô tả chi tiết</button>
+          </div>
+          <div class="tab-content" *ngIf="selectedTab === 'thong-tin'">
+              <div class="form-section">
+                  <label for="product-code">Danh mục:</label>
+                  <input type="text" id="product-code" formControlName="tenDanhMuc" placeholder="Nhập tên danh mục mới" />
+
+                  <label for="postStatus" class="post-status-label">Trạng thái danh mục: </label>
+                  <div id="statusWrapper" class="custom-checkbox-wrapper">
+                      <input type="checkbox" formControlName="trangThai"  class="switch-toggle-new" id="light-dark" >
+                  </div>
+              </div>
+          </div>
+          <div class="tab-content" *ngIf="selectedTab === 'mo-ta'">
+              <div class="form-section">
+                  <label for="product-description">Mô tả chi tiết:</label>
+                  <textarea id="product-description" placeholder="Nhập mô tả sản phẩm"></textarea>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="form-footer">
+      <button type="submit" (click)="editDanhMuc()" class="submit-btn" >Lưu</button>
+  </div>
+</div> 
+
+<!-- End Edit DanhMuc --> 
+
+
+
+
+
+
+
+<!-- Thẻ Info có chứa thêm phần mô tả chi tiết -->
+<!-- <div class="overlay" *ngIf="showTintucs" (click)="hideForm()"></div>
+
+<div class="form-container" *ngIf="showTintucs">
+  <div class="form-header">
+      <span class="form-title">Sửa hàng</span>
+      <button class="close-btn" (click)="hideForm()">X</button>
+  </div>
+  <div class="form-body">
+      <div class="form-left">
+          <div class="image-upload">
+              <label for="product-image">Hình ảnh sản phẩm:</label>
+              <img id="product-image" src="https://via.placeholder.com/150" alt="Product Image" />
+              <input type="file" id="upload-image" />
+          </div>
+      </div>
+      <div class="form-right">
+          <div class="tabs">
+              <button class="tab-button" [ngClass]="{'active': selectedTab === 'thong-tin'}" (click)="selectTab('thong-tin')">Thông tin</button>
+              <button class="tab-button" [ngClass]="{'active': selectedTab === 'mo-ta'}" (click)="selectTab('mo-ta')">Mô tả chi tiết</button>
+          </div>
+          <div class="tab-content" *ngIf="selectedTab === 'thong-tin'">
+              <div class="form-section">
+                  <label for="product-code">Mã hàng:</label>
+                  <input type="text" id="product-code" placeholder="Mã hàng tự động" />
+
+                  <label for="product-barcode">Mã vạch:</label>
+                  <input type="text" id="product-barcode" placeholder="Nhập mã vạch" />
+
+                  <label for="product-name">Tên hàng:</label>
+                  <input type="text" id="product-name" placeholder="Nhập tên hàng" />
+
+                  <label for="product-category">Nhóm hàng:</label>
+                  <select id="product-category">
+                      <option value="1">Điện thoại</option>
+                      <option value="2">Laptop</option>
+                  </select>
+                  <label for="product-price">Giá bán:</label>
+                  <input type="text" id="product-price" placeholder="Nhập giá bán" />
+              </div>
+          </div>
+          <div class="tab-content" *ngIf="selectedTab === 'mo-ta'">
+              <div class="form-section">
+                  <label for="product-description">Mô tả chi tiết:</label>
+                  <textarea id="product-description" placeholder="Nhập mô tả sản phẩm"></textarea>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="form-footer">
+      <button type="submit" class="submit-btn">Lưu</button>
+  </div>
+</div> -->
+<!-- End thẻ Info -->

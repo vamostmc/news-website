@@ -1,0 +1,47 @@
+.greeting {
+    margin-top: 5px; /* Điều chỉnh khoảng cách */
+    display: inline-block;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .avatar {
+    width: 40px; /* Kích thước avatar */
+    height: 40px;
+    border-radius: 50%; /* Làm hình ảnh thành hình tròn */
+    object-fit: cover; /* Đảm bảo hình ảnh vừa với khung tròn */
+    cursor: pointer;
+}
+
+.dropdown-menu {
+  top: 100%;
+  right: 4%;
+  display: block;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 1000;
+  width: 180px;
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  width: 80%;
+  text-align: left;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+  width: 100%;
+}
+
+.icon-spacing {
+  margin-right: 8px; /* Điều chỉnh khoảng cách theo ý muốn */
+}
