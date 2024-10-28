@@ -45,6 +45,7 @@ namespace Web1.Controllers
             return Ok("OK");
         }
 
+        //Update Notify
         [HttpPut("EditNoti")]
         public async Task<IActionResult> UpdateNotification(int id) 
         {
