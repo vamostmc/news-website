@@ -38,7 +38,7 @@ namespace Web1.Controllers
             return await _noti.AddNotifyBinhLuanRepo(notifyBinhLuan);
         }
 
-        //Delete Notify
+        //Delete Notification
         [HttpDelete("RemoveNotification")]
         public async Task<IActionResult> DeleteNotification(int id) 
         {
