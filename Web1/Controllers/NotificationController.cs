@@ -32,6 +32,7 @@ namespace Web1.Controllers
             return await _noti.AddNotifyTinTucRepo(newNoti);
         }
 
+        //Post Notification
         [HttpPost("AddNotificationBinhLuan")]
         public async Task<NotifyBinhLuan> AddNotificationBinhLuan([FromBody] NotifyBinhLuan notifyBinhLuan)
         {

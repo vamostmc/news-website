@@ -530,3 +530,4 @@ D:\source\repos\Web1\Web1\obj\Debug\net8.0\refint\Web1.dll
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.pdb
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.genruntimeconfig.cache
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\ref\Web1.dll
+D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.sourcelink.json
