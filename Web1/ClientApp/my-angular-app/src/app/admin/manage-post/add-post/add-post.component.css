@@ -513,7 +513,7 @@ textarea {
   transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền khi hover */
   margin-bottom: 15px;
   margin-top: 0px;
-  width: 115px;
+  width: 110px;
 }
 
 .btn-back i {

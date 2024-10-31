@@ -46,7 +46,4 @@ export class TinTucService {
     console.log(`Trạng thái là: ${trangThai}`);
     return this.http.put<Tintuc[]>(StatusUrl,trangThai);
   }
-
-  
-
 }

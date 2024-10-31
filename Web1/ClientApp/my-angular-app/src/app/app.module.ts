@@ -4,7 +4,6 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { StudentListComponent } from './Client/student-list/student-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from '../app/Client/login/login.component';
 import { NavbarComponent } from './Client/navbar/navbar.component';
@@ -22,7 +21,6 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 @NgModule({
   declarations: [
     AppComponent,
-    StudentListComponent,
     LoginComponent,
     NavbarComponent,
     RegisterComponent,

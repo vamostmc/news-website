@@ -6,6 +6,7 @@ import { CommentService } from '../../Client/service-client/comment-service/comm
 import { DashboardService } from '../../Client/service-client/dashboard-service/dashboard.service';
 import { Notification } from '../../Client/models/notification';
 import { Comment } from '../../Client/models/comment';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -28,26 +29,30 @@ export class DashboardAdminComponent implements OnInit {
     itemsPerPage: number = 4;
     pTinTuc: number = 1; // Biến để lưu số trang hiện tại
     pBinhLuan: number = 1;
+    
     onPageChangeTinTuc(page: number) {
       this.pTinTuc = page;
     }
 
+  
     onPageChangeBinhLuan(page: number) {
       this.pBinhLuan = page;
     }
 
+    //Phân trang thông báo tin tức
     get paginatedTinTuc() {
       const start = (this.pTinTuc - 1) * this.itemsPerPage;
       return this.notificationsTinTuc.slice(start, start + this.itemsPerPage);
     }
   
+    //Phân trang thông báo bình luận
     get paginatedBinhLuan() {
       const start = (this.pBinhLuan - 1) * this.itemsPerPage;
       return this.notificationsBinhLuan.slice(start, start + this.itemsPerPage);
     }
   
 
-
+    //Hiển thị ngày và giờ hành động
     getTimeAgo(timestamp: string): string {
       const now = new Date();
       const timeDiff = now.getTime() - new Date(timestamp).getTime();
@@ -69,25 +74,18 @@ export class DashboardAdminComponent implements OnInit {
     }
 
     ngOnInit(): void {
-      this.tintucservice.getTintuc().subscribe(
-        (data) => this.tintucs = data
-      )
-
-      this.customerservice.getTotalCustomer().subscribe(
-        (data) => this.totalCustomer = data
-      )
-
-      this.commentservice.getAllComment().subscribe(
-        (data) => { this.comments = data;}
-      )
-
-      this.dashboardservice.getNotifyTinTuc().subscribe(
-        (data) => { this.notificationsTinTuc = data.reverse(); console.log(this.notificationsTinTuc);}
-      )
-
-      this.dashboardservice.getNotifyBinhLuan().subscribe(
-        (data) => { this.notificationsBinhLuan = data.reverse(); console.log(this.notificationsBinhLuan);}
-      )
-      
+      forkJoin({
+        tintucs: this.tintucservice.getTintuc(),
+        totalCustomer: this.customerservice.getTotalCustomer(),
+        comments: this.commentservice.getAllComment(),
+        notificationsTinTuc: this.dashboardservice.getNotifyTinTuc(),
+        notificationsBinhLuan: this.dashboardservice.getNotifyBinhLuan()
+      }).subscribe((results) => {
+        this.tintucs = results.tintucs;
+        this.totalCustomer = results.totalCustomer;
+        this.comments = results.comments;
+        this.notificationsTinTuc = results.notificationsTinTuc.reverse();
+        this.notificationsBinhLuan = results.notificationsBinhLuan.reverse();  
+      });
     }
 }

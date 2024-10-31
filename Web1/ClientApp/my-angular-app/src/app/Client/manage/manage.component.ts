@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { StudentService } from '../service-client/student-service/student.service';
 import { Student } from '../models/student';
 import { AuthenService } from '../service-client/authen-service/authen.service';
 import { HttpClient } from '@angular/common/http';
@@ -17,7 +16,7 @@ export class ManageComponent implements OnInit {
 
   private apiUrl = 'https://localhost:7233/api/Students';
 
-  constructor(private studentService: StudentService, private authen: AuthenService, private http: HttpClient) { }
+  constructor(private authen: AuthenService, private http: HttpClient) { }
 
   deleteStudent(maSV: number) {
     const url = `${this.apiUrl}/${maSV}`;
@@ -73,8 +72,6 @@ export class ManageComponent implements OnInit {
     // console.log('HEloo');
     console.log(`Role user là: ${this.authen.GetRoleUser()}`);
 
-    this.studentService.getStudents().subscribe(data => {
-      this.students = data;
-    });
+   
   }
 }

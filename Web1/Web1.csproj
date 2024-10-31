@@ -21,8 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\" />
-    <Folder Include="ClientApp\" />
     <Folder Include="Hinh\" />
   </ItemGroup>
 

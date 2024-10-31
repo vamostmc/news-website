@@ -17,6 +17,8 @@ import { ManageCommentComponent } from './manage-comment/manage-comment.componen
 import { ManageUserComponent } from './manage-user/manage-user.component';
 import { AddPostComponent } from './manage-post/add-post/add-post.component';
 import { EditPostComponent } from './manage-post/edit-post/edit-post.component';
+import { ShowPostComponent } from './manage-post/show-post/show-post.component';
+import { SearchFilterPostComponent } from './manage-post/search-filter-post/search-filter-post.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { EditPostComponent } from './manage-post/edit-post/edit-post.component';
     ManageUserComponent,
     AddPostComponent,
     EditPostComponent,
+    ShowPostComponent,
+    SearchFilterPostComponent,
   ],
   imports: [
     CommonModule,

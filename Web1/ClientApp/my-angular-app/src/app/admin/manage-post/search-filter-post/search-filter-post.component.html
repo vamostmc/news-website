@@ -1,0 +1,84 @@
+<div class="d-flex align-items-center button-group">
+      
+    <div class="input-group position-relative">
+      <div class="form-outline" data-mdb-input-init>
+        <input
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          id="search-input"
+          type="search"
+          class="form-control custom-input"
+          placeholder="Search"
+          spellcheck="false"
+        />
+      </div>
+      <button id="search-button" type="button" (click)="searchTintuc(searchTerm)" class="btn btn-primary">
+        <i class="fas fa-search"></i>
+      </button>
+    
+      <!-- Danh sách gợi ý sẽ xuất hiện ngay bên dưới input -->
+      <ul *ngIf="tintucSearch.length > 0" class="suggestions-list position-absolute w-100">
+        <li *ngFor="let tinsearch of tintucSearch" (click)="getSearchId(tinsearch.tintucId)" class="list-group-item d-flex align-items-center" >
+          <img [src]="getFullImageUrl(tinsearch.hinhAnh)" alt="image" class="suggestion-image">
+          <div class="ml-2">
+            <span>{{ tinsearch.tieuDe }}</span>
+            <br>
+            <span><i class="dm-font">{{ tinsearch.tenDanhMuc || 'Chưa có danh mục' }}</i></span>
+          </div>
+        </li>
+      </ul>
+      <div class="overlay-search" *ngIf="showSearchTintucs" (click)="hideForm()"></div>
+    </div>
+    
+    
+    <!-- Lọc nâng cao -->
+    <div class="filter-container">
+      <button class="btn btn-primary" (click)="toggleFilter()" id="filter-button">
+        <i class="fas fa-filter"></i> Lọc
+      </button>
+      <span class="filter-count" *ngIf="filterCount > 0">{{ filterCount }}</span>
+      <div class="overlay-filter" *ngIf="showFilterOptions" (click)="hideForm()"></div>
+
+      <div class="filter-dropdown" *ngIf="showFilterOptions">
+        <form [formGroup]="filterForm">
+          <div class="filter-group">
+            <label for="categoryFilter">Danh mục:</label>
+            <select id="categoryFilter" formControlName="FilterCategory" (change)="updateFilterCount()">
+              <option value="" >Tất cả</option>
+              <option *ngFor="let danhmuc of danhmucs" [value]="danhmuc.danhmucId">{{ danhmuc.tenDanhMuc }}</option>
+            </select>
+          </div>
+      
+          <div class="filter-group date-filter">
+            <label for="dateStartFilter">Ngày đăng bài:</label>
+            <div class="date-inputs">
+              <input type="date" id="dateStartFilter" formControlName="FilterStartDate" (change)="updateFilterCount()">
+              <label for="dateEndFilter" class="date-label">-</label>
+              <input type="date" id="dateEndFilter" formControlName="FilterEndDate" (change)="updateFilterCount()">
+            </div>
+          </div>
+      
+          <div class="filter-group date-filter">
+            <label for="updateStartDate">Ngày cập nhật:</label>
+            <div class="date-inputs">
+              <input type="date" id="updateStartDate" formControlName="FilterStartUpdateDate" (change)="updateFilterCount()">
+              <label for="updateEndDate" class="date-label">-</label>
+              <input type="date" id="updateEndDate" formControlName="FilterEndUpdateDate" (change)="updateFilterCount()">
+            </div>
+          </div>
+      
+          <div class="filter-group date-filter">
+            <label for="commentStartFilter">Số lượng bình luận:</label>
+            <div class="date-inputs">
+              <input type="number" id="commentStartFilter" formControlName="FilterStartComment" (change)="updateFilterCount()">
+              <label for="commentEndFilter" class="date-label">-</label>
+              <input type="number" id="commentEndFilter" formControlName="FilterEndComment" (change)="updateFilterCount()">
+            </div>
+          </div>
+        
+          <button type="button" class="btn btn-success btn-filter" (click)="applyFilters()">Áp Dụng</button>
+          <button type="button" class="btn btn-secondary btn-filter" (click)="resetFilters()">Đặt Lại</button>
+        </form>
+      </div>
+    </div>
+  </div>
