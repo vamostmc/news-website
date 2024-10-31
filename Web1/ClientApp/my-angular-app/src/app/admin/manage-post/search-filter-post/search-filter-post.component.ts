@@ -26,6 +26,8 @@ export class SearchFilterPostComponent {
               private route: Router,
               private fb: FormBuilder,
               private sf: SearchFilterService,
+
+              
               private location: Location) {}
   
   //Nhận dữ liệu tin tức từ cha
