@@ -13,6 +13,7 @@ namespace Web1.Controllers
 
         public CustomerController( ICustomerRepository customer) { _customer = customer; }
 
+
         [HttpGet("TongKH")]
         public async Task<int> CountCustomer()
         {
