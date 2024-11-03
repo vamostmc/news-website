@@ -18,7 +18,7 @@ export class ManagePostComponent implements OnInit {
               private route: Router,
               private danhmucservice: DanhmucService, 
               ) {}
-  
+
   tintucs: Tintuc[] = [];
   danhmucs: Danhmuc[] = [];
   loading: boolean = true;
