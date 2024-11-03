@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Web1.Data;
 using Web1.Models;
@@ -13,6 +14,12 @@ namespace Web1.Controllers
         private readonly INotificationRepository _noti;
 
         public NotificationController(INotificationRepository noti ) { _noti = noti; }
+
+        
+        public IActionResult getOK()
+        {
+            return Ok();
+        }
 
         [HttpGet("GetNotify/{idNotify}")]
         public async Task<List<NotificationDto>> GetNotifyTinTuc(int idNotify) 
