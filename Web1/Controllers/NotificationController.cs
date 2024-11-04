@@ -16,19 +16,6 @@ namespace Web1.Controllers
 
         public NotificationController(INotificationRepository noti ) { _noti = noti; }
 
-        
-        public IActionResult getOK()
-        {
-            return Ok("Thanh cong merge");
-        }
-
-
-        public IActionResult new_getOK()
-        {
-            return Ok("new");
-        }
-
-
         [HttpGet("GetNotify/{idNotify}")]
         public async Task<List<NotificationDto>> GetNotifyTinTuc(int idNotify) 
         {
