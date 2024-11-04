@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Web1.Data;
 using Web1.Models;
 using Web1.Repository;
@@ -18,8 +19,10 @@ namespace Web1.Controllers
         
         public IActionResult getOK()
         {
-            return Ok();
+            return Ok("Thanh cong merge");
         }
+
+        
 
         [HttpGet("GetNotify/{idNotify}")]
         public async Task<List<NotificationDto>> GetNotifyTinTuc(int idNotify) 
