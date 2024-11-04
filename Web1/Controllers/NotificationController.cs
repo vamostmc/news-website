@@ -15,6 +15,11 @@ namespace Web1.Controllers
 
         public NotificationController(INotificationRepository noti ) { _noti = noti; }
 
+        
+        public IActionResult getOK()
+        {
+            return Ok();
+        }
 
         [HttpGet("GetNotify/{idNotify}")]
         public async Task<List<NotificationDto>> GetNotifyTinTuc(int idNotify) 
