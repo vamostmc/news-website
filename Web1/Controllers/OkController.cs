@@ -7,5 +7,10 @@ namespace Web1.Controllers
     [ApiController]
     public class OkController : ControllerBase
     {
+        [HttpGet]
+        public IActionResult AnhEm()
+        {
+            return Ok();
+        }
     }
 }
