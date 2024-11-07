@@ -11,5 +11,7 @@ namespace Web1.Repository
         
         public Task<string> LoginCookeAsync(Login login);
 
+        public Task<string> PasswordReset(string email);
+
     }
 }

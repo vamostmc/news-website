@@ -52,12 +52,17 @@ public partial class TinTucDbContext : IdentityDbContext<AppUser>
                 .HasColumnType("datetime");
             entity.Property(e => e.NoiDung).HasMaxLength(1000);
             entity.Property(e => e.TintucId).HasColumnName("TintucID");
+            entity.Property(e => e.Likes).HasDefaultValue(0);
             entity.Property(e => e.TrangThai).HasDefaultValue(true);
             entity.Property(e => e.UserId).HasMaxLength(450);
+            entity.HasOne(d => d.Parent).WithMany(p => p.InverseParent)
+               .HasForeignKey(d => d.ParentId)
+               .HasConstraintName("FK_BinhLuan_ParentID");
 
             entity.HasOne(d => d.Tintuc).WithMany(p => p.BinhLuans)
                 .HasForeignKey(d => d.TintucId)
                 .HasConstraintName("FK__BinhLuan__Tintuc__73BA3083");
+
         });
 
         modelBuilder.Entity<DanhMuc>(entity =>

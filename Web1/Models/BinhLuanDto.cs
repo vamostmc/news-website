@@ -19,5 +19,9 @@ namespace Web1.Models
         public string? TieuDeTinTuc { get; set; }
 
         public bool? TrangThai {  get; set; }
+
+        public int? ParentId { get; set; }
+
+        public int? Likes { get; set; }
     }
 }

@@ -46,12 +46,29 @@ namespace Web1.Repository
         {
             try
             {
+                if(comment.ParentId != null)
+                {
+                    var checkParentId = await _binhLuan.BinhLuans.FindAsync(comment.ParentId);
+                    if(checkParentId == null) 
+                    { 
+                        throw new RepositoryException("Không tồn tại bình luận cha"); 
+                    }
+
+                    else
+                    {
+                        var checkTinTucId = await _binhLuan.TinTucs.FindAsync(comment.TintucId);
+                    }
+                }
+                    
+
                 var dataNew = new BinhLuan
                 {
                     NgayGioBinhLuan = comment.NgayGioBinhLuan,
                     NoiDung = comment.NoiDung,
                     UserId = comment.UserId,
-                    TintucId = comment.TintucId
+                    TintucId = comment.TintucId,
+                    Likes = comment.Likes,
+                    ParentId = comment.ParentId,
                 };
 
                 await _binhLuan.AddRangeAsync(dataNew);
@@ -61,7 +78,7 @@ namespace Web1.Repository
             }
             catch (RepositoryException ex)
             {
-                throw new RepositoryException("Lỗi không thể thêm bình luận");
+                throw new RepositoryException("Lỗi không thể thêm bình luận: " + ex.Message, ex);
             }
         }
 
@@ -102,6 +119,8 @@ namespace Web1.Repository
                                                     UserName = t.User.UserName,
                                                     UserId = t.UserId,
                                                     TrangThai = t.TrangThai,
+                                                    ParentId = t.ParentId,
+                                                    Likes = t.Likes,
                                                 }).ToListAsync();
 
             return data;
@@ -124,6 +143,8 @@ namespace Web1.Repository
                                                         UserName = t.User.UserName,
                                                         UserId = t.UserId,
                                                         TrangThai = t.TrangThai,
+                                                        ParentId = t.ParentId,
+                                                        Likes = t.Likes,
                                                     }).FirstOrDefaultAsync();
                 if(data == null)
                 {
@@ -164,6 +185,8 @@ namespace Web1.Repository
                     data.User = checkUser;
                     data.TrangThai = comment.TrangThai;
                     data.Tintuc = checkTinTuc;
+                    data.Likes = comment.Likes;
+                    data.ParentId = comment.ParentId;
 
                     // Lưu thay đổi
                     _binhLuan.BinhLuans.Update(data);

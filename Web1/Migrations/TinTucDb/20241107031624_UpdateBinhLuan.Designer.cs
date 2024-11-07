@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Web1.Data;
 
@@ -11,9 +12,11 @@ using Web1.Data;
 namespace Web1.Migrations.TinTucDb
 {
     [DbContext(typeof(TinTucDbContext))]
-    partial class TinTucDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241107031624_UpdateBinhLuan")]
+    partial class UpdateBinhLuan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

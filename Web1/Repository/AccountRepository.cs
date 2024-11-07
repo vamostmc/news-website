@@ -162,5 +162,10 @@ namespace Web1.Repository
 
             return result;
         }
+
+        public Task<string> PasswordReset(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

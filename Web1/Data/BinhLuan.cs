@@ -23,4 +23,12 @@ public partial class BinhLuan
 
     public virtual AppUser? User { get; set; }
 
+    public int? ParentId { get; set; }
+
+    public int? Likes { get; set; }
+
+    public virtual BinhLuan? Parent { get; set; }
+
+    public virtual ICollection<BinhLuan> InverseParent { get; set; } = new List<BinhLuan>();
+
 }

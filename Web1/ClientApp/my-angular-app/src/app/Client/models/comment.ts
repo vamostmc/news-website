@@ -7,6 +7,6 @@ export interface Comment {
   tieuDeTinTuc?: string;
   userName?: string;
   trangThai?: boolean;
-
-  
+  parentId?: number;
+  likes?: number;
 }
