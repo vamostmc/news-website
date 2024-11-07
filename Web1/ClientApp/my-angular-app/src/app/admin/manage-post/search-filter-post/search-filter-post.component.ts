@@ -33,16 +33,8 @@ export class SearchFilterPostComponent {
   @Input() tintucs:Tintuc[] = [];
   @Input() danhmucs: Danhmuc[] = [];
 
-  //Truyền dữ liệu lên cha
-  @Output() TinTucSend = new EventEmitter<Tintuc[]>();
-
-  
-  
   selectedTintuc: Tintuc | null = null;
   filterForm!: FormGroup;
-  
-  showDeleteTintucs = false;
-  showInfoTintucs = false;
   
   showFilterOptions = false;
   showSearchTintucs = false;
@@ -52,7 +44,6 @@ export class SearchFilterPostComponent {
   searchQuery: string = '';   // Lưu chuỗi tìm kiếm
   selectedCategory: string = '';  // Lưu giá trị của bộ lọc danh mục
   
-
   searchTerm: string = '';
   tintucSearch: Tintuc[] = [];
   tintucView: Tintuc[] = [];
