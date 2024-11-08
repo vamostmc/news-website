@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Configuration;
-using System.Drawing.Drawing2D;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -143,6 +142,7 @@ namespace Web1.Repository
                 FullName = register.FullName,
                 DateUser = register.DateUser,
                 Address = register.Address,
+                Email = register.Email
             };
 
             var result = await _userManager.CreateAsync(registerUser, register.Password);
@@ -156,6 +156,7 @@ namespace Web1.Repository
                     await _roleManager.CreateAsync(new IdentityRole(Role.Customer));
                 }
 
+                
                 //Gan vai tro cho user
                  await _userManager.AddToRoleAsync(registerUser, Role.Customer);
             }

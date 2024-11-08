@@ -13,6 +13,9 @@ namespace Web1.Models
         [Required]
         public string? Address { get; set; }
 
+        [Required] 
+        public string Email { get; set;}
+
         [Required]
         public string UserName { get; set; }
 
