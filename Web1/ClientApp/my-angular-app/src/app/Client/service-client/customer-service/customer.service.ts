@@ -68,6 +68,7 @@ export class CustomerService {
     formData.append("dateUser", postForm.get("dateUser")?.value); // Định dạng ngày
     formData.append("address", postForm.get("address")?.value); // Tên trường trùng khớp
     formData.append("fullName", postForm.get("fullName")?.value); // Tên trường trùng khớp
+    formData.append("email", postForm.get("email")?.value);
     formData.append("userRole", postForm.get("userRole")?.value); // Chuyển mảng thành chuỗi JSON
     formData.append("password", postForm.get("password")?.value); // Tên trường trùng khớp
     formData.append("confirmPassword", postForm.get("confirmPassword")?.value); // Tên trường ConfirmPassword
@@ -79,6 +80,7 @@ export class CustomerService {
     let formData = new FormData();
     formData.append("id", postForm.get("id")?.value);
     formData.append("userName", postForm.get("userName")?.value); // Tên trường trùng khớp
+    formData.append("email", postForm.get("email")?.value);
     formData.append("dateUser", postForm.get("dateUser")?.value); // Định dạng ngày
     formData.append("address", postForm.get("address")?.value); // Tên trường trùng khớp
     formData.append("fullName", postForm.get("fullName")?.value); // Tên trường trùng khớp

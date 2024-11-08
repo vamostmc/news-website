@@ -129,7 +129,7 @@
   top: 60%; /* Đặt khoảng cách từ trên xuống */
   left: 50%; /* Đặt khoảng cách từ trái sang */
   transform: translate(-50%, -50%); /* Dịch chuyển để căn giữa */
-  height: 800px; /* Giới hạn chiều cao của form */
+  height: 860px; /* Giới hạn chiều cao của form */
   padding: 30px;
   background-color: #ffffff; /* Màu nền trắng */
   border-radius: 15px; /* Bo tròn các góc */

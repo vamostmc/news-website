@@ -9,4 +9,5 @@ export interface User {
     isActive?: boolean;
     userRole?: string;
     userRoleList?: string[];
+    email: string;
 }

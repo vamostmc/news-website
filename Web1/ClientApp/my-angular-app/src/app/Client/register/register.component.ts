@@ -14,12 +14,25 @@ export class RegisterComponent implements OnInit {
   errorMessage: string | null;
 
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
+    // this.registerForm = this.fb.group({
+    //   firstName: ['', Validators.required],
+    //   lastName: ['', Validators.required],
+    //   userName: ['', Validators.required],
+    //   password: ['', Validators.required],
+    //   confirmPassword: ['', Validators.required]
+    // });
+
     this.registerForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      userName: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required]
+      id: [0],
+      userName: ['', Validators.required],       
+      dateUser: [new Date(), Validators.required], 
+      address: ['', Validators.required],        
+      fullName: ['', Validators.required],      
+      isActive: [true],                        
+      userRole: ['', Validators.required],      
+      email: ['', Validators.required],
+      password: ['', Validators.required],      
+      confirmPassword: ['', Validators.required]  
     });
     this.errorMessage = null;
   }

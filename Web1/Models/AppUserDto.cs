@@ -14,6 +14,8 @@ namespace Web1.Models
 
         public DateTime? CreationDate { get; set; }
 
+        public string Email { get; set; }
+
         public string? FullName { get; set; }
 
         public bool IsActive { get; set; }

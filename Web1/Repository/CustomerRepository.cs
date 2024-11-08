@@ -56,12 +56,12 @@ namespace Web1.Repository
                     DateUser = user.DateUser,
                     FullName = user.FullName,
                     IsActive = user.IsActive,
+                    Email = user.Email,
                     UserRoleList = roles.ToList(),
                 };
 
                 usersInRoleList.Add(userInRole); 
             }
-
             return usersInRoleList; 
         }
 
@@ -72,7 +72,7 @@ namespace Web1.Repository
                 var user = await _userManager.FindByIdAsync(id);
                 if(user == null)
                 {
-                    throw new RepositoryException("User not found.");
+                    throw new RepositoryException("User not found");
                 }
 
                 var roles = await _userManager.GetRolesAsync(user);
@@ -84,6 +84,7 @@ namespace Web1.Repository
                     CreationDate = user.CreationDate,
                     DateUser = user.DateUser,
                     FullName = user.FullName,
+                    Email = user.Email,
                     IsActive = user.IsActive,
                     UserRoleList = roles.ToList(),
                 };
@@ -93,7 +94,7 @@ namespace Web1.Repository
             }
             catch (RepositoryException ex) 
             {
-                throw new RepositoryException("not found.");
+                throw new RepositoryException("Lỗi" + ex.Message, ex);
             }
         }
 
@@ -107,6 +108,7 @@ namespace Web1.Repository
                 FullName = user.FullName,
                 UserName = user.UserName,
                 DateUser = user.DateUser,
+                Email = user.Email,
                 IsActive = true,
                 CreationDate = LocalTime.GetLocalTime()
             };
@@ -125,6 +127,7 @@ namespace Web1.Repository
 
             if(UserNew.Succeeded)
             {
+
                 await _userManager.AddToRoleAsync(data, user.UserRole);
             }
 
@@ -154,7 +157,13 @@ namespace Web1.Repository
                 if (user.UserRoleList != null && user.UserRoleList.Count > 0)
                 {
                     // Thêm người dùng vào nhiều vai trò
-                    var result = await _userManager.AddToRolesAsync(data, user.UserRoleList);
+                    await _userManager.AddToRolesAsync(data, user.UserRoleList);
+                }
+
+                //Cập nhật lại email cho user
+                if (user.Email != data.Email || data.Email == null)
+                {
+                    await _userManager.SetEmailAsync(data, user.Email);
                 }
 
                 data.Address = user.Address;
@@ -169,7 +178,7 @@ namespace Web1.Repository
             }
             catch (RepositoryException ex)
             {
-                throw new RepositoryException("Lỗi không thể sửa",ex);
+                throw new RepositoryException("Lỗi không thể sửa: " + ex.Message ,ex);
             }
         }
 
@@ -201,7 +210,7 @@ namespace Web1.Repository
             }
             catch (RepositoryException ex)
             {
-                throw new RepositoryException("Lỗi không thể xóa User", ex);
+                throw new RepositoryException("Lỗi không thể xóa User: " + ex.Message, ex);
             }
         }
 
@@ -221,7 +230,7 @@ namespace Web1.Repository
             }
             catch (RepositoryException ex)
             {
-                throw new Exception("Lỗi không thể xóa User", ex);
+                throw new Exception("Lỗi không thể xóa User" + ex.Message, ex);
             }
         }
     }

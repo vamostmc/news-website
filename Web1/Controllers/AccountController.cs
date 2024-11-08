@@ -41,6 +41,7 @@ namespace Web1.Controllers
         {
             var result = await _account.RegisterAsync(register);
             return Ok(result);
+            
         }
     }
 }

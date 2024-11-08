@@ -38,24 +38,26 @@ export class ManageUserComponent implements OnInit {
   initialization() {
     this.postForm = this.fb.group({
       id: [0],
-      userName: ['', Validators.required],       // Tên trường đã cập nhật
-      dateUser: [new Date(), Validators.required], // Tên trường đã cập nhật
-      address: ['', Validators.required],         // Tên trường đã cập nhật
-      fullName: ['', Validators.required],       // Tên trường đã cập nhật
-      isActive: [true],                         // Tên trường đã cập nhật
-      userRole: ['', Validators.required],       // Tên trường đã cập nhật
-      password: ['', Validators.required],       // Tên trường đã cập nhật
-      confirmPassword: ['', Validators.required]  // Thêm ConfirmPassword nếu cần
+      userName: ['', Validators.required],       
+      dateUser: [new Date(), Validators.required], 
+      address: ['', Validators.required],        
+      fullName: ['', Validators.required],      
+      isActive: [true],                        
+      userRole: ['', Validators.required],      
+      email: ['', Validators.required],
+      password: ['', Validators.required],      
+      confirmPassword: ['', Validators.required]  
     });
 
     this.editForm = this.fb.group({
       id: [0],
-      userName: ['', Validators.required],       // Tên trường đã cập nhật
-      dateUser: [new Date(), Validators.required], // Tên trường đã cập nhật
-      address: ['', Validators.required],         // Tên trường đã cập nhật
-      fullName: ['', Validators.required],       // Tên trường đã cập nhật
-      isActive: [true, Validators.required],                         // Tên trường đã cập nhật
-      userRoleList: [[], Validators.required],       // Tên trường đã cập nhật
+      userName: ['', Validators.required],      
+      dateUser: [new Date(), Validators.required],
+      address: ['', Validators.required],        
+      fullName: ['', Validators.required],
+      email: ['', Validators.required],      
+      isActive: [true, Validators.required],                        
+      userRoleList: [[], Validators.required],      
     });
 
     
@@ -96,6 +98,7 @@ export class ManageUserComponent implements OnInit {
             userName: this.selectedUser.userName,
             fullName: this.selectedUser.fullName,
             address: this.selectedUser.address,
+            email: this.selectedUser.email,
             dateUser: this.selectedUser.dateUser.split('T')[0],
             userRoleList: this.selectedUser.userRoleList,
             isActive: this.selectedUser.isActive

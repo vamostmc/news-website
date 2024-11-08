@@ -70,7 +70,10 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
 //Dang ki Identity 
-builder.Services.AddIdentity<AppUser, IdentityRole>()
+builder.Services.AddIdentity<AppUser, IdentityRole>( options =>
+                 {
+                    options.SignIn.RequireConfirmedEmail = true; // Bật yêu cầu xác nhận email
+                 })
                 .AddEntityFrameworkStores<TinTucDbContext>()
                 .AddDefaultTokenProviders();
 
