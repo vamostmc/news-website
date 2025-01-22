@@ -17,7 +17,6 @@ using Web1.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -68,7 +67,7 @@ builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
-
+builder.Services.AddScoped<IPasswordRepository, PasswordRepository>();
 //Dang ki Identity 
 builder.Services.AddIdentity<AppUser, IdentityRole>( options =>
                  {
