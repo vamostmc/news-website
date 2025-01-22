@@ -19,6 +19,7 @@ import { AddPostComponent } from './manage-post/add-post/add-post.component';
 import { EditPostComponent } from './manage-post/edit-post/edit-post.component';
 import { ShowPostComponent } from './manage-post/show-post/show-post.component';
 import { SearchFilterPostComponent } from './manage-post/search-filter-post/search-filter-post.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { SearchFilterPostComponent } from './manage-post/search-filter-post/sear
     ReactiveFormsModule, 
     FormsModule,
     NgxPaginationModule,
-    EditorModule
+    EditorModule,
+    RouterModule
   ]
 })
 export class AdminModule { }

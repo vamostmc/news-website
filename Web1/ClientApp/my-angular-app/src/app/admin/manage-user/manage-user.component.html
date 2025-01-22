@@ -32,7 +32,7 @@
             <tbody>
               <tr *ngFor="let user of userView | paginate: { itemsPerPage: 5, currentPage: p  }; let i = index;  ">
                 <td> {{ (p - 1) * 5 + (i + 1) }}</td>
-                <td > {{ user.id }}</td>
+                <td> {{ user.id }}</td>
                 <td> {{ user.fullName }}</td>
                 <td> {{ user.userName }}</td>
                 <td> {{ user.email }}</td>

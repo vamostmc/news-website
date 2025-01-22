@@ -44,23 +44,30 @@ export class NavbarComponent implements OnInit {
     }
 
     logOut() {
-        // Xóa token và thông tin người dùng khỏi localStorage hoặc sessionStorage
-        localStorage.removeItem('keyUser');
-        localStorage.removeItem('userName');
-        this.username = ''; // Xóa thông tin username
-        window.location.reload();
-        this.router.navigate(['/']); // Chuyển hướng về trang login
+        
+        this.authService.LogOut().subscribe(
+          (data) => {
+            console.log(data);
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('confirmEmail');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('fullName');
+            localStorage.removeItem('userRoles');
+            this.username = ''; // Xóa thông tin username
+            window.location.reload();
+            this.router.navigate(['/']);
+          }
+        );
+        
     }
 
     ngOnInit(): void {
       console.log(`Click : ${this.isDropdownOpen}`);
       this.authService.currentUserName.subscribe(userName => {
         this.username = userName;
-        this.username = localStorage.getItem("userName");
+        this.username = localStorage.getItem("fullName");
         this.userRole = this.authService.GetRoleUser();
       });
-      
-      
       
     }
 }

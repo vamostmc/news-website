@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Web1.Data;
 using Web1.Repository;
 using Web1.Models;
+using Microsoft.AspNetCore.Authorization;
+using Web1.Helps;
 
 namespace Web1.Controllers
 {
@@ -15,6 +17,7 @@ namespace Web1.Controllers
         public DanhMucController( IDanhMucRepository danhMuc) { _danhMuc = danhMuc; }
 
         [HttpGet("GetDanhmuc")]
+        //[Authorize(Roles = Role.Customer)]
         public async Task<List<DanhMucDto>> GetAllDanhMuc()
         {
             return await _danhMuc.GetDanhMuc();

@@ -7,11 +7,9 @@ namespace Web1.Repository
     {
         public Task<IdentityResult> RegisterAsync(Register register);
 
-        public Task<string> LoginJWTAsync(Login login);
-        
-        public Task<string> LoginCookeAsync(Login login);
+        public Task<LoginDto> LoginJWTAsync(Login login);
 
-        public Task<string> PasswordReset(string email);
+        public Task<string> LoginCookeAsync(Login login);
 
     }
 }

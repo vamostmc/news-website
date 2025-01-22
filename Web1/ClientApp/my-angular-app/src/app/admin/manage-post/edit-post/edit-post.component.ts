@@ -6,6 +6,14 @@ import { Danhmuc } from '../../../Client/models/danhmuc';
 import { DanhmucService } from '../../../Client/service-client/danhmuc-service/danhmuc.service';
 import { DashboardService } from '../../../Client/service-client/dashboard-service/dashboard.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as pdfjsLib from 'pdfjs-dist';
+import { async } from 'rxjs';
+import * as JSZip from 'jszip';
+
+
+
+
+
 @Component({
   selector: 'app-edit-post',
   templateUrl: './edit-post.component.html',
@@ -269,12 +277,92 @@ export class EditPostComponent {
     )
   }
 
+  importFile(editor: any): void {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf,.docx'; // Chỉ cho phép file PDF và Word
+    fileInput.style.display = 'none';
+
+    fileInput.onchange = async () => {
+      const file = fileInput.files ? fileInput.files[0] : null;
+      if (file) {
+        const fileType = file.name.split('.').pop()?.toLowerCase();
+
+        if (fileType === 'pdf') {
+          this.loadPDF(file, editor);
+        } else if (fileType === 'docx') {
+          this.loadWord(file, editor);
+        } else {
+          alert('Chỉ hỗ trợ file PDF hoặc Word.');
+        }
+      }
+    };
+
+    
+    // Kích hoạt chọn file
+    fileInput.click();
+  }
+
+  // Hàm xử lý hiển thị nội dung file PDF
+  async loadPDF(file: File, editor: any): Promise<void> {
+    try {
+      // Tạo URL từ file PDF
+      const url = URL.createObjectURL(file);
+  
+      // Thêm iframe để hiển thị PDF
+      const iframe = `<iframe src="${url}" style="width: 100%; height: 500px;" frameborder="0"></iframe>`;
+      
+      // Chèn iframe vào editor
+      editor.insertContent(iframe);
+    } catch (error) {
+      console.error('Lỗi khi hiển thị file PDF qua iframe:', error);
+    }
+  }
   
 
+  // Upload file word
+  async loadWord(file: File, editor: any): Promise<void> {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const zip = await JSZip.loadAsync(arrayBuffer);
   
+      // Tìm thư mục hình ảnh trong file docx
+      const images: any[] = [];
+      zip.forEach((relativePath, file) => {
+        if (file.name.startsWith('word/media/')) {
+          file.async('base64').then((data: string) => {
+            images.push({
+              name: file.name,
+              data: data
+            });
+          });
+        }
+      });
+  
+      // Sử dụng mammoth để trích xuất HTML với định dạng
+      const mammoth = await import('mammoth');
+      const { value, messages } = await mammoth.convertToHtml({ arrayBuffer });
+      
+      // Kiểm tra các cảnh báo từ mammoth (nếu có)
+      if (messages.length > 0) {
+        console.warn('Cảnh báo từ Mammoth:', messages);
+      }
+  
+      // Chèn nội dung văn bản vào editor (HTML có định dạng)
+      editor.insertContent(value);
+  
+      // Chèn hình ảnh vào editor
+      images.forEach(image => {
+        const imgElement = `<img src="data:image/jpeg;base64,${image.data}" alt="${image.name}" />`;
+        editor.insertContent(imgElement);
+      });
+  
+    } catch (error) {
+      console.error('Lỗi khi xử lý tệp Word:', error);
+    }
+  }
 
 
-  
   ngOnInit(): void {
     this.editorConfig = {
       height: 550, // Chiều cao editor
@@ -282,9 +370,37 @@ export class EditPostComponent {
       plugins: 'link image code preview',
       toolbar: [
         'undo redo | styleselect | bold italic | fontselect | fontsizeselect | forecolor backcolor\n',
-        'alignleft aligncenter alignright alignjustify | bullist numlist | link image | table | media | preview'
-      ].join('\n') // Sử dụng join để xuống dòng
+        'alignleft aligncenter alignright alignjustify | bullist numlist | link image | table | media | preview | importfile'
+      ].join('\n'), // Sử dụng join để xuống dòng
+      setup: (editor: any) => {
+        editor.ui.registry.addButton('importfile', {
+          text: 'Import File', // Nhãn nút
+          icon: 'upload', // Biểu tượng
+          onAction: () => {
+            // Tạo input file để chọn file
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.docx, .pdf'; // Hỗ trợ cả Word và PDF
+            input.onchange = async (event: Event) => {
+              const file = (event.target as HTMLInputElement).files?.[0];
+              if (file) {
+                const fileExtension = file.name.split('.').pop()?.toLowerCase();
+                if (fileExtension === 'docx') {
+                  await this.loadWord(file, editor); // Xử lý file Word
+                } else if (fileExtension === 'pdf') {
+                  await this.loadPDF(file, editor); // Xử lý file PDF
+                } else {
+                  console.error('File không được hỗ trợ.');
+                  alert('Chỉ hỗ trợ file .docx và .pdf');
+                }
+              }
+            };
+            input.click();
+          },
+        });
+      },
     };
+    
 
     this.FindTinTucId();
     console.log(this.idUrl);

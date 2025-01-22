@@ -75,6 +75,11 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "ssl": true,
+            "sslCert": "D:/source/repos/Web1/Web1/ClientApp/my-angular-app/localhost.crt",
+            "sslKey": "D:/source/repos/Web1/Web1/ClientApp/my-angular-app/localhost.key"
+          },
           "configurations": {
             "production": {
               "buildTarget": "my-angular-app:build:production"

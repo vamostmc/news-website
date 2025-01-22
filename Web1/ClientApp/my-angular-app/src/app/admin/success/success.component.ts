@@ -13,7 +13,6 @@ export class SuccessComponent implements OnInit {
   countdownInterval: any; // Biến để lưu giữ interval
   showNotification: boolean = false;
   @Input() typeNotify : boolean = true;
-
   @Input() messageNotify: string[] = [];
 
   
@@ -25,11 +24,7 @@ export class SuccessComponent implements OnInit {
       this.startCountdown();
     }
      // Bắt đầu đếm ngược khi component được khởi tạo
-
-    
   }
-
-
 
   startCountdown() {
     this.countdownInterval = setInterval(() => {

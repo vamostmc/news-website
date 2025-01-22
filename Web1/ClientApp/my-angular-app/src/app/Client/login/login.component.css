@@ -2,7 +2,10 @@
     background: #fff;
     border-radius: 10px;
     padding: 40px;
+    margin-bottom: 50px;
 }
+
+
 
 .icon {
     color: #007bff;
@@ -20,6 +23,30 @@
     padding-left: 20px;
 }
 
+.password-toggle {
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #aaa;
+}
+
+.password-toggle i {
+  font-size: 18px; /* Điều chỉnh kích thước theo ý muốn, ví dụ 16px */
+}
+
+.password-toggle:hover {
+  color: #333;
+}
+
+.form-floating {
+  position: relative;
+}
+
+
 .checkbox-wrap input {
     margin-right: 10px;
 }
@@ -27,6 +54,7 @@
 .submit {
     background-color: #007bff;
     border-radius: 30px;
+   font-size: 16px;
 }
 
 .shadow {
@@ -39,7 +67,7 @@ h3 {
 }
 
 .login-check {
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 .w-50.text-md-right a {
@@ -48,33 +76,122 @@ h3 {
 
 
 
+.form-floating label {
+  padding-left: 20px; /* Lùi chữ placeholder vào trong */
+}
 
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f8f9fa;
-  }
-  .login-card {
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    background-color: white;
-  }
-  .login-card h2 {
-    margin-bottom: 1.5rem;
-    text-align: center;
-    font-weight: bold;
-  }
-  .login-btn {
-    background-color: #0d6efd;
-    color: white;
-  }
-  .login-btn:hover {
-    background-color: #0b5ed7;
-  }
-  .form-floating .form-control:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-  }
+
+
+
+
+  /* Giao diện nền mờ cho màn hình loading */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Nền đen mờ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out; /* Hiệu ứng chuyển mờ dần */
+}
+
+/* Vùng chứa spinner và text */
+.spinner-container {
+  text-align: center;
+  color: #fff;
+}
+
+/* Vòng xoay (spinner) */
+.spinner {
+  border: 8px solid rgba(255, 255, 255, 0.5); /* Viền mờ */
+  border-top: 8px solid #fff; /* Viền sáng */
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 1.5s linear infinite; /* Hiệu ứng xoay */
+  margin-bottom: 15px;
+  margin-left: 20px;
+}
+
+/* Text loading */
+.spinner-container p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  opacity: 0.8;
+}
+
+/* Animation cho spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Hiệu ứng mờ dần khi ẩn loading */
+.loading-overlay.ng-leave-active {
+  opacity: 0;
+}
+
+/* Nút đăng nhập */
+.login-alt-btn {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none; /* Không cần viền */
+  border-radius: 50%; /* Tạo hình tròn */
+  background-color: white; /* Màu xám nhạt */
+  transition: all 0.3s ease;
+  padding: 0; /* Xóa padding mặc định */
+  overflow: hidden; /* Đảm bảo ảnh vừa khít */
+  cursor: pointer; /* Hiển thị biểu tượng trỏ chuột */
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.login-alt-btn:hover {
+  filter: brightness(0.9); /* Tối hơn một chút khi hover */
+}
+
+/* Logo trong nút */
+.login-alt-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: cover; /* Đảm bảo ảnh không bị méo */
+  border-radius: 50%; /* Đảm bảo hình ảnh cũng là hình tròn */
+}
+
+/* Dòng Đăng ký */
+.register-link {
+  font-size: 15px;
+  color: #6c757d; /* Màu xám nhạt */
+}
+
+.register-now {
+  font-weight: bold;
+  color: #007bff; /* Màu xanh liên kết */
+  text-decoration: none; /* Bỏ gạch chân mặc định */
+  transition: color 0.2s ease;
+}
+
+.register-now:hover {
+  color: #0056b3; /* Màu xanh đậm hơn khi hover */
+  text-decoration: underline; /* Gạch chân khi hover */
+}
+
+#google-signin-btn {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center;     /* Căn giữa theo chiều dọc */
+  
+}
+
+
+
+
+

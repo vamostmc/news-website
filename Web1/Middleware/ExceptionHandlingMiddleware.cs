@@ -42,10 +42,12 @@ namespace Web1.Middleware
                 {
                     Status = StatusCodes.Status500InternalServerError,
                     Title = "Lỗi hệ thống",
-                    Detail = "Đã xảy ra lỗi không mong muốn",
+                    Detail = ex.Message,
                     Instance = context.Request.Path
                 });
             }
         }
+
+        
     }
 }

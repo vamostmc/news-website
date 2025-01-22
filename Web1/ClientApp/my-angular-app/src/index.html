@@ -6,7 +6,31 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js"></script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v21.0&appId=1124693869096012"></script>
   <script src="https://cdn.tiny.cloud/1/8k7almaxv4x4zjxd51s3okdv5zujay8rm98w8weidphzn6ne/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '1124693869096012',  // Thay bằng appId của bạn
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v21.0'  // Thay bằng phiên bản API bạn muốn
+      });
+        
+      FB.AppEvents.logPageView();   
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
 </head>
 <body>
   <app-root></app-root>
