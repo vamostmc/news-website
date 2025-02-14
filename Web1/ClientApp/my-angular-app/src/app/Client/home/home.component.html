@@ -1,0 +1,119 @@
+<app-navbar-client></app-navbar-client>
+    <div class="news-container">
+        <div class="news-item large" *ngIf="tintucView.length > 0">
+          <a routerLink="/detail/{{tintucView[0].tintucId}}">
+            <img [src]="getFullImageUrl(tintucView[0].hinhAnh)" alt="Bài viết 1">
+            <h2>{{ tintucView[0].tieuDe }}</h2>
+            <p class="time-item1">{{ tintucView[0].ngayDang | date:'MMMM d, yyyy' }}</p>
+          </a> 
+        </div>
+      
+        <div class="news-item small" *ngIf="tintucView.length > 1">
+          <a routerLink="/detail/{{tintucView[1].tintucId}}">
+            <img [src]="getFullImageUrl(tintucView[1].hinhAnh)" alt="Bài viết 2">
+            <h3>{{ tintucView[1].tieuDe }}</h3>
+            <p class="time-item2">{{ tintucView[1].ngayDang | date:'MMMM d, yyyy' }}</p>
+          </a>
+        </div>
+      
+        <div class="news-item smaller" *ngIf="tintucView.length > 2">
+          <a routerLink="/detail/{{tintucView[2].tintucId}}">
+            <img [src]="getFullImageUrl(tintucView[2].hinhAnh)" alt="Bài viết 3">
+            <h4>{{ tintucView[2].tieuDe }}</h4>
+            <p class="time-item3">{{ tintucView[2].ngayDang | date:'MMMM d, yyyy' }}</p>
+          </a>
+        </div>
+      
+        <div class="news-item smaller" *ngIf="tintucView.length > 3">
+          <a routerLink="/detail/{{tintucView[3].tintucId}}">
+            <img [src]="getFullImageUrl(tintucView[3].hinhAnh)" alt="Bài viết 4">
+            <h4>{{ tintucView[3].tieuDe }}</h4>
+            <p class="time-item4">{{ tintucView[3].ngayDang | date:'MMMM d, yyyy' }}</p>
+          </a>
+        </div>
+    </div>
+
+    <div class="container">
+      <!-- Bên trái -->
+      
+      <div class="left-content">
+        <div class="highlight-box">
+          <div class="highlight-header">
+              <h2>BÀI VIẾT NỔI BẬT</h2>
+              <div class="tags">
+                <span 
+                  *ngFor="let category of categories" 
+                  (click)="filterNews(category.id)" 
+                  [ngClass]="{'active-tag': selectedCategory === category.id}">
+                  {{ category.name }}
+                </span>
+              </div>
+          </div>
+        </div>
+        <div class="post" *ngFor="let tintuc of paginatedNews">
+          <img class="image-prominent" [src]="getFullImageUrl(tintuc.hinhAnh)" alt="Ảnh bài viết">
+          <h3 class="title">{{ tintuc.tieuDe }}</h3>
+          <div class="info">
+            <span><i class="fas fa-calendar-alt"></i> {{ tintuc.ngayDang | date:'MMMM d, yyyy' }}</span>
+            <span><i class="fas fa-comments"></i> {{ tintuc.soLuongComment }}</span>
+            <span><i class="fas fa-eye"></i> {{ tintuc.luongKhachTruyCap }}</span>
+          </div>
+          <p class="summary">{{ tintuc.moTaNgan.length > 100 ? (tintuc.moTaNgan | slice:0:100) + '...' : tintuc.moTaNgan }}</p>
+        </div>
+
+        <!-- Phân trang -->
+        <div class="pagination-box">
+          <div class="pagination-header">
+            <button (click)="prevPage()" [disabled]="currentPage === 1">«</button>
+  
+            <button *ngFor="let page of [].constructor(totalPages); let i = index"
+                    (click)="goToPage(i + 1)"
+                    [class.active]="currentPage === i + 1">
+              {{ i + 1 }}
+            </button>
+  
+            <button (click)="nextPage()" [disabled]="currentPage === totalPages">»</button>
+          </div>
+        </div>
+        
+      </div>
+      <div class="divider"></div>
+    
+      <!-- Bên phải -->
+      <app-trending-view *ngIf="tintucView.length > 0" [tintucs]="tintucView"></app-trending-view>
+    </div>
+
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="loading-overlay">
+      <div class="spinner-container">
+        <div class="spinner"></div>
+        <p>Vui lòng chờ ...</p>
+      </div>
+    </div>
+
+
+    <app-footer></app-footer>
+  
+  
+  
+
+    
+    
+    
+
+      
+
+
+
+<!-- <button (click)="fetchWeather()">Get Weather Forecast</button>
+
+<div *ngIf="weatherData">
+  <h3>Weather Data:</h3>
+  <ul>
+    <li *ngFor="let item of weatherData">
+      {{ item.date }} - {{ item.temperatureC }}°C - {{ item.summary }}
+    </li>
+  </ul>
+</div> -->
+

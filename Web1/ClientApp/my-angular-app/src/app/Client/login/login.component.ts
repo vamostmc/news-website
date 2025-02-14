@@ -147,7 +147,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(["/admin"]);
       }
       else {
-        this.router.navigate([""]);
+        this.router.navigate(["/home"]);
       }
     }
 
@@ -226,15 +226,5 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {
       this.initializeGoogleLogin();
-      
-      const account = this.cookieService.getAccountCookie();
-      if (account) {
-        this.loginForm.patchValue({
-          username: account.username,
-          password: account.password,
-          remember: true
-        });
-      }
-      
     }
 }

@@ -23,5 +23,7 @@ namespace Web1.Models
         public int? ParentId { get; set; }
 
         public int? Likes { get; set; }
+
+        public List<BinhLuanDto>? Replies { get; set; }
     }
 }

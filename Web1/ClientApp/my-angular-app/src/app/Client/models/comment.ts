@@ -9,4 +9,5 @@ export interface Comment {
   trangThai?: boolean;
   parentId?: number;
   likes?: number;
+  replies?: Comment[];
 }

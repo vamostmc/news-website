@@ -1,0 +1,17 @@
+<!-- Bên phải -->
+<div class="right-content">
+    <div class="popular-header">
+      Bài viết truy cập nhiều nhất
+    </div>
+    <div class="right-post" *ngFor="let tintuc of tintucTop">
+      <img class="image-right" [src]="getFullImageUrl(tintuc.hinhAnh)" alt="Ảnh bài viết">
+      <div class="right-text">
+        <h4 class="title">{{ tintuc.tieuDe }}</h4>
+        <div class="info-row">
+          <span class="date">{{ tintuc.ngayDang | date:'MMMM d, yyyy' }}</span>
+          <span class="views"> {{ tintuc.luongKhachTruyCap }} lượt xem</span>
+        </div>
+      </div>
+    </div>
+    <!-- Thêm bài viết tiếp theo -->
+  </div>

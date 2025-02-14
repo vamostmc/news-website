@@ -55,6 +55,7 @@ export class CommentService {
 
     formData.append("tintucId", postForm.get("tintucId")?.value);
     formData.append("userId", postForm.get("userId")?.value);
+    formData.append("parentId", postForm.get("parentId")?.value);
     formData.append("ngayGioBinhLuan", postForm.get("ngayGioBinhLuan")?.value);
     formData.append("noiDung", postForm.get("noiDung")?.value);
     formData.append("trangThai", postForm.get("trangThai")?.value);
@@ -66,6 +67,7 @@ export class CommentService {
     const formData = new FormData();
     formData.append("binhluanId", postForm.get("binhluanId")?.value);
     formData.append("tintucId", postForm.get("tintucId")?.value);
+    formData.append("parentId", postForm.get("parentId")?.value);
     formData.append("userId", postForm.get("userId")?.value);
     formData.append("ngayGioBinhLuan", postForm.get("ngayGioBinhLuan")?.value);
     formData.append("noiDung", postForm.get("noiDung")?.value);

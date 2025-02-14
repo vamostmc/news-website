@@ -1,0 +1,58 @@
+<div class="top-bar">
+    <div class="social-icons">
+      <p class="date-bar">{{ dayOfWeek }}, {{ formattedDate }}</p>
+      <a href="#" class="icon facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="icon instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="icon twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="icon gmail"><i class="fa-brands fa-tiktok"></i></a>
+    </div>
+    
+    <div class="auth-buttons" *ngIf="!fullName; else userLoggedIn">
+      <a routerLink="/login"><button class="login">Đăng nhập</button></a>
+      <a routerLink="/register"><button class="register">Đăng ký</button></a>
+    </div>
+  
+    <!-- Nếu đã đăng nhập, hiển thị avatar + icon -->
+    <ng-template #userLoggedIn>
+      <div class="user-container">
+        <div class="user-avatar">
+          <img src="https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg" alt="Avatar">
+        </div>
+        <span class="user-name">{{ fullName }}</span>
+        <div class="icon-group">
+          <a href="#" class="circle-icon"><i class="fas fa-envelope"></i></a> <!-- Tin nhắn -->
+          <a href="#" class="circle-icon"><i class="fas fa-bell"></i></a>  <!-- Thông báo -->
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  
+  <hr class="silver-line1">
+      <div class="logo-container">
+        <h2>THE NEWS</h2>
+        <div class="logo-image">
+            <img src="https://static-images.vnncdn.net/files/publish/2022/8/23/emag-cover-desk-849.jpg" alt="logo-image">
+        </div>
+      </div>
+      <hr class="silver-line2">
+      <nav class="navigation">
+          <ul>
+              <li><i class="fa-solid fa-bars"></i></li>
+              <li><a routerLink="/home">Home</a></li>
+              <li><a href="/login">Today</a></li>
+              <li><a href="#">Music</a></li>
+              <li><a href="#">Education</a></li>
+              <li><a href="#">Celebrities</a></li>
+              <li><a href="#">Sports</a></li>
+              <li class="search-container">
+                  <i class="fa-solid fa-search search-icon"></i>
+                  <input 
+                      type="text" 
+                      class="search-bar" 
+                      placeholder="Tìm kiếm bài viết" 
+                      
+                  />
+              </li>            
+          </ul>
+      </nav>
+      <hr class="silver-line2">

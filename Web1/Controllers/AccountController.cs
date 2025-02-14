@@ -163,7 +163,6 @@ namespace Web1.Controllers
         }
 
         [HttpGet("RefreshToken")]
-        
         public async Task<string> RefreshToken()
         {
             var authorizationHeader = Request.Headers["Authorization"].ToString();
@@ -188,7 +187,6 @@ namespace Web1.Controllers
         }
 
         [HttpGet("Check-Admin")]
-        
         public async Task<Success> CheckAdmin()
         {
             var authorizationHeader = Request.Headers["Authorization"].ToString();

@@ -27,5 +27,7 @@ namespace Web1.Models
         public int? DanhmucId { get; set; }
 
         public string TenDanhMuc { get; set; } = null!;
+
+        public List<BinhLuanDto>? BinhLuan { get; set; }
     }
 }

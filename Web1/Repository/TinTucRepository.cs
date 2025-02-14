@@ -47,13 +47,10 @@ namespace Web1.Repository
 
         public async Task<TinTucDto> GetTinTuc(int id)
         {
-            var countComment = await _tinTuc.TinTucs.Include(t => t.BinhLuans)
-                                                    .Where(t => t.TintucId == id)
-                                                    .SelectMany(t => t.BinhLuans)
-                                                    .CountAsync();
-
             var data = await _tinTuc.TinTucs
                                     .Include(t => t.Danhmuc)
+                                    .Include(t => t.BinhLuans)
+                                    .ThenInclude(bl => bl.User)
                                     .Where(t => t.TintucId == id)
                                     .Select(t => new TinTucDto
                                     {
@@ -64,21 +61,56 @@ namespace Web1.Repository
                                         NgayDang = t.NgayDang,
                                         DanhmucId = t.DanhmucId,
                                         NgayCapNhat = t.NgayCapNhat,
-                                        SoLuongComment = countComment,
+                                        SoLuongComment = t.BinhLuans.Count(),
                                         LuongKhachTruyCap = t.LuongKhachTruyCap,
                                         NoiDung = t.NoiDung,
                                         TrangThai = t.TrangThai,
-                                        TenDanhMuc = t.Danhmuc.TenDanhMuc // Lấy tên danh mục
+                                        TenDanhMuc = t.Danhmuc.TenDanhMuc,
+
+                                        // Danh sách bình luận
+                                        BinhLuan = t.BinhLuans
+                                            .Where(bl => bl.ParentId == null) // Lọc bình luận cha
+                                            .GroupJoin(t.BinhLuans, bl => bl.BinhluanId, reply => reply.ParentId, (bl, replies) => new
+                                            {
+                                                BinhLuan = bl,
+                                                Replies = replies
+                                            })
+                                            .Select(blg => new BinhLuanDto
+                                            {
+                                                BinhluanId = blg.BinhLuan.BinhluanId,
+                                                TintucId = blg.BinhLuan.TintucId,
+                                                UserId = blg.BinhLuan.UserId,
+                                                NgayGioBinhLuan = blg.BinhLuan.NgayGioBinhLuan,
+                                                NoiDung = blg.BinhLuan.NoiDung,
+                                                UserName = blg.BinhLuan.User != null ? blg.BinhLuan.User.UserName : "Ẩn danh",
+                                                TieuDeTinTuc = t.TieuDe,
+                                                TrangThai = blg.BinhLuan.TrangThai,
+                                                ParentId = blg.BinhLuan.ParentId,
+                                                Likes = blg.BinhLuan.Likes ?? 0,
+                                                // Các bình luận trả lời cho bình luận này
+                                                Replies = blg.Replies.Select(reply => new BinhLuanDto
+                                                {
+                                                    BinhluanId = reply.BinhluanId,
+                                                    TintucId = reply.TintucId,
+                                                    UserId = reply.UserId,
+                                                    NgayGioBinhLuan = reply.NgayGioBinhLuan,
+                                                    NoiDung = reply.NoiDung,
+                                                    UserName = reply.User != null ? reply.User.UserName : "Ẩn danh",
+                                                    TieuDeTinTuc = t.TieuDe,
+                                                    TrangThai = reply.TrangThai,
+                                                    ParentId = reply.ParentId,
+                                                    Likes = reply.Likes ?? 0
+                                                })
+                                                .ToList()
+                                            })
+                                            .ToList()
                                     })
                                     .FirstOrDefaultAsync();
 
-            if (data == null)
-            {
-                return null; // Trả về null nếu không tìm thấy tin tức
-            }
-
             return data;
         }
+
+
 
         public async Task<List<DanhMuc>> GetDanhMuc()
         {
@@ -100,7 +132,7 @@ namespace Web1.Repository
                 NoiDung = tinTuc.NoiDung,
             };
 
-            if (tinTuc.Image.Length > 0)
+            if (tinTuc.Image != null)
             {
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "Hinh", tinTuc.Image.FileName);
                 using (var stream = System.IO.File.Create(path))
@@ -112,7 +144,7 @@ namespace Web1.Repository
 
             else
             {
-                NewTintuc.HinhAnh = "";
+                NewTintuc.HinhAnh = "/Hinh/Null.png";
             }
 
             _tinTuc.TinTucs.Add(NewTintuc);
@@ -138,19 +170,21 @@ namespace Web1.Repository
             var data = await _tinTuc.TinTucs.FindAsync(id);
             if (data != null)
             {
-                // Xóa hình ảnh khỏi thư mục nếu có
-                var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), data.HinhAnh.TrimStart('/'));
-
-                // Xóa file hình ảnh cũ nếu tồn tại
-                if (System.IO.File.Exists(oldImagePath))
+                if (data.HinhAnh != "/Hinh/Null.png")
                 {
-                    System.IO.File.Delete(oldImagePath);
-                }
+                    // Xóa hình ảnh khỏi thư mục nếu có
+                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), data.HinhAnh.TrimStart('/'));
 
-                // Xóa bài viết khỏi cơ sở dữ liệu
+                    // Xóa file hình ảnh cũ nếu tồn tại
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
                 _tinTuc.TinTucs.Remove(data);
                 await _tinTuc.SaveChangesAsync();
             }
+
             else
             {
                 // Xử lý trường hợp không tìm thấy bài viết

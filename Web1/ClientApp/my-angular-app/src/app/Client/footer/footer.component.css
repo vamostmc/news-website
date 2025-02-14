@@ -1,0 +1,116 @@
+
+footer{
+    width: 100%;
+    height: 370px;
+    background-color: black;
+  }
+  
+  footer .footer-logo a {
+    text-decoration: none;
+    color: white;
+    font-size: 30px;
+  }
+  
+  .footer-logo {
+    margin-left: 80px;
+  }
+  
+  .footer-logo .footer-brand img {
+    width: 140px;
+    margin-right: -40px;
+    margin-left: -10px;
+  }
+  
+  .footer-follow {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    margin-left: 0px;
+  }
+  
+  .footer-follow a {
+    font-size: 10px; /* Tùy chỉnh kích thước icon */
+    margin-right: 25px;
+    color: white;
+  }
+  
+  .footer-follow :hover {
+    color: red;
+  }
+  
+  .footer-follow a i {
+    font-size: 20px;
+  }
+  
+  .footer-follow a {
+    display: inline-block;
+    width: 47px; /* Đặt kích thước cho khối a */
+    height: 47px;
+    line-height: 35px; /* Căn giữa icon theo chiều dọc */
+    text-align: center; /* Căn giữa icon theo chiều ngang */
+    border-radius: 50%; /* Tạo viền tròn */
+    border: 2px solid #333; /* Màu viền */
+    margin-right: 13px; /* Khoảng cách giữa các khối */
+    color: #333; /* Màu biểu tượng */
+    transition: all 0.3s ease;
+  }
+  
+  .footer-contact {
+    margin-top: -25px;
+    color: white;
+    width: 400px;
+  }
+  
+  .footer-contact h3 {
+   margin-bottom: 18px;
+  }
+  
+  .footer-contact .phone i, .mail i, .location i {
+    margin-bottom: 12px;
+    font-size: 18px;
+    margin-right: 10px;
+    width: 15px;
+  }
+  
+  .footer-end .container {
+    display: flex;
+  }
+  
+  .footer-link,
+  .footer-support {
+    color: white;
+    margin-top: 80px;
+    margin-left: 180px;
+  }
+  
+  .footer-link .link-element a,
+  .footer-support .link-element a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  .footer-link h3,
+  .footer-support h3 {
+    margin-bottom: 25px;
+  }
+  
+  .footer-link .link-element,
+  .footer-support .link-element {
+    margin-bottom: 18px;
+  }
+  
+  .footer-link .link-element a:hover,
+  .footer-support .link-element a:hover {
+    color: red
+  }
+  
+  .footer-link .link-element a i,
+  .footer-support .link-element a i {
+    margin-right: 7px;
+  }
+    
+    
+    
+    
+  

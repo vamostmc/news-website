@@ -1,0 +1,216 @@
+.article-container {
+  display: grid;
+  grid-template-columns: 61% 1px 35%; /* Chia thành 3 phần: Nội dung - Line - Sidebar */
+  gap: 25px;
+  padding: 0px 90px;
+
+  margin-bottom: 50px;
+  align-items: start;
+}
+
+/* Nội dung chính */
+.article-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  
+}
+
+/* Thanh line giữa */
+.article-divider {
+  width: 1px;
+  background-color: #ccc;
+  height: 100%;
+}
+
+/* Sidebar */
+.article-sidebar {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.article-sidebar {
+  position: sticky;
+  top: 20px; /* Giữ sidebar cách đỉnh 20px */
+  height: fit-content; /* Giữ kích thước phù hợp */
+}
+
+
+  
+
+ 
+
+
+  .comment-section {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px; 
+  }
+
+  .comment-section-header {
+    display: flex;
+    
+    align-items: center;
+    padding: 10px 0;
+}
+
+.total-comments {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 4px 20px 10px 15px;
+}
+
+.filter-dropdown {
+    position: relative;
+}
+
+.filter-button {
+    background: white;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.filter-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    list-style: none;
+    padding: 5px 0;
+    width: 120px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-menu li {
+    padding: 8px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.filter-menu li:hover {
+    background: #f0f0f0;
+}
+
+.filter-dropdown:hover .filter-menu {
+    display: block;
+}
+
+  
+  .comment-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .input-box {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  .send-icon {
+    color: #007bff;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .comment-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+  }
+
+
+  
+  .avatar {
+    width: 47px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .comment-content {
+    flex: 1;
+  }
+  
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .comment-author {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .comment-text {
+    margin: 8px 0;
+    font-size: 16px;
+  }
+  
+  .comment-actions {
+    display: flex;
+    gap: 15px;
+    font-size: 16px;
+  }
+  
+  .comment-actions i {
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .comment-actions i:hover {
+    color: #007bff;
+  }
+  
+  /* Phần bình luận con */
+  .replies {
+    margin-top: 10px;
+    padding-left: 10px;
+    border-left: 2px solid #ddd;
+  }
+  
+  .reply {
+    background: white;
+    box-shadow: none;
+  }
+  
+  /* Thanh nhập phản hồi ẩn ban đầu */
+  .reply-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  

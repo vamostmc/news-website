@@ -8,7 +8,7 @@ export interface Tintuc {
     luongKhachTruyCap: number;      // Số lượng khách truy cập
     soLuongComment: number;          // Số lượng bình luận
     danhmucId: number;               // ID danh mục
-    binhLuans: any[];                // Danh sách bình luận (có thể định nghĩa thêm nếu cần)
+    binhLuan: any[];                // Danh sách bình luận (có thể định nghĩa thêm nếu cần)
     danhmuc: any;                    // Danh mục (có thể định nghĩa thêm nếu cần)
     tenDanhMuc?: string;
     trangThai?: boolean;

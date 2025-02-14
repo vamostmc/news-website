@@ -1,0 +1,439 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+
+.news-container {
+    display: grid;
+    grid-template-columns: 54% 23% 23%;
+    grid-template-rows: 45% 35%;
+    gap: 10px;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .news-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .news-item a img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    transition: transform 0.3s ease;
+}
+  
+  .news-item:hover {
+    transform: scale(1.01);
+  }
+  
+  /* Bài 1 (chiếm 50%) */
+  .news-item.large {
+    width: 100%;
+    height: auto;
+    grid-row: span 2;
+  }
+  
+  /* Bài 2 (chiếm 25%) */
+  .news-item.small {
+    grid-column: span 2;
+  }
+  
+  .news-item.smaller {
+  width: 50%; /* Chiếm toàn bộ chiều rộng của cột */
+  display: inline-block;
+}
+
+/* Bài 3 (Nằm dưới bài 2, ở bên trái) */
+.news-item.smaller:nth-child(3) {
+  width: 100%;
+  grid-column: 2 / 3; /* Bài 3 nằm ở cột 2 */
+  grid-row: 2 / 3;
+}
+
+/* Bài 4 (Nằm dưới bài 2, ở bên phải) */
+.news-item.smaller:nth-child(4) {
+  width: 100%;
+  grid-column: 3 / 4; /* Bài 4 nằm ở cột 3 */
+  grid-row: 2 / 3;
+}
+  
+  .news-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .time-item1 {
+    position: absolute;
+    bottom: 7px;
+    left: 18px;
+    color: white;
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 0px;
+  }
+
+  .time-item2 {
+    position: absolute;
+    bottom: -2px;
+    left: 13px;
+    color: white;
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 0px;
+  }
+
+  .time-item3,
+  .time-item4 {
+    position: absolute;
+    bottom: -9px;
+    left: 13px;
+    color: white;
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 0px;
+  }
+
+  
+
+
+  
+  .news-item h2,
+  .news-item h3,
+  .news-item h4 {
+    position: absolute;
+    bottom: -6.5px;
+    left: -1px;
+    color: white;
+    padding: 8px;
+    border-radius: 0px;
+    background: transparent;
+  }
+  
+  .news-item h2 {
+    font-size: 23px;
+    bottom: 48px;
+    left: 18px;
+  }
+
+  .news-item h3{
+    font-size: 21px;
+    bottom: 31px;
+    left: 11px;
+  }
+
+  .news-item h4{
+    font-size: 17px;
+    bottom: 23px;
+    left: 11px;
+  }
+
+
+
+
+  .container {
+    display: grid;
+    grid-template-columns: 60% 0% 31%; /* Chia 2 phần 60% - 40% */
+    gap: 25px;
+    margin-right: 50px;
+    margin-bottom: 50px;
+  }
+  
+  .left-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 bài trên 1 dòng */
+    gap: 15px;
+  }
+  
+  .post {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    
+  }
+  
+  .post img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .title {
+    font-size: 18px;
+    margin: 12px 0px;
+  }
+  
+  .info {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+  }
+  
+  .info span {
+    margin-right: 10px;
+  }
+  
+  .info i {
+    margin-right: 5px;
+    
+  }
+  
+  .summary {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  /* Bên phải */
+  .right-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .right-post {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .right-post img {
+    width: 90px;
+    height: 70px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .right-text {
+    font-size: 14px;
+    margin: 5px 3px;
+    
+  }
+
+  .info-row {
+    font-size: 14px;
+    color: #666;
+    display: inline-block; /* Để ngày đăng không bị kéo dài theo chiều ngang */
+  }
+  
+  .views {
+    position: absolute;
+    left: 300px; /* Cách ngày đăng 20px */
+    top: 56px;
+    white-space: nowrap; /* Giữ nguyên không bị xuống dòng */
+    font-weight: bold;
+  }
+
+  .right-text .title {
+    margin: 2px 0px;
+  }
+
+  .right-text h4{
+    font-size: 14px;
+    font-family: inherit;
+  }
+  
+  .right-text i {
+    color: #007bff;
+  }
+
+  .right-text span {
+    font-size: 12px;
+
+  }
+
+  /* Đường line ngăn cách */
+.divider {
+  background-color: #ccc;
+  width: 1px;
+  height: 100%;
+}
+
+
+.highlight-box {
+  grid-column: 1 / -1; /* Chiếm toàn bộ hàng */
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  
+}
+
+/* --- HEADER CHO BÀI VIẾT NỔI BẬT --- */
+.highlight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #52CCE3; /* Đường gạch chân màu xanh nổi bật */
+}
+
+/* Tiêu đề chính */
+.highlight-header h2 {
+  font-size: 27px;
+  font-weight: bold;
+  color: black;
+  text-transform: uppercase; /* Chữ in hoa */
+  letter-spacing: 0px;
+  position: relative;
+  padding-bottom: 0px;
+  margin-bottom: -0;
+}
+
+
+/* --- TAGS --- */
+.tags {
+  display: flex;
+  gap: 8px;
+}
+
+.tags span {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.tags span:hover {
+  background: #007bff ;
+  transform: scale(1.05);
+}
+
+.active-tag {
+  background-color: #007bff ;
+  color: white;
+}
+
+.image-prominent {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.pagination-box {
+  grid-column: 1 / -1; 
+}
+
+
+.pagination-header {
+  
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-header button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pagination-header button:hover {
+  background-color: #0056b3;
+}
+
+.pagination-header button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination-header button.active {
+  background-color: rgb(36, 90, 86);
+  font-weight: bold;
+}
+
+.popular-header {
+  background: linear-gradient(145deg, #000 40%, #007bff 100%); /* Đen -> Xanh lam */
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+
+
+/* Giao diện nền mờ cho màn hình loading */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Nền đen mờ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out; /* Hiệu ứng chuyển mờ dần */
+}
+
+/* Vùng chứa spinner và text */
+.spinner-container {
+  text-align: center;
+  color: #fff;
+}
+
+/* Vòng xoay (spinner) */
+.spinner {
+  border: 8px solid rgba(255, 255, 255, 0.5); /* Viền mờ */
+  border-top: 8px solid #fff; /* Viền sáng */
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 1.5s linear infinite; /* Hiệu ứng xoay */
+  margin-bottom: 15px;
+  margin-left: 20px;
+}
+
+/* Text loading */
+.spinner-container p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  opacity: 0.8;
+}
+
+/* Animation cho spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Hiệu ứng mờ dần khi ẩn loading */
+.loading-overlay.ng-leave-active {
+  opacity: 0;
+}
+
+
+
+
+  
+  
+  
+  

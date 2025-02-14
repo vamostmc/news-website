@@ -45,8 +45,54 @@
           <!-- Nội dung từng bước -->
           <form [formGroup]="postForm" >
             <div *ngIf="currentStep === 1" class="step-content">
-              <h3>Thêm mới thông tin cơ bản</h3>
               
+              <h3>Thêm mới thông tin cơ bản</h3>
+              <div class="container-excel">
+                <button class="import-btn" (click)="openFileDialog()">Import Excel</button>
+                
+
+                <!-- Nền tối -->
+                <div *ngIf="isDialogOpen" class="overlay" (click)="closeFileDialog()"></div>
+              
+                <!-- Bảng thông báo Drag and Drop -->
+                <div *ngIf="isDialogOpen" class="file-dialog">
+                  <button class="download-btn" (click)="downloadTemplate()">Tải xuống mẫu</button>
+                  <div
+                    class="drop-area"
+                    (dragover)="onDragOver($event)"
+                    (dragleave)="onDragLeave($event)"
+                    (drop)="onDrop($event)"
+                  >
+                    <input
+                      type="file"
+                      id="fileInput"
+                      (change)="onFileSelected($event)"
+                      hidden
+                      accept=".xlsx, .xls"
+                    />
+                    <label for="fileInput" class="file-label" *ngIf="!fileExcelName">
+                      Kéo thả hoặc chọn file excel của bạn tại đây
+                      <br />
+                      <span class="file-note">Lưu ý: Bạn có thể import nhiều bài viết trước và thêm thông tin chi tiết sau.</span>
+                    </label>
+                    
+                    <div *ngIf="fileExcelName && !isUploading" class="file-preview">
+                      <img src="https://i.pinimg.com/736x/13/88/5f/13885f590c6070c7f106b0f19a17ab9b.jpg" alt="Excel icon" class="file-icon" />
+                      <span class="file-name">{{ fileExcelName }}</span>
+                    </div>
+                  </div>
+              
+                  <!-- Hiển thị thanh tiến trình khi đang tải file -->
+                  <div *ngIf="isUploading" class="progress-bar">
+                    <div class="progress" [style.width]="uploadProgress + '%'"></div>
+                  </div>
+  
+                  <div *ngIf="!isUploading && fileExcelName" class="import-button-container">
+                    <button class="import-action-btn" (click)="ImportExcel()">Import</button>
+                    <button class="change-file-btn" (click)="changeFileExcel()">Đổi file</button>
+                  </div>
+                </div>
+              </div>
               <!-- Bootstrap row to split content -->
               <div class="form-body" >
                 <div class="form-left">
@@ -57,7 +103,7 @@
                   </div>
                   <div class="image-upload">
                     <img *ngIf="imagePreview" [src]="imagePreview" id="post-image" alt="Post Image" style="width: 300px; max-height: 300px; object-fit: cover;" />
-                    <img  *ngIf="!imagePreview" id="post-image" src="https://via.placeholder.com/150" alt="Post Image" />
+                    <img  *ngIf="!imagePreview" id="post-image" src="https://dummyimage.com/150x150/cccccc/ffffff" alt="Post Image" />
                     <input type="file" id="upload-image" formControlName="HinhAnh" (change)="onFileChange($event)" required />
                     <div class="input-wrapper-upload">
                       
