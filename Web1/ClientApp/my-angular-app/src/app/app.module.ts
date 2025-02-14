@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from '../app/Client/login/login.component';
-import { NavbarComponent } from './Client/navbar/navbar.component';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './Client/register/register-customer/register.component';
 
@@ -20,11 +20,17 @@ import { ConfirmEmailComponent } from './Client/register/confirm-email/confirm-e
 import { RouterModule } from '@angular/router';
 import { ForgotPasswordComponent } from './Client/password/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './Client/password/reset-password/reset-password.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './Client/home/home.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule, GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
+
+import { ViewDetailComponent } from './Client/view-detail/view-detail.component';
+import { TrendingViewComponent } from './Client/home/trending-view/trending-view.component';
+import { FooterComponent } from './Client/footer/footer.component';
+import { NavbarClientComponent } from './Client/navbar/navbar-client/navbar-client.component';
+import { NavbarAuthenComponent } from './Client/navbar/navbar-authen/navbar-authen.component';
 
 
 
@@ -32,7 +38,6 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
   declarations: [
     AppComponent,
     LoginComponent,
-    NavbarComponent,
     RegisterComponent,
     AdminComponent,
     ConfirmEmailComponent,
@@ -40,6 +45,11 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
     ResetPasswordComponent,
     HomeComponent,
     ErrorPageComponent,
+    ViewDetailComponent,
+    TrendingViewComponent,
+    FooterComponent,
+    NavbarClientComponent,
+    NavbarAuthenComponent,
 
   ],
   imports: [

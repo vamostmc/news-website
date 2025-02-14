@@ -44,6 +44,7 @@ export class ManageCommentComponent implements OnInit {
       noiDung: ['', Validators.required],
       userName: [''],
       tieuDeTinTuc: [''],
+      parentId: [''],
       trangThai: [false, Validators.required]
     });
 
@@ -55,6 +56,7 @@ export class ManageCommentComponent implements OnInit {
       noiDung: ['', Validators.required],
       userName: [''],
       tieuDeTinTuc: [''],
+      parentId: [''],
       trangThai: [false, Validators.required]
     });
   }
@@ -81,7 +83,8 @@ export class ManageCommentComponent implements OnInit {
             tieuDeTinTuc: this.selectedComment.tieuDeTinTuc,
             ngayGioBinhLuan: this.selectedComment.ngayGioBinhLuan,
             noiDung: this.selectedComment.noiDung,
-            trangThai: this.selectedComment.trangThai
+            trangThai: this.selectedComment.trangThai,
+            parentId: this.selectedComment.parentId
           })
         }
       }

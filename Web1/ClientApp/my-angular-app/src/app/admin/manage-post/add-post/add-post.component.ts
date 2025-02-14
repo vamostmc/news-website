@@ -7,7 +7,7 @@ import { DanhmucService } from '../../../Client/service-client/danhmuc-service/d
 import { DashboardService } from '../../../Client/service-client/dashboard-service/dashboard.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-
+import * as JSZip from 'jszip';
 
 
 @Component({
@@ -48,7 +48,11 @@ export class AddPostComponent implements OnInit {
 
   loading: boolean = false;
   showPostData: boolean = false;
-
+  fileExcelName: string | null = null;
+  selectedFileExcel: File | null = null;
+  isDialogOpen = false;
+  isUploading = false;
+  uploadProgress = 0;
   
 
   private Url = 'https://localhost:7233';
@@ -185,7 +189,7 @@ export class AddPostComponent implements OnInit {
             
           },3000);
           return;
-          return;
+          
         }
       }
 
@@ -266,6 +270,90 @@ export class AddPostComponent implements OnInit {
       });
   }
 
+  importFile(editor: any): void {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf,.docx'; // Chỉ cho phép file PDF và Word
+    fileInput.style.display = 'none';
+
+    fileInput.onchange = async () => {
+      const file = fileInput.files ? fileInput.files[0] : null;
+      if (file) {
+        const fileType = file.name.split('.').pop()?.toLowerCase();
+
+        if (fileType === 'pdf') {
+          this.loadPDF(file, editor);
+        } else if (fileType === 'docx') {
+          this.loadWord(file, editor);
+        } else {
+          alert('Chỉ hỗ trợ file PDF hoặc Word.');
+        }
+      }
+    };
+
+    
+    // Kích hoạt chọn file
+    fileInput.click();
+  }
+
+  async loadPDF(file: File, editor: any) {
+    const reader = new FileReader();
+    reader.onload = async (event: any) => {
+      const pdfjsLib = await import('pdfjs-dist');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+      const pdf = await pdfjsLib.getDocument({ data: event.target.result }).promise;
+      let content = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        content += textContent.items.map((item: any) => item.str).join(' ') + '<br/>';
+      }
+      editor.setContent(content); // Chèn nội dung vào editor
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  async loadWord(file: File, editor: any): Promise<void> {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const zip = await JSZip.loadAsync(arrayBuffer);
+  
+      // Tìm thư mục hình ảnh trong file docx
+      const images: any[] = [];
+      zip.forEach((relativePath, file) => {
+        if (file.name.startsWith('word/media/')) {
+          file.async('base64').then((data: string) => {
+            images.push({
+              name: file.name,
+              data: data
+            });
+          });
+        }
+      });
+  
+      // Sử dụng mammoth để trích xuất HTML với định dạng
+      const mammoth = await import('mammoth');
+      const { value, messages } = await mammoth.convertToHtml({ arrayBuffer });
+      
+      // Kiểm tra các cảnh báo từ mammoth (nếu có)
+      if (messages.length > 0) {
+        console.warn('Cảnh báo từ Mammoth:', messages);
+      }
+  
+      // Chèn nội dung văn bản vào editor (HTML có định dạng)
+      editor.insertContent(value);
+  
+      // Chèn hình ảnh vào editor
+      images.forEach(image => {
+        const imgElement = `<img src="data:image/jpeg;base64,${image.data}" alt="${image.name}" />`;
+        editor.insertContent(imgElement);
+      });
+  
+    } catch (error) {
+      console.error('Lỗi khi xử lý tệp Word:', error);
+    }
+  }
+
   // Khởi tạo editor Tiny trình soạn thảo văn bản
   EditorInit() {
     this.editorConfig = {
@@ -274,10 +362,169 @@ export class AddPostComponent implements OnInit {
       plugins: 'link image code preview',
       toolbar: [
         'undo redo | styleselect | bold italic | fontselect | fontsizeselect | forecolor backcolor\n',
-        'alignleft aligncenter alignright alignjustify | bullist numlist | link image | table | media | preview'
-      ].join('\n') // Sử dụng join để xuống dòng
+        'alignleft aligncenter alignright alignjustify | bullist numlist | link image | table | media | preview | importfile'
+      ].join('\n'), // Sử dụng join để xuống dòng
+      setup: (editor: any) => {
+        editor.ui.registry.addButton('importfile', {
+          text: 'Import File', // Nhãn nút
+          icon: 'upload', // Biểu tượng
+          onAction: () => {
+            // Tạo input file để chọn file
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.docx, .pdf'; // Hỗ trợ cả Word và PDF
+            input.onchange = async (event: Event) => {
+              const file = (event.target as HTMLInputElement).files?.[0];
+              if (file) {
+                const fileExtension = file.name.split('.').pop()?.toLowerCase();
+                if (fileExtension === 'docx') {
+                  await this.loadWord(file, editor); // Xử lý file Word
+                } else if (fileExtension === 'pdf') {
+                  await this.loadPDF(file, editor); // Xử lý file PDF
+                } else {
+                  console.error('File không được hỗ trợ.');
+                  alert('Chỉ hỗ trợ file .docx và .pdf');
+                }
+              }
+            };
+            input.click();
+          },
+        });
+      },
     };
   }
+
+  openFileDialog() {
+    this.isDialogOpen = true;
+    console.log("OK");
+  }
+
+  // Đóng hộp thoại khi click vào nền tối
+  closeFileDialog() {
+    this.isDialogOpen = false;
+    this.resetFile();
+  }
+
+
+  triggerFileInput() {
+    const fileInput: HTMLInputElement = document.getElementById('fileInput') as HTMLInputElement;
+    fileInput.click();
+  }
+
+  resetFile() {
+    this.fileExcelName = null;
+  }
+
+  // Xử lý sự kiện khi chọn file từ input
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.fileExcelName = input.files[0].name;
+      this.selectedFileExcel = input.files[0];
+    }
+  }
+
+  // Xử lý sự kiện khi kéo file vào ô hình chữ nhật
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.add('drag-over');
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.remove('drag-over');
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    const dropArea = event.target as HTMLElement;
+    dropArea.classList.remove('drag-over');
+    const file = event.dataTransfer?.files[0];
+    if (file) {
+      this.fileExcelName = file.name;
+    }
+  }
+
+  ImportExcel() {
+    this.loading = true;
+    this.messNotify = [];
+    if (this.selectedFileExcel) {
+      const formData = new FormData();
+      formData.append('file', this.selectedFileExcel);
+      this.tintucservice.ImportExcel(formData).subscribe(
+        (data) => {
+          console.log(data);
+          if(data.success == true) {
+            setTimeout(() => {
+              this.loading = false;
+              this.route.navigate(['/admin/ManagePost']);
+            }, 1800);
+          }
+          else {
+            this.typeNotify = false;
+            this.scrollToNext();
+            this.messNotify.push(data.message);
+            this.showNotify = true;
+            setTimeout(() => {
+              this.showNotify = false;
+            },3000);
+            
+          }
+        }
+      );
+    } else {
+      console.error('No file selected');
+    }
+  }
+
+  // Giả lập quá trình tải lên file
+  uploadFile(file: File) {
+    this.isUploading = true;
+    let progress = 0;
+    const interval = setInterval(() => {
+      if (progress < 100) {
+        progress += 5;
+        this.uploadProgress = progress;
+      } else {
+        clearInterval(interval);
+        this.isUploading = false;
+      }
+    }, 200); // Giả lập tải file lên mỗi 200ms
+  }
+
+  changeFileExcel() {
+    this.fileExcelName = null;
+    this.uploadProgress = 0;
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = ''; // Reset input file
+    }
+  }
+
+  downloadTemplate() {
+    this.tintucservice.DownloadTempExcel().subscribe({
+      next: (blob) => {
+        // Tạo URL từ Blob
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a'); 
+        a.href = url;
+        a.download = 'template.xlsx'; 
+        document.body.appendChild(a); 
+        a.click();
+        document.body.removeChild(a); 
+        window.URL.revokeObjectURL(url); 
+      },
+      error: (err) => {
+        console.error('Error downloading the file', err);
+      },
+    });
+  }
+
+
+
+
 
 
   ngOnInit(): void {

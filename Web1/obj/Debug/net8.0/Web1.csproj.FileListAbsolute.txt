@@ -523,8 +523,6 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Dat
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
@@ -552,3 +550,11 @@ D:\source\repos\Web1\Web1\obj\Debug\net8.0\refint\Web1.dll
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.pdb
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.genruntimeconfig.cache
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\ref\Web1.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\EPPlus.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\EPPlus.Interfaces.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\EPPlus.System.Drawing.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Configuration.FileExtensions.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Json.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.IO.RecyclableMemoryStream.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Private.Windows.Core.dll

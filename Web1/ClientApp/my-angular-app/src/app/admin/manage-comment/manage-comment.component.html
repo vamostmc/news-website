@@ -101,6 +101,9 @@
               <label for="userId">Người dùng bình luận:</label>
               <input id="userId" formControlName="userId" placeholder="Nhập ID người dùng hoặc tên người dùng" type="text" required>
             
+              <label for="parentId">Trả lời bình luận:</label>
+              <input id="parentId" formControlName="parentId" placeholder="Nhập ID bình luận trả lời" type="text" required>
+
               <label for="ngayGioBinhLuan">Ngày giờ bình luận:</label>
               <input id="ngayGioBinhLuan" formControlName="ngayGioBinhLuan" type="datetime-local" required>
             
@@ -152,6 +155,9 @@
               <label for="userId">Người dùng bình luận:</label>
               <input id="userId" formControlName="userName" [readonly]="true"  placeholder="Nhập ID người dùng hoặc tên người dùng">
             
+              <label for="parentId">Trả lời bình luận:</label>
+              <input id="parentId" formControlName="parentId" [readonly]="true" placeholder="Nhập ID bình luận trả lời" type="text" required>
+
               <label for="ngayGioBinhLuan">Ngày giờ bình luận:</label>
               <input id="ngayGioBinhLuan" formControlName="ngayGioBinhLuan" type="datetime-local" required>
             

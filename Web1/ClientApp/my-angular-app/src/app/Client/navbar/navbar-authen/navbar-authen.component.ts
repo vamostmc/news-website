@@ -1,20 +1,22 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { AuthenService } from '../service-client/authen-service/authen.service';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { AuthenService } from '../../service-client/authen-service/authen.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  selector: 'app-navbar-authen',
+  templateUrl: './navbar-authen.component.html',
+  styleUrl: './navbar-authen.component.css'
 })
-export class NavbarComponent implements OnInit {
-    constructor(private changeDetectorRef: ChangeDetectorRef,
+export class NavbarAuthenComponent implements OnInit {
+constructor(
                 private authService: AuthenService,
                 private router: Router) {}
 
     isDropdownOpen = false;
     userRole = ''; // Giả sử bạn đã lưu thông tin role của user
+    today: Date = new Date();
+    dayOfWeek: string = '';
+    formattedDate: string = '';
   
     // Toggle the menu when avatar is clicked
     toggleMenu(event: MouseEvent) {
@@ -61,6 +63,17 @@ export class NavbarComponent implements OnInit {
         
     }
 
+    getTodayInfo() {
+      const daysOfWeek = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+      this.dayOfWeek = daysOfWeek[this.today.getDay()];
+  
+      const date = this.today.getDate();
+      const month = this.today.getMonth() + 1;
+      const year = this.today.getFullYear();
+      
+      this.formattedDate = `${date}/${month}/${year}`;
+    }
+
     ngOnInit(): void {
       console.log(`Click : ${this.isDropdownOpen}`);
       this.authService.currentUserName.subscribe(userName => {
@@ -68,6 +81,6 @@ export class NavbarComponent implements OnInit {
         this.username = localStorage.getItem("fullName");
         this.userRole = this.authService.GetRoleUser();
       });
-      
+      this.getTodayInfo();
     }
 }

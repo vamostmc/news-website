@@ -1,0 +1,103 @@
+<app-navbar-client></app-navbar-client>
+
+<div class="article-container">
+  <!-- Nội dung bài viết (bên trái 60%) -->
+  <div class="article-content" *ngIf="tintucs">
+      <h1 class="article-title">{{ tintucs.tieuDe }}</h1>
+      <div class="article-body" [innerHTML]="tintucs.noiDung"></div>
+      <div class="comment-section">
+        <!-- Thanh nhập bình luận -->
+        <div class="comment-input">
+          <input type="text" placeholder="Viết bình luận..." class="input-box" formControlName="noiDung"/>
+          <i class="fa-solid fa-paper-plane send-icon" (click)="addReply(0)"></i>
+        </div>
+      
+        <!-- Danh sách bình luận -->
+        <div class="comment-section-header">
+          <p class="total-comments"><strong>4 bình luận</strong></p>
+          <div class="filter-dropdown">
+              <button class="filter-button">Sắp xếp <i class="fas fa-chevron-down"></i></button>
+              <ul class="filter-menu">
+                  <li>Mới nhất</li>
+                  <li>Top bình luận</li>
+              </ul>
+          </div>
+        </div>
+            
+          <!-- Bình luận chính -->
+          <div class="comment-item" *ngFor="let comment of comments" >
+            <img src="https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg" alt="Avatar" class="avatar" />
+            <div class="comment-content">
+              <div class="comment-header">
+                <span class="comment-author">{{ comment.userName }}</span>
+                <span class="comment-time">5 phút trước</span>
+              </div>
+              <p class="comment-text">{{ comment.noiDung }}</p>
+      
+              <!-- Hành động -->
+              <div class="comment-actions">
+                <i class="fa-solid fa-thumbs-up"></i> <span>10</span>
+                <i class="fa-solid fa-thumbs-down"></i> <span>2</span>
+                <i class="fa-regular fa-comment reply-icon" (click)="toggleReply(comment.binhluanId)"></i>
+    
+                <!-- Thanh nhập phản hồi -->
+                <div *ngIf="activeReplyId === comment.binhluanId" class="reply-box">
+                  <input type="text" placeholder="Viết phản hồi..." class="input-box" [(ngModel)]="currentComment" />
+                  <i class="fa-solid fa-paper-plane send-icon" (click)="addReply(comment.binhluanId)"></i>
+                </div>
+                <i class="fa-solid fa-flag report-icon"></i>
+              </div>
+    
+      
+              <!-- Danh sách phản hồi -->
+              <div class="replies" *ngIf="comment.replies && comment.replies.length > 0">{{ comment.replies.length }} Trả lời
+                <div class="comment-item reply" *ngFor="let reply of comment.replies">
+                  <img src="https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg" alt="Avatar" class="avatar" />
+                  <div class="comment-content">
+                    <div class="comment-header">
+                      <span class="comment-author">{{ reply.userName }}</span>
+                      <span class="comment-time">3 phút trước</span>
+                    </div>
+                    <p class="comment-text">{{ reply.noiDung }}</p>
+                    <div class="comment-actions">
+                      <i class="fa-regular fa-thumbs-up like-icon"></i> <span>2</span>
+                      <i class="fa-regular fa-thumbs-down dislike-icon"></i> <span>0</span>
+                      <i class="fa-regular fa-comment reply-icon" (click)="toggleReply(reply.binhluanId)"></i>
+    
+                      <!-- Thanh nhập phản hồi -->
+                      <div *ngIf="activeReplyId === reply.binhluanId" class="reply-box">
+                        <input type="text" placeholder="Viết phản hồi..." class="input-box" [(ngModel)]="currentComment"/>
+                        <i class="fa-solid fa-paper-plane send-icon" (click)="addReply(reply.binhluanId)"></i>
+                      </div>
+                      <i class="fa-solid fa-flag report-icon"></i>
+                    </div>
+      
+                    <!-- Thanh nhập phản hồi ẩn -->
+                    <div class="reply-box hidden">
+                      <input type="text" placeholder="Viết phản hồi..." class="input-box" />
+                      <i class="fa-solid fa-paper-plane send-icon"></i>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- Kết thúc replies -->
+            </div>
+          </div> <!-- Kết thúc comment-item -->
+        </div>
+      </div>
+
+  <!-- Thanh line thẳng đứng -->
+  <div class="article-divider"></div>
+
+  <!-- Phần bên phải (40%) -->
+  <div class="article-sidebar">
+    <app-trending-view *ngIf="tintucTop.length > 0" [tintucs]="tintucTop"></app-trending-view>
+  </div>
+</div>
+
+
+  
+  
+  
+  
+  
+  

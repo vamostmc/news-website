@@ -304,19 +304,21 @@ export class EditPostComponent {
   }
 
   // Hàm xử lý hiển thị nội dung file PDF
-  async loadPDF(file: File, editor: any): Promise<void> {
-    try {
-      // Tạo URL từ file PDF
-      const url = URL.createObjectURL(file);
-  
-      // Thêm iframe để hiển thị PDF
-      const iframe = `<iframe src="${url}" style="width: 100%; height: 500px;" frameborder="0"></iframe>`;
-      
-      // Chèn iframe vào editor
-      editor.insertContent(iframe);
-    } catch (error) {
-      console.error('Lỗi khi hiển thị file PDF qua iframe:', error);
-    }
+  async loadPDF(file: File, editor: any) {
+    const reader = new FileReader();
+    reader.onload = async (event: any) => {
+      const pdfjsLib = await import('pdfjs-dist');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+      const pdf = await pdfjsLib.getDocument({ data: event.target.result }).promise;
+      let content = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        content += textContent.items.map((item: any) => item.str).join(' ') + '<br/>';
+      }
+      editor.setContent(content); // Chèn nội dung vào editor
+    };
+    reader.readAsArrayBuffer(file);
   }
   
 

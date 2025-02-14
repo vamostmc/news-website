@@ -1,0 +1,91 @@
+
+  /* Bên phải */
+  .right-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .right-post {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .right-post img {
+    width: 90px;
+    height: 70px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .right-text {
+    font-size: 14px;
+    margin: 5px 3px;
+    
+  }
+
+  .info-row {
+    font-size: 14px;
+    color: #666;
+    display: inline-block; /* Để ngày đăng không bị kéo dài theo chiều ngang */
+  }
+  
+  .views {
+    position: absolute;
+    left: 300px; /* Cách ngày đăng 20px */
+    top: 56px;
+    white-space: nowrap; /* Giữ nguyên không bị xuống dòng */
+    font-weight: bold;
+  }
+
+  .right-text .title {
+    margin: 2px 0px;
+  }
+
+  .right-text h4{
+    font-size: 14px;
+    font-family: inherit;
+  }
+  
+  .right-text i {
+    color: #007bff;
+  }
+
+  .right-text span {
+    font-size: 12px;
+
+  }
+
+  /* Đường line ngăn cách */
+.divider {
+  background-color: #ccc;
+  width: 1px;
+  height: 100%;
+}
+
+
+.highlight-box {
+  grid-column: 1 / -1; /* Chiếm toàn bộ hàng */
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.popular-header {
+    background: linear-gradient(145deg, #000 40%, #007bff 100%); /* Đen -> Xanh lam */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
