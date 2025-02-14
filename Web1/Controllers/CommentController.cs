@@ -27,6 +27,13 @@ namespace Web1.Controllers
             return await _binhLuan.GetCommentByid(id);
         }
 
+        [HttpGet("GetCommentByTinTucId/{id}")]
+        public async Task<List<BinhLuanDto>> GetBinhLuanNews(int id)
+        {
+            return await _binhLuan.GetCommentByTinTucId(id);
+        }
+
+
         [HttpDelete("DeleteComment/{id}")]
         public async Task<IActionResult> DeleteComment(int id)
         {
@@ -35,10 +42,10 @@ namespace Web1.Controllers
         }
 
         [HttpPost("AddCommentNew")]
-        public async Task<IActionResult> AddCommentNew([FromForm] BinhLuanDto NewComment)
+        public async Task<BinhLuanDto> AddCommentNew([FromForm] BinhLuanDto NewComment)
         {
-            await _binhLuan.AddCommentNew(NewComment);
-            return Ok(new { message = "Thanh cong" });
+            var data = await _binhLuan.AddCommentNew(NewComment);
+            return data;
         }
 
 

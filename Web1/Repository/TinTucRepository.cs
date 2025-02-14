@@ -66,44 +66,6 @@ namespace Web1.Repository
                                         NoiDung = t.NoiDung,
                                         TrangThai = t.TrangThai,
                                         TenDanhMuc = t.Danhmuc.TenDanhMuc,
-
-                                        // Danh sách bình luận
-                                        BinhLuan = t.BinhLuans
-                                            .Where(bl => bl.ParentId == null) // Lọc bình luận cha
-                                            .GroupJoin(t.BinhLuans, bl => bl.BinhluanId, reply => reply.ParentId, (bl, replies) => new
-                                            {
-                                                BinhLuan = bl,
-                                                Replies = replies
-                                            })
-                                            .Select(blg => new BinhLuanDto
-                                            {
-                                                BinhluanId = blg.BinhLuan.BinhluanId,
-                                                TintucId = blg.BinhLuan.TintucId,
-                                                UserId = blg.BinhLuan.UserId,
-                                                NgayGioBinhLuan = blg.BinhLuan.NgayGioBinhLuan,
-                                                NoiDung = blg.BinhLuan.NoiDung,
-                                                UserName = blg.BinhLuan.User != null ? blg.BinhLuan.User.UserName : "Ẩn danh",
-                                                TieuDeTinTuc = t.TieuDe,
-                                                TrangThai = blg.BinhLuan.TrangThai,
-                                                ParentId = blg.BinhLuan.ParentId,
-                                                Likes = blg.BinhLuan.Likes ?? 0,
-                                                // Các bình luận trả lời cho bình luận này
-                                                Replies = blg.Replies.Select(reply => new BinhLuanDto
-                                                {
-                                                    BinhluanId = reply.BinhluanId,
-                                                    TintucId = reply.TintucId,
-                                                    UserId = reply.UserId,
-                                                    NgayGioBinhLuan = reply.NgayGioBinhLuan,
-                                                    NoiDung = reply.NoiDung,
-                                                    UserName = reply.User != null ? reply.User.UserName : "Ẩn danh",
-                                                    TieuDeTinTuc = t.TieuDe,
-                                                    TrangThai = reply.TrangThai,
-                                                    ParentId = reply.ParentId,
-                                                    Likes = reply.Likes ?? 0
-                                                })
-                                                .ToList()
-                                            })
-                                            .ToList()
                                     })
                                     .FirstOrDefaultAsync();
 

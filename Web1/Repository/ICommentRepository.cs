@@ -9,6 +9,8 @@ namespace Web1.Repository
 
         public Task<BinhLuanDto> GetCommentByid(int id);
 
+        public Task<List<BinhLuanDto>> GetCommentByTinTucId(int id);
+
         public Task<BinhLuan> AddComment(BinhLuan comment);
 
         public Task<BinhLuanDto> AddCommentNew(BinhLuanDto comment);

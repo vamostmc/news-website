@@ -71,6 +71,8 @@ namespace Web1.Repository
                     ParentId = comment.ParentId,
                 };
 
+
+
                 await _binhLuan.AddRangeAsync(dataNew);
                 await _binhLuan.SaveChangesAsync();
                 return comment;
@@ -159,6 +161,49 @@ namespace Web1.Repository
             }
         }
 
+        public async Task<List<BinhLuanDto>> GetCommentByTinTucId(int id)
+        {
+            var comments = await _binhLuan.BinhLuans
+                .Include(t => t.Tintuc)
+                .Include(t => t.User)
+                .Where(t => t.TintucId == id)
+                .ToListAsync();
+
+            
+            var data = comments
+                .Where(bl => bl.ParentId == null)
+                .Select(blg => new BinhLuanDto
+                {
+                    BinhluanId = blg.BinhluanId,
+                    TintucId = blg.TintucId,
+                    UserId = blg.UserId,
+                    NgayGioBinhLuan = blg.NgayGioBinhLuan,
+                    NoiDung = blg.NoiDung,
+                    UserName = blg.User != null ? blg.User.UserName : "Ẩn danh",
+                    TieuDeTinTuc = blg.Tintuc.TieuDe,
+                    TrangThai = blg.TrangThai,
+                    ParentId = blg.ParentId,
+                    Likes = blg.Likes ?? 0,
+                    Replies = comments
+                        .Where(reply => reply.ParentId == blg.BinhluanId)
+                        .Select(reply => new BinhLuanDto
+                        {
+                            BinhluanId = reply.BinhluanId,
+                            TintucId = reply.TintucId,
+                            UserId = reply.UserId,
+                            NgayGioBinhLuan = reply.NgayGioBinhLuan,
+                            NoiDung = reply.NoiDung,
+                            UserName = reply.User != null ? reply.User.UserName : "Ẩn danh",
+                            TieuDeTinTuc = reply.Tintuc.TieuDe,
+                            TrangThai = reply.TrangThai,
+                            ParentId = reply.ParentId,
+                            Likes = reply.Likes ?? 0
+                        })
+                        .ToList()
+                }).ToList();
+
+            return data;
+        }
 
         public async Task UpdateCommentRepo(int id, BinhLuanDto comment)
         {

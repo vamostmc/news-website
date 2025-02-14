@@ -2,19 +2,19 @@
 
 <div class="article-container">
   <!-- Nội dung bài viết (bên trái 60%) -->
-  <div class="article-content" *ngIf="tintucs">
+  <div class="article-content" *ngIf="tintucs" [formGroup]="postForm" >
       <h1 class="article-title">{{ tintucs.tieuDe }}</h1>
       <div class="article-body" [innerHTML]="tintucs.noiDung"></div>
       <div class="comment-section">
         <!-- Thanh nhập bình luận -->
         <div class="comment-input">
           <input type="text" placeholder="Viết bình luận..." class="input-box" formControlName="noiDung"/>
-          <i class="fa-solid fa-paper-plane send-icon" (click)="addReply(0)"></i>
+          <i class="fa-solid fa-paper-plane send-icon" (click)="addCommentParent(0)"></i>
         </div>
       
         <!-- Danh sách bình luận -->
         <div class="comment-section-header">
-          <p class="total-comments"><strong>4 bình luận</strong></p>
+          <p class="total-comments"><strong>{{ tintucs.soLuongComment }} bình luận</strong></p>
           <div class="filter-dropdown">
               <button class="filter-button">Sắp xếp <i class="fas fa-chevron-down"></i></button>
               <ul class="filter-menu">
@@ -26,50 +26,50 @@
             
           <!-- Bình luận chính -->
           <div class="comment-item" *ngFor="let comment of comments" >
-            <img src="https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg" alt="Avatar" class="avatar" />
+            <img src="https://vntime.vn/wp-content/uploads/2024/10/avatar-mac-dinh-30xJKPDu.jpg" alt="Avatar" class="avatar" />
             <div class="comment-content">
               <div class="comment-header">
                 <span class="comment-author">{{ comment.userName }}</span>
-                <span class="comment-time">5 phút trước</span>
+                <span class="comment-time">{{ getTimeAgo(comment.ngayGioBinhLuan) }}</span>
               </div>
               <p class="comment-text">{{ comment.noiDung }}</p>
       
               <!-- Hành động -->
               <div class="comment-actions">
-                <i class="fa-solid fa-thumbs-up"></i> <span>10</span>
-                <i class="fa-solid fa-thumbs-down"></i> <span>2</span>
-                <i class="fa-regular fa-comment reply-icon" (click)="toggleReply(comment.binhluanId)"></i>
-    
-                <!-- Thanh nhập phản hồi -->
-                <div *ngIf="activeReplyId === comment.binhluanId" class="reply-box">
-                  <input type="text" placeholder="Viết phản hồi..." class="input-box" [(ngModel)]="currentComment" />
-                  <i class="fa-solid fa-paper-plane send-icon" (click)="addReply(comment.binhluanId)"></i>
-                </div>
+                <i class="fa-regular fa-thumbs-up"></i> <span *ngIf="comment.likes && comment.likes > 0" class="value-like">{{ comment.likes }}</span>
+                <i class="fa-regular fa-thumbs-down"></i> <span></span>
+                <i class="fa-regular fa-comment" (click)="toggleReply(comment.binhluanId)"></i>
                 <i class="fa-solid fa-flag report-icon"></i>
+              </div>
+              <!-- Thanh nhập phản hồi -->
+              <div *ngIf="activeReplyId === comment.binhluanId" class="reply-box">
+                <input type="text" placeholder="Viết phản hồi..." class="input-box" formControlName="noiDung" />
+                <i class="fa-solid fa-paper-plane send-icon" (click)="addCommentChild(comment.binhluanId)"></i>
               </div>
     
       
               <!-- Danh sách phản hồi -->
-              <div class="replies" *ngIf="comment.replies && comment.replies.length > 0">{{ comment.replies.length }} Trả lời
+              <button class="no-border-btn" *ngIf="comment.replies && comment.replies.length > 0" (click)="ControlReply(comment.binhluanId)">{{ isExpanded(comment.binhluanId) ? 'Ẩn' : 'Hiển thị' }} {{ comment.replies.length }} câu trả lời</button> 
+              
+              <div class="replies" *ngIf="isExpanded(comment.binhluanId)">
                 <div class="comment-item reply" *ngFor="let reply of comment.replies">
-                  <img src="https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg" alt="Avatar" class="avatar" />
+                  <img src="https://vntime.vn/wp-content/uploads/2024/10/avatar-mac-dinh-30xJKPDu.jpg" alt="Avatar" class="avatar" />
                   <div class="comment-content">
                     <div class="comment-header">
                       <span class="comment-author">{{ reply.userName }}</span>
-                      <span class="comment-time">3 phút trước</span>
+                      <span class="comment-time">{{ getTimeAgo(comment.ngayGioBinhLuan) }}</span>
                     </div>
                     <p class="comment-text">{{ reply.noiDung }}</p>
                     <div class="comment-actions">
-                      <i class="fa-regular fa-thumbs-up like-icon"></i> <span>2</span>
-                      <i class="fa-regular fa-thumbs-down dislike-icon"></i> <span>0</span>
+                      <i class="fa-regular fa-thumbs-up like-icon"></i> <span *ngIf="reply.likes && reply.likes > 0" class="value-like">{{ reply.likes }}</span>
+                      <i class="fa-regular fa-thumbs-down dislike-icon"></i> <span></span>
                       <i class="fa-regular fa-comment reply-icon" (click)="toggleReply(reply.binhluanId)"></i>
-    
-                      <!-- Thanh nhập phản hồi -->
-                      <div *ngIf="activeReplyId === reply.binhluanId" class="reply-box">
-                        <input type="text" placeholder="Viết phản hồi..." class="input-box" [(ngModel)]="currentComment"/>
-                        <i class="fa-solid fa-paper-plane send-icon" (click)="addReply(reply.binhluanId)"></i>
-                      </div>
                       <i class="fa-solid fa-flag report-icon"></i>
+                    </div>
+                    <!-- Thanh nhập phản hồi -->
+                    <div *ngIf="activeReplyId === reply.binhluanId && reply.parentId" class="reply-box">
+                      <input type="text" placeholder="Viết phản hồi..." class="input-box" formControlName="noiDung"/>
+                      <i class="fa-solid fa-paper-plane send-icon" (click)="addCommentChild(reply.parentId)"></i>
                     </div>
       
                     <!-- Thanh nhập phản hồi ẩn -->

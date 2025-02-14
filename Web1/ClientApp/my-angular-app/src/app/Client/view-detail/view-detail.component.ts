@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Tintuc } from '../models/tintuc';
 import { Comment } from '../models/comment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommentService } from '../service-client/comment-service/comment.service';
 
 @Component({
   selector: 'app-view-detail',
@@ -20,10 +21,13 @@ export class ViewDetailComponent implements OnInit{
   replies: Comment[] = [];
   activeReplyId !: number;
   currentComment: string = '';
+  expandedComments: Set<number> = new Set();
 
   constructor(private tintucService: TinTucService,
               private route: ActivatedRoute,
-              private fb: FormBuilder
+              private fb: FormBuilder,
+              private commentService: CommentService
+              
   ) {}
 
   getNewId() {
@@ -36,6 +40,18 @@ export class ViewDetailComponent implements OnInit{
     console.log(this.checkToken)
   }
 
+  ControlReply(id: number) {
+    if (this.expandedComments.has(id)) {
+      this.expandedComments.delete(id); // Ẩn replies nếu đã mở
+    } else {
+      this.expandedComments.add(id); // Hiển thị replies
+    }
+  }
+
+  isExpanded(commentId: number): boolean {
+    return this.expandedComments.has(commentId);
+  }
+
   initForm(): void {
     this.postForm = this.fb.group({
       binhluanId: [0], // Giá trị mặc định
@@ -44,21 +60,82 @@ export class ViewDetailComponent implements OnInit{
       ngayGioBinhLuan: [new Date(), Validators.required],
       noiDung: ['', Validators.required],
       userName: [''],
-      tieuDeTinTuc: [''],
       parentId: [''],
       trangThai: [false, Validators.required]
     });
   }
 
-  addReply(commentId: number) {
-    console.log(this.currentComment);
+  addCommentParent(commentId: number) {
     console.log(commentId);
+    if(this.postForm.value['noiDung'] != null) {
+      this.postForm.patchValue({
+        binhluanId: [0],
+        tintucId: this.newsId,
+        userId: localStorage.getItem('userId'),
+        ngayGioBinhLuan: new Date().toISOString(),
+        parentId: '',
+        trangThai: true,
+        userName: localStorage.getItem('userName'),
+      })
+    }
+    const data = this.commentService.SendFormPost(this.postForm);
+    this.commentService.PostComment(data).subscribe(
+      (data) => {
+        this.comments.unshift(data);
+        this.postForm.reset();
+        console.log(data);
+      }
+    )
+  }
+
+  addCommentChild(commentId: number) {
+    if(this.postForm.value['noiDung'] != null) {
+      this.postForm.patchValue({
+        binhluanId: [0],
+        tintucId: this.newsId,
+        userId: localStorage.getItem('userId'),
+        ngayGioBinhLuan: new Date().toISOString(),
+        parentId: commentId,
+        trangThai: true,
+        userName: localStorage.getItem('userName'),
+      })
+    }
+    const data = this.commentService.SendFormPost(this.postForm);
+    this.commentService.PostComment(data).subscribe(
+      (data) => {
+        this.comments.find(t => t.binhluanId === commentId)?.replies?.push(data);
+        this.postForm.reset();
+        console.log(data);
+      }
+    )
   }
 
   updateParent(tintucNew: Tintuc[]) {
     this.tintucTop = tintucNew;
     console.log("Tin tức từ cha: ", this.tintucTop);
   }
+
+  getTimeAgo(dateInput: string | Date): string {
+    const commentDate = dateInput instanceof Date ? dateInput : new Date(dateInput);
+    const now = new Date();
+    const diffMs = now.getTime() - commentDate.getTime();
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHours = Math.floor(diffMin / 60);
+    const diffDays = Math.floor(diffHours / 24);
+    const diffMonths = Math.floor(diffDays / 30); 
+    const diffYears = Math.floor(diffDays / 365); 
+  
+    if (diffSec < 60) return `${diffSec} giây trước`;
+    if (diffMin < 60) return `${diffMin} phút trước`;
+    if (diffHours < 24) return `${diffHours} giờ trước`;
+    if (diffDays < 30) return `${diffDays} ngày trước`;
+    if (diffMonths < 12) return `${diffMonths} tháng trước`;
+    return `${diffYears} năm trước`;
+  }
+  
+  
+  
 
   
 
@@ -70,8 +147,13 @@ export class ViewDetailComponent implements OnInit{
     this.tintucService.getTintucById(this.newsId).subscribe(
       (data) => {
         this.tintucs = data;
-        this.comments = this.tintucs.binhLuan;
         console.log(this.tintucs);
+      }
+    )
+
+    this.commentService.getCommentTinTuc(this.newsId).subscribe(
+      (data) => {
+        this.comments = data;
         console.log(this.comments);
       }
     )

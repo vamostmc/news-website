@@ -13,7 +13,8 @@ export class CommentService {
   private GetIdUrl = 'https://localhost:7233/api/Comment/GetCommentById';
   private DeleteUrl = 'https://localhost:7233/api/Comment/DeleteComment';
   private PutUrl = 'https://localhost:7233/api/Comment/EditCommnent';
-  private UpdateStatusUrl = 'https://localhost:7233/api/Comment/UpdateStatus'
+  private UpdateStatusUrl = 'https://localhost:7233/api/Comment/UpdateStatus';
+  private GetCommentTinTuc = 'https://localhost:7233/api/Comment/GetCommentByTinTucId';
   
   //Lấy tất cả danh sách comment
   getAllComment():Observable<Comment[]>{
@@ -24,6 +25,13 @@ export class CommentService {
   getIdComment(id: number): Observable<Comment> {
     const url = `${this.GetIdUrl}/${id}`;
     return this.http.get<Comment>(url);
+  }
+
+  //Lấy bình luận của bài viết chi tiết
+  getCommentTinTuc(id: number): Observable<Comment[]>
+  {
+    const url = `${this.GetCommentTinTuc}/${id}`;
+    return this.http.get<Comment[]>(url);
   }
 
   //Post comment
@@ -58,6 +66,7 @@ export class CommentService {
     formData.append("parentId", postForm.get("parentId")?.value);
     formData.append("ngayGioBinhLuan", postForm.get("ngayGioBinhLuan")?.value);
     formData.append("noiDung", postForm.get("noiDung")?.value);
+    formData.append("userName", postForm.get("userName")?.value);
     formData.append("trangThai", postForm.get("trangThai")?.value);
     return formData;
   }

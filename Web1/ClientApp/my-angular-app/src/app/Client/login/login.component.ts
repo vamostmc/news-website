@@ -130,6 +130,7 @@ export class LoginComponent implements OnInit {
       localStorage.setItem("fullName",data.fullName);
       localStorage.setItem('userRoles', JSON.stringify(data.roleList));
       localStorage.setItem("confirmEmail", data.confirmEmail);
+      localStorage.setItem("userId", data.userId);
       this.authService.setUserName(data.userName);
     }
 

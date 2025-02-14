@@ -114,10 +114,11 @@
   
   .input-box {
     flex: 1;
-    padding: 12px;
+    padding: 9px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 15px;
+    margin-left: -10px;
   }
   
   .send-icon {
@@ -148,6 +149,7 @@
     height: 45px;
     border-radius: 50%;
     object-fit: cover;
+    margin-top: 5px;
   }
   
   .comment-content {
@@ -175,6 +177,7 @@
     display: flex;
     gap: 15px;
     font-size: 16px;
+    align-items: center;
   }
   
   .comment-actions i {
@@ -213,4 +216,19 @@
     display: none;
   }
   
-  
+  .value-like {
+    margin-bottom: 0px;
+    margin-left: -6px;
+  }
+
+  .no-border-btn {
+    background: none;   /* Xóa nền */
+    border: none;       /* Xóa viền */
+    padding: 0;         /* Xóa khoảng cách thừa */
+    font-size: inherit; /* Giữ nguyên kích thước chữ */
+    color: inherit;     /* Giữ nguyên màu chữ */
+    cursor: pointer;    /* Hiển thị con trỏ khi rê chuột */
+    margin-top: 10px;
+    color: #007bff;
+    
+  }
