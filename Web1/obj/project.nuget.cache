@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "hNGKr3K7ufk=",
+  "dgSpecHash": "U/5F4aBgjtc=",
   "success": true,
   "projectFilePath": "D:\\source\\repos\\Web1\\Web1\\Web1.csproj",
   "expectedPackageFiles": [
@@ -137,6 +137,7 @@
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.20.1\\microsoft.visualstudio.azure.containers.tools.targets.1.20.1.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration\\8.0.4\\microsoft.visualstudio.web.codegeneration.8.0.4.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.core\\8.0.4\\microsoft.visualstudio.web.codegeneration.core.8.0.4.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.design\\8.0.4\\microsoft.visualstudio.web.codegeneration.design.8.0.4.nupkg.sha512",

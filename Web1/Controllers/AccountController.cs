@@ -26,6 +26,8 @@ namespace Web1.Controllers
         private readonly IAccountService _accountService;
         private readonly ICookieService _cookieService;
 
+        
+
         public AccountController(
             IAccountRepository account,
             IConfiguration configuration,

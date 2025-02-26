@@ -3,58 +3,44 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Comment } from '../../models/comment';
 import { FormGroup, FormsModule } from '@angular/forms';
+import { API_ENDPOINTS } from '../../../constants/api-endpoints.ts';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
-  private apiUrl = 'https://localhost:7233/api/Comment/GetAllComment';
-  private PostUrl = 'https://localhost:7233/api/Comment/AddCommentNew';
-  private GetIdUrl = 'https://localhost:7233/api/Comment/GetCommentById';
-  private DeleteUrl = 'https://localhost:7233/api/Comment/DeleteComment';
-  private PutUrl = 'https://localhost:7233/api/Comment/EditCommnent';
-  private UpdateStatusUrl = 'https://localhost:7233/api/Comment/UpdateStatus';
-  private GetCommentTinTuc = 'https://localhost:7233/api/Comment/GetCommentByTinTucId';
   
-  //Lấy tất cả danh sách comment
-  getAllComment():Observable<Comment[]>{
-    return this.http.get<Comment[]>(this.apiUrl);
-  } 
-
-  //Lấy mình phần comment đã select
+  getAllComment(): Observable<Comment[]> {
+    return this.http.get<Comment[]>(API_ENDPOINTS.comment.getAll);
+  }
+  
   getIdComment(id: number): Observable<Comment> {
-    const url = `${this.GetIdUrl}/${id}`;
-    return this.http.get<Comment>(url);
+    return this.http.get<Comment>(API_ENDPOINTS.comment.getById(id));
   }
-
-  //Lấy bình luận của bài viết chi tiết
-  getCommentTinTuc(id: number): Observable<Comment[]>
-  {
-    const url = `${this.GetCommentTinTuc}/${id}`;
-    return this.http.get<Comment[]>(url);
+  
+  // Lấy bình luận của bài viết chi tiết
+  getCommentTinTuc(id: number): Observable<Comment[]> {
+    return this.http.get<Comment[]>(API_ENDPOINTS.comment.getByTinTucId(id));
   }
-
-  //Post comment
+  
+  // Post comment
   PostComment(Data: any): Observable<Comment> {
-    return this.http.post<Comment>(this.PostUrl,Data);
+    return this.http.post<Comment>(API_ENDPOINTS.comment.add, Data);
   }
-
-  //Put Commment
+  
+  // Put Commment
   PutComment(id: number, Data: any): Observable<Comment> {
-    const url = `${this.PutUrl}/${id}`;
-    return this.http.put<Comment>(url,Data);
+    return this.http.put<Comment>(API_ENDPOINTS.comment.update(id), Data);
   }
-
-  //Cập nhật status
-  StatusComment(id: number,status: boolean): Observable<Comment[]> {
-    const url = `${this.UpdateStatusUrl}/${id}`;
-    return this.http.put<Comment[]>(url, status);
+  
+  // Cập nhật status
+  StatusComment(id: number, status: boolean): Observable<Comment[]> {
+    return this.http.put<Comment[]>(API_ENDPOINTS.comment.updateStatus(id), status);
   }
-
-  //Delete Comment
+  
+  // Delete Comment
   DeleteComment(id: number): Observable<any> {
-    const url = `${this.DeleteUrl}/${id}`;
-    return this.http.delete<any>(url);
+    return this.http.delete<any>(API_ENDPOINTS.comment.delete(id));
   }
 
   //Chuyển dạng FormGroup Post từ bên user sang dạng FormData

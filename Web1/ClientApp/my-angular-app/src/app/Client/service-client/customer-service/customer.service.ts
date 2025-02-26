@@ -4,53 +4,45 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { API_ENDPOINTS } from '../../../constants/api-endpoints.ts';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
-  private apiURL = 'https://localhost:7233/api/Customer/TongKH';
-  private GetAllUrl = 'https://localhost:7233/api/Customer/DsachKH';
-  private GetUserIdUrl = 'https://localhost:7233/api/Customer/GetUserId';
-  private AddUrl = 'https://localhost:7233/api/Customer/AddUser';
-  private DeleteUrl = 'https://localhost:7233/api/Customer/DeleteUser';
-  private UpdateUrl = 'https://localhost:7233/api/Customer/EditUser';
-  private UpdateStatus = 'https://localhost:7233/api/Customer/StatusUser';
-
-
 
   getTotalCustomer(): Observable<number> {
-    return this.http.get<number>(this.apiURL);
+    return this.http.get<number>(API_ENDPOINTS.customer.total);
   }
-
+  
   getAllCustomer(): Observable<User[]> {
-    return this.http.get<User[]>(this.GetAllUrl);
+    return this.http.get<User[]>(API_ENDPOINTS.customer.getAll);
   }
-
+  
   GetCustomerById(id: string): Observable<User> {
-    const url = `${this.GetUserIdUrl}/${id}`;
+    const url = API_ENDPOINTS.customer.getByUserId(id);
     return this.http.get<User>(url);
   }
-
+  
   AddCustomer(NewData: any): Observable<User> {
-    return this.http.post<User>(this.AddUrl,NewData);
-  } 
-
+    return this.http.post<User>(API_ENDPOINTS.customer.add, NewData);
+  }
+  
   DeleteCustomer(id: string): Observable<User> {
-    const url = `${this.DeleteUrl}/${id}`;
+    const url = API_ENDPOINTS.customer.delete(id);
     return this.http.delete<User>(url);
   }
-
+  
   UpdateCustomer(id: string, NewData: any): Observable<User> {
-    const url = `${this.UpdateUrl}/${id}`;
+    const url = API_ENDPOINTS.customer.update(id);
     return this.http.put<User>(url, NewData);
   }
-
+  
   UpdateStatusCustomer(id: string, status: boolean): Observable<User[]> {
-    const url = `${this.UpdateStatus}/${id}`;
-    return this.http.put<User[]>(url,status);
+    const url = API_ENDPOINTS.customer.updateStatus(id);
+    return this.http.put<User[]>(url, status);
   }
-
+  
   SetFormData(FormUser: any): FormData {
     const formData = new FormData();
     Object.keys(FormUser).forEach(key => {
@@ -73,7 +65,6 @@ export class CustomerService {
     formData.append("password", postForm.get("password")?.value); // Tên trường trùng khớp
     formData.append("confirmPassword", postForm.get("confirmPassword")?.value); // Tên trường ConfirmPassword
     return formData;
-  
   }
 
   SetFormDataEdit(postForm: FormGroup): FormData {
@@ -87,7 +78,6 @@ export class CustomerService {
     formData.append("userRoleList", postForm.get("userRoleList")?.value); // Chuyển mảng thành chuỗi JSON
     formData.append("isActive", postForm.get("isActive")?.value);
     return formData;
-  
   }
 
   SendDataPost(form: FormData) {
@@ -101,10 +91,6 @@ export class CustomerService {
       },
     });
   }
-
-  
-
-  
 
   constructor(private http: HttpClient, private route: Router) { }
 }

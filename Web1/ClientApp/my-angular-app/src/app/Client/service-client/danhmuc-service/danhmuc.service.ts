@@ -5,53 +5,42 @@ import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { error } from 'console';
 import { Router } from '@angular/router';
+import { API_ENDPOINTS } from '../../../constants/api-endpoints.ts';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DanhmucService {
-  private apiUrl = 'https://localhost:7233/api/DanhMuc/GetDanhmuc';
-  private apiIdUrl = 'https://localhost:7233/api/DanhMuc/GetDanhmuc';
-  private postUrl = 'https://localhost:7233/api/DanhMuc/AddDanhMuc';
-  private deleteUrl = 'https://localhost:7233/api/DanhMuc/RemoveDanhMuc'
-  private putUrl = 'https://localhost:7233/api/DanhMuc/EditDanhMuc';
-  private statusUrl = 'https://localhost:7233/api/DanhMuc/EditStatusDanhMuc';
 
   constructor(private http: HttpClient, private route : Router) { }
 
-
-  // Lấy tất cả danh mục và số lượng tin tức trong danh mục
   GetDanhmuc(): Observable<Danhmuc[]> {
-      return this.http.get<Danhmuc[]>(this.apiUrl);
+    return this.http.get<Danhmuc[]>(API_ENDPOINTS.danhMuc.getAll);
   }
-
-  // Lấy danh mục Id đã chọn 
+  
+  // Lấy danh mục theo ID đã chọn
   GetDanhMucById(id: number): Observable<Danhmuc> {
-    const url = `${this.apiIdUrl}/${id}`;
-    return this.http.get<Danhmuc>(url);
+    return this.http.get<Danhmuc>(API_ENDPOINTS.danhMuc.getById(id));
   }
-
-  //Thêm Danh mục mới
-  PostDanhMuc(newDanhMuc : any): Observable<Danhmuc> {
-    return this.http.post<Danhmuc>(this.postUrl,newDanhMuc);
+  
+  // Thêm danh mục mới
+  PostDanhMuc(newDanhMuc: any): Observable<Danhmuc> {
+    return this.http.post<Danhmuc>(API_ENDPOINTS.danhMuc.add, newDanhMuc);
   }
-
-  //Xóa danh mục
+  
+  // Xóa danh mục
   DeleteDanhMuc(id: number): Observable<string> {
-    const url = `${this.deleteUrl}/${id}`;
-    return this.http.delete<string>(url);
+    return this.http.delete<string>(API_ENDPOINTS.danhMuc.delete(id));
   }
-
-  //Sửa danh mục
+  
+  // Sửa danh mục
   UpdateDanhMuc(id: number, newDanhMuc: any): Observable<Danhmuc> {
-    const url = `${this.putUrl}/${id}`;
-    return this.http.put<Danhmuc>(url,newDanhMuc);
+    return this.http.put<Danhmuc>(API_ENDPOINTS.danhMuc.update(id), newDanhMuc);
   }
-
-  //Update trạng thái 
+  
+  // Cập nhật trạng thái danh mục
   UpdateStatus(id: number, status: boolean): Observable<Danhmuc[]> {
-    const url = `${this.statusUrl}/${id}`;
-    return this.http.put<Danhmuc[]>(url,status);
+    return this.http.put<Danhmuc[]>(API_ENDPOINTS.danhMuc.updateStatus(id), status);
   }
 
   //Send Form từ User

@@ -2,20 +2,11 @@ import { Injectable } from '@angular/core';
 import { Tintuc } from '../../models/tintuc';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_ENDPOINTS } from '../../../constants/api-endpoints.ts';
 @Injectable({
   providedIn: 'root'
 })
 export class TinTucService {
-  
-  private apiUrl = 'https://localhost:7233/api/TinTuc';
-  private ManageTinUrl = 'https://localhost:7233/api/TinTuc/TintucWithDanhmuc';
-  private NewsUrl = 'https://localhost:7233/api/TinTuc';
-  private DeleteUrl = 'https://localhost:7233/api/TinTuc/Delete';
-  private PostUrl = 'https://localhost:7233/api/TinTuc/ThemTinTuc';
-  private UpdateUrl = 'https://localhost:7233/api/TinTuc/Edit';
-  private UpdateStatus = 'https://localhost:7233/api/TinTuc/UpdateStatus';
-  private ExcelUrl = "https://localhost:7233/api/TinTuc/Import-Excel";
-  private DownloadExcelUrl = "https://localhost:7233/api/TinTuc/Template-Excel";
 
   constructor(private http: HttpClient) {}
 
@@ -30,45 +21,38 @@ export class TinTucService {
   }
 
   getTintuc(): Observable<Tintuc[]> {
-    return this.http.get<Tintuc[]>(this.ManageTinUrl, { withCredentials: true });
+    return this.http.get<Tintuc[]>(API_ENDPOINTS.tinTuc.manage, { withCredentials: true });
   }
-
-  getNewTintuc(): Observable<Tintuc[]> {
-    return this.http.get<Tintuc[]>(this.NewsUrl);
-  }
-
-
 
   getTintucById(id: number): Observable<Tintuc> {
-    const GetByIdUrl = `${this.apiUrl}/${id}`;
-    return this.http.get<Tintuc>(GetByIdUrl);
+    return this.http.get<Tintuc>(`${API_ENDPOINTS.tinTuc.base}/${id}`);
   }
 
   deleteTintuc(id: number): Observable<Tintuc[]> {
-    const deleteURL = `${this.DeleteUrl}/${id}`;
-    return this.http.delete<Tintuc[]>(deleteURL);
+    return this.http.delete<Tintuc[]>(API_ENDPOINTS.tinTuc.delete(id));
   }
 
-  addTintuc(newTintuc : FormData): Observable<Tintuc> {
-      return this.http.post<Tintuc>(this.PostUrl, newTintuc);
+  addTintuc(newTintuc: FormData): Observable<Tintuc> {
+    return this.http.post<Tintuc>(API_ENDPOINTS.tinTuc.add, newTintuc, 
+                                 { withCredentials: true });
   }
 
   updateTintuc(TintucEdit: any, id: number): Observable<Tintuc> {
-    const EditUrl = `${this.UpdateUrl}/${id}`;
-    return this.http.put<Tintuc>(EditUrl, TintucEdit);
+    return this.http.put<Tintuc>(API_ENDPOINTS.tinTuc.update(id), TintucEdit, 
+                                { withCredentials: true });
   }
 
   updateStatus(id: number, trangThai: boolean): Observable<Tintuc[]> {
-    const StatusUrl = `${this.UpdateStatus}/${id}`;
-    console.log(`Trạng thái là: ${trangThai}`);
-    return this.http.put<Tintuc[]>(StatusUrl,trangThai);
+    return this.http.put<Tintuc[]>(API_ENDPOINTS.tinTuc.updateStatus(id),trangThai, 
+                                  { withCredentials: true });
   }
 
   ImportExcel(FileExcel: FormData): Observable<any> {
-    return this.http.post<any>(this.ExcelUrl,FileExcel);
+    return this.http.post<any>(API_ENDPOINTS.tinTuc.importExcel, FileExcel, 
+                              { withCredentials: true });
   }
 
   DownloadTempExcel(): Observable<Blob> {
-    return this.http.get(this.DownloadExcelUrl, { responseType: 'blob' });
+    return this.http.get(API_ENDPOINTS.tinTuc.downloadExcelTemplate, { responseType: 'blob' });
   }
 }

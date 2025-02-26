@@ -280,6 +280,9 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\Web1.pdb
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Azure.Core.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Azure.Identity.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\EPPlus.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\EPPlus.Interfaces.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\EPPlus.System.Drawing.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Google.Apis.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Google.Apis.Auth.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Google.Apis.Core.dll
@@ -314,6 +317,8 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relatio
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Configuration.FileExtensions.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Json.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
@@ -331,6 +336,7 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.IO.RecyclableMemoryStream.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.NET.StringTools.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.OpenApi.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
@@ -368,6 +374,7 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Composition.TypedParts.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Drawing.Common.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Private.Windows.Core.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Management.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Memory.Data.dll
@@ -523,6 +530,7 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Dat
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
@@ -550,11 +558,3 @@ D:\source\repos\Web1\Web1\obj\Debug\net8.0\refint\Web1.dll
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.pdb
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.genruntimeconfig.cache
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\ref\Web1.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\EPPlus.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\EPPlus.Interfaces.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\EPPlus.System.Drawing.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Configuration.FileExtensions.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Json.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.IO.RecyclableMemoryStream.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Private.Windows.Core.dll

@@ -6,6 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
 import { googleRequest } from '../../models/googleRequest';
+import { API_ENDPOINTS } from '../../../constants/api-endpoints.ts';
 
 
 
@@ -18,7 +19,6 @@ export class AuthenService {
   private UrlPostRegister = "https://localhost:7233/api/Account/Sign-Up";
   private UrlPostLogin = "https://localhost:7233/api/Account/Log-In-JWT";
   private UrlOAuthGoogle = "https://localhost:7233/api/Account/Login-Google";
-  private UrlOAuthFacebook = "";
   private UrlHeader = "https://localhost:7233/api/Account/check-header";
   private UrlLogOut = "https://localhost:7233/api/Account/LogOut";
   private WWUrl = 'https://localhost:7233/WeatherForecast';
@@ -116,22 +116,23 @@ export class AuthenService {
     return formData;
   }
 
-  //Gửi người dùng đăng kí lên server
+  
+
   PostRegister(FormRegister: FormGroup): Observable<{ succeeded: boolean; errors: string[] }> {
     return this.http.post<{ succeeded: boolean; errors: string[] }>(
-      this.UrlPostRegister,
+      API_ENDPOINTS.authen.register, 
       this.SetFormRegister(FormRegister)
     );
   }
-
-  //Kiểm tra người dùng đăng nhập theo form
+  
+  // Kiểm tra người dùng đăng nhập theo form
   PostLogin(FormLogin: any): Observable<any> {
-    return this.http.post<any>(this.UrlPostLogin,FormLogin, { withCredentials: true });
-  } 
-
-  // Login theo google
+    return this.http.post<any>(API_ENDPOINTS.authen.login, FormLogin, { withCredentials: true });
+  }
+  
+  // Login theo Google
   LoginGoogle(request: googleRequest): Observable<any> {
-    return this.http.post<any>(this.UrlOAuthGoogle,request, { withCredentials: true });
+    return this.http.post<any>(API_ENDPOINTS.authen.loginGoogle, request, { withCredentials: true });
   }
 
   getHeaderToken(): HttpHeaders {
@@ -152,7 +153,7 @@ export class AuthenService {
 
   LogOut(): Observable<any> {
     let headers: HttpHeaders = this.getHeaderToken();
-    return this.http.get<any>(this.UrlLogOut, { headers, withCredentials: true });
+    return this.http.get<any>(API_ENDPOINTS.authen.logout, { headers, withCredentials: true });
   }
 
 
@@ -168,9 +169,11 @@ export class AuthenService {
   }
 
   GetRefreshToken(): Observable<string> {
-    let headers: HttpHeaders = this.getHeaderToken();
-    return this.http.get<string>(this.refreshTokenUrl, { headers , withCredentials: true, responseType: 'text' as 'json' });
+    return this.http.get<string>(API_ENDPOINTS.authen.refreshToken, { 
+      headers: this.getHeaderToken(), 
+      withCredentials: true, 
+      responseType: 'text' as 'json' 
+    });
+
   }
-
-
 }

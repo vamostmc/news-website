@@ -22,7 +22,6 @@ using Web1.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Đọc cấu hình từ appsettings.json
 builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSetting"));
 
@@ -159,10 +158,6 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         builder =>
         {
-            // builder.AllowAnyOrigin()  // Cho phép tất cả các nguồn
-            //       .AllowAnyMethod()  // Cho phép tất cả các phương thức HTTP (GET, POST, PUT, DELETE, ...)
-            //       .AllowAnyHeader();  // Cho phép tất cả các header
-
             builder.WithOrigins("https://localhost:4200", "https://accounts.google.com")
                    .AllowAnyHeader()
                    .AllowAnyMethod()
@@ -180,6 +175,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
 }
+
+
 app.UseCors("AllowAll");
 
 app.UseStaticFiles(new StaticFileOptions
