@@ -45,6 +45,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "AWSSDK.S3": {
+              "target": "Package",
+              "version": "[3.7.415.13, )"
+            },
             "EPPlus": {
               "target": "Package",
               "version": "[7.5.3, )"

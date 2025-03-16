@@ -11,7 +11,8 @@ using System.Security.Claims;
 using Web1.Helps;
 using Web1.Models;
 using Web1.Repository;
-using Web1.Service;
+using Web1.Service.Account;
+using Web1.Service.Cookie;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Web1.Controllers

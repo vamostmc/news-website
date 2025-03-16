@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { error } from 'pdf-lib';
 import { TrendingViewComponent } from './trending-view/trending-view.component';
 import { ViewDetailComponent } from '../view-detail/view-detail.component';
-
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-home',
@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit {
   formattedDate: string = '';
   fullName: string | null = null;
   
+  
   categories = [
     { id: 1, name: 'Công nghệ' },
     { id: 2, name: 'Thể thao' },
@@ -52,8 +53,8 @@ export class HomeComponent implements OnInit {
   ) {}
   
 
-  private Url = 'https://localhost:7233';
-
+  private aws_URL = environment.awsUrl;
+  
   ngOnInit(): void {
     console.log("Component Home khởi chạy!");
     this.loading = true;
@@ -132,7 +133,7 @@ export class HomeComponent implements OnInit {
 
 
   getFullImageUrl(imageUrl: string): string {
-    return `${this.Url}${imageUrl}`;
+    return `${this.aws_URL}/${imageUrl}`;
   }
 
   toggleSearch() {

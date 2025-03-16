@@ -11,8 +11,8 @@ using Web1.Helps;
 using Web1.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Web1.Service;
 using Azure.Core;
+using Web1.Service.Account;
 
 namespace Web1.Repository
 {

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Web1.Data;
 using Web1.DataNew;
 using Web1.Models;
+using Web1.Service.AWS;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Web1.Repository
@@ -10,8 +11,15 @@ namespace Web1.Repository
     public class TinTucRepository : ITintucRepository
     {
         private readonly TinTucDbContext _tinTuc;
+        private readonly IUploadAWSService _aws;
 
-        public TinTucRepository(TinTucDbContext tinTuc) { _tinTuc = tinTuc; }
+        public TinTucRepository(
+            TinTucDbContext tinTuc, 
+            IUploadAWSService aws ) 
+        { 
+            _tinTuc = tinTuc; 
+            _aws = aws;
+        }
 
         //Lấy thông tin có chứa thêm tên danh mục
         public async Task<List<TinTucDto>> GetTinTucDto()
@@ -96,17 +104,12 @@ namespace Web1.Repository
 
             if (tinTuc.Image != null)
             {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "Hinh", tinTuc.Image.FileName);
-                using (var stream = System.IO.File.Create(path))
-                {
-                    await tinTuc.Image.CopyToAsync(stream);
-                }
-                NewTintuc.HinhAnh = "/Hinh/" + tinTuc.Image.FileName;
+                NewTintuc.HinhAnh = await _aws.UploadFileToAWS(tinTuc.Image);
             }
 
             else
             {
-                NewTintuc.HinhAnh = "/Hinh/Null.png";
+                NewTintuc.HinhAnh = "/Hinh/NULL.png";
             }
 
             _tinTuc.TinTucs.Add(NewTintuc);
@@ -132,15 +135,12 @@ namespace Web1.Repository
             var data = await _tinTuc.TinTucs.FindAsync(id);
             if (data != null)
             {
-                if (data.HinhAnh != "/Hinh/Null.png")
+                if (data.HinhAnh != "NULL.png")
                 {
-                    // Xóa hình ảnh khỏi thư mục nếu có
-                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), data.HinhAnh.TrimStart('/'));
-
-                    // Xóa file hình ảnh cũ nếu tồn tại
-                    if (System.IO.File.Exists(oldImagePath))
+                    var checkImg = await _aws.DeleteFileAWS(data.HinhAnh);
+                    if(checkImg.success == false)
                     {
-                        System.IO.File.Delete(oldImagePath);
+                        throw new Exception("Lỗi khi xóa ảnh trên AWS: " + checkImg.message);
                     }
                 }
                 _tinTuc.TinTucs.Remove(data);
@@ -161,7 +161,6 @@ namespace Web1.Repository
             {
                 throw new KeyNotFoundException("TinTuc không tồn tại.");
             }
-
             data.TieuDe = tinTuc.TieuDe;
             data.MoTaNgan = tinTuc.MoTaNgan;
             data.NgayDang = tinTuc.NgayDang;
@@ -171,34 +170,19 @@ namespace Web1.Repository
             data.DanhmucId = tinTuc.DanhmucId;
             data.BinhLuans = tinTuc.BinhLuans;
             data.NoiDung = tinTuc.NoiDung;
+
             // Kiểm tra xem có hình ảnh mới không
             if (tinTuc.Image != null && tinTuc.Image.Length > 0)
             {
-                // Đường dẫn tới file hình ảnh hiện tại
-                var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), data.HinhAnh.TrimStart('/'));
-
-                // Xóa file hình ảnh cũ nếu tồn tại
-                if (System.IO.File.Exists(oldImagePath))
+                // Cập nhật đường dẫn hình ảnh trong database và aws
+                var checkImg = await _aws.DeleteFileAWS(data.HinhAnh);
+                if (checkImg.success == false)
                 {
-                    System.IO.File.Delete(oldImagePath);
+                    throw new Exception("Lỗi khi xóa ảnh trên AWS: " + checkImg.message);
                 }
 
-                // Tạo đường dẫn file mới
-                var newImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Hinh", tinTuc.Image.FileName);
-
-                // Tạo file mới với ảnh cập nhật
-                using (var stream = System.IO.File.Create(newImagePath))
-                {
-                    await tinTuc.Image.CopyToAsync(stream);
-                }
-
-                // Cập nhật đường dẫn hình ảnh trong database với file mới
-                data.HinhAnh = "/Hinh/" + tinTuc.Image.FileName;
-            }
-            else
-            {
-                // Nếu không có hình ảnh mới, giữ nguyên ảnh cũ hoặc để xử lý khác nếu muốn
-                data.HinhAnh = data.HinhAnh; // Giữ nguyên ảnh cũ
+                var UrlImage = await _aws.UploadFileToAWS(tinTuc.Image);
+                data.HinhAnh = UrlImage;
             }
 
             _tinTuc.TinTucs.Update(data);

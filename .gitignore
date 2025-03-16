@@ -1,2 +1,4 @@
 .vs/
 /Web1/obj/
+appsettings.json
+appsettings.*.json

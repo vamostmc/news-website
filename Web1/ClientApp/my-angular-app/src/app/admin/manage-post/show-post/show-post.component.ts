@@ -7,7 +7,7 @@ import { DashboardService } from '../../../Client/service-client/dashboard-servi
 import { firstValueFrom, forkJoin, switchMap } from 'rxjs';
 import { Location } from '@angular/common';
 import { SearchFilterService } from '../../../Client/service-client/search-filter-service/search-filter.service';
-
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-show-post',
@@ -33,7 +33,7 @@ export class ShowPostComponent implements OnInit  {
   tintucView: Tintuc[] = [];
   loading: boolean = true;
 
-  private Url = 'https://localhost:7233';
+  private aws_URL = environment.awsUrl;
 
   p: number = 1; // Biến để lưu số trang hiện tại
   onPageChange(page: number) {
@@ -42,7 +42,7 @@ export class ShowPostComponent implements OnInit  {
 
   //Lấy đường dẫn hình ảnh
   getFullImageUrl(imageUrl: string): string {
-    return `${this.Url}${imageUrl}`;
+    return `${this.aws_URL}/${imageUrl}`;
   }
 
   

@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as pdfjsLib from 'pdfjs-dist';
 import { async } from 'rxjs';
 import * as JSZip from 'jszip';
-
+import { environment } from '../../../../environments/environment.development';
 
 
 
@@ -50,8 +50,7 @@ export class EditPostComponent {
 
   loading: boolean = false;
   
-
-  private Url = 'https://localhost:7233';
+  private aws_URL = environment.awsUrl; 
 
   get progressWidth(): number {
     return (this.currentStep - 1) / (this.steps.length - 1) * 88;
@@ -97,7 +96,7 @@ export class EditPostComponent {
   }
 
   getFullImageUrl(imageUrl: string): string {
-    return `${this.Url}${imageUrl}`;
+    return `${this.aws_URL}/${imageUrl}`;
   }
 
   onFileChange(event: any) {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Web1.Service;
+using Web1.Service.Mail;
 
 namespace Web1.Controllers
 {

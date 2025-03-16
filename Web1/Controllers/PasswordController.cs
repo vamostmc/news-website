@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Web1.Models;
-using Web1.Service;
+using Web1.Service.Account;
 
 namespace Web1.Controllers
 {

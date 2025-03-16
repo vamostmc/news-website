@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Amazon;
+using Amazon.S3;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +19,11 @@ using Web1.DataNew;
 using Web1.Middleware;
 using Web1.Models;
 using Web1.Repository;
-using Web1.Service;
+using Web1.Service.Account;
+using Web1.Service.AWS;
+using Web1.Service.Cookie;
+using Web1.Service.Mail;
+using Web1.Service.Session;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -81,6 +87,18 @@ builder.Services.AddDbContext<TinTucDbContext>(
 
 builder.Services.AddDistributedMemoryCache();  // Lưu session trong RAM
 
+//Đăng kí sử dụng AWS
+var awsOptions = builder.Configuration.GetSection("AWS");
+builder.Services.AddSingleton<IAmazonS3>(sp =>
+{
+    return new AmazonS3Client(
+        awsOptions["AccessKey"],
+        awsOptions["SecretKey"],
+        RegionEndpoint.GetBySystemName(awsOptions["Region"])
+    );
+});
+
+
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = "TMC";
@@ -91,7 +109,6 @@ builder.Services.AddSession(options =>
 });
 
 //Them Repository
-
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ITintucRepository, TinTucRepository>();
 builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
@@ -99,6 +116,8 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IPasswordRepository, PasswordRepository>();
+builder.Services.AddScoped<IUploadAWSService, UploadAWSService>();
+
 //Dang ki Identity 
 builder.Services.AddIdentity<AppUser, IdentityRole>( options =>
                  {
@@ -178,13 +197,6 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseCors("AllowAll");
-
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "Hinh")),
-    RequestPath = "/Hinh"
-});
 
 // Đăng kí ExceptionHandlingMiddleware
 app.UseMiddleware<ExceptionHandlingMiddleware>();

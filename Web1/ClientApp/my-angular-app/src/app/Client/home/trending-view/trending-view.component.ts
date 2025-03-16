@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Tintuc } from '../../models/tintuc';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-trending-view',
@@ -8,11 +9,10 @@ import { Tintuc } from '../../models/tintuc';
 })
 export class TrendingViewComponent implements OnInit {
 
-    private Url = 'https://localhost:7233';
+    private aws_URL = environment.awsUrl;
     @Input() tintucs: Tintuc[] = [];
 
     tintucTop: Tintuc[] = [];
-    
 
     constructor() {}
 
@@ -22,7 +22,7 @@ export class TrendingViewComponent implements OnInit {
     }
 
     getFullImageUrl(imageUrl: string): string {
-      return `${this.Url}${imageUrl}`;
+      return `${this.aws_URL}/${imageUrl}`;
     }
 
     getTopNews() {
