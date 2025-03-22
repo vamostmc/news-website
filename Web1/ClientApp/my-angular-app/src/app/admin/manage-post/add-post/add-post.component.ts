@@ -8,7 +8,7 @@ import { DashboardService } from '../../../Client/service-client/dashboard-servi
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as JSZip from 'jszip';
-
+import { EditorComponent } from '@tinymce/tinymce-angular';
 
 @Component({
   selector: 'app-add-post',

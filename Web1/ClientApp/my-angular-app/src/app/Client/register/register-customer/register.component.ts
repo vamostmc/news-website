@@ -53,8 +53,11 @@ export class RegisterComponent implements OnInit {
             
             this.errorMessage = null;
             this.registerForm.reset(); // Reset form nếu cần
-            this.router.navigate(['/confirmEmail']);
-            // this.router.navigate(['/']);
+            this.router.navigate(['/success'], { replaceUrl: true }).then(() => {
+              setTimeout(() => {
+                this.router.navigate(['/login'], { replaceUrl: true });
+              }, 3000);
+            });
           } else {
             // Đăng ký thất bại và hiển thị lỗi
             this.errorMessage = response.errors.length > 0 

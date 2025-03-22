@@ -16,15 +16,6 @@ import { API_ENDPOINTS } from '../../../constants/api-endpoints.ts';
 
 export class AuthenService {
 
-  private UrlPostRegister = "https://localhost:7233/api/Account/Sign-Up";
-  private UrlPostLogin = "https://localhost:7233/api/Account/Log-In-JWT";
-  private UrlOAuthGoogle = "https://localhost:7233/api/Account/Login-Google";
-  private UrlHeader = "https://localhost:7233/api/Account/check-header";
-  private UrlLogOut = "https://localhost:7233/api/Account/LogOut";
-  private WWUrl = 'https://localhost:7233/WeatherForecast';
-  private refreshTokenUrl = "https://localhost:7233/api/Account/RefreshToken";
-  private checkAdminUrl = "https://localhost:7233/api/Account/Check-Admin";
-
   constructor(private http: HttpClient,
               private oauthService: OAuthService) {  }
 
@@ -71,7 +62,7 @@ export class AuthenService {
     console.log('Gọi API checkAdmin');
     let headers: HttpHeaders = this.getHeaderToken();
     
-    return this.http.get<any>(this.checkAdminUrl, { headers, withCredentials: true }).pipe(
+    return this.http.get<any>(API_ENDPOINTS.authen.checkAdmin, { headers, withCredentials: true }).pipe(
       tap(response => {
         console.log('Kết quả từ checkAdmin:', response); // In ra kết quả trả về từ API
       }),
@@ -160,12 +151,7 @@ export class AuthenService {
    // Gửi request với Authorization header
   checkHeaderWithToken(): Observable<any> {
     let headers: HttpHeaders = this.getHeaderToken();
-    return this.http.get(this.checkAdminUrl , { headers , withCredentials: true } );
-  }
-
-  getWeatherForecast(): Observable<any> {
-    let headers: HttpHeaders = this.getHeaderToken();
-    return this.http.get<any>(this.WWUrl, { headers }); // Thêm withCredentials nếu cần gửi cookie
+    return this.http.get(API_ENDPOINTS.authen.checkAdmin , { headers , withCredentials: true } );
   }
 
   GetRefreshToken(): Observable<string> {

@@ -5,6 +5,7 @@ import { Tintuc } from '../models/tintuc';
 import { Comment } from '../models/comment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommentService } from '../service-client/comment-service/comment.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-view-detail',
@@ -21,6 +22,8 @@ export class ViewDetailComponent implements OnInit{
   replies: Comment[] = [];
   activeReplyId !: number;
   currentComment: string = '';
+  tintucView: Tintuc[] = [];
+  tintucProminent: Tintuc[] = [];
   expandedComments: Set<number> = new Set();
 
   constructor(private tintucService: TinTucService,
@@ -133,7 +136,28 @@ export class ViewDetailComponent implements OnInit{
     if (diffMonths < 12) return `${diffMonths} tháng trước`;
     return `${diffYears} năm trước`;
   }
+
+  loadData() {
+    forkJoin({
+      tintucById: this.tintucService.getTintucById(this.newsId),
+      allTintuc: this.tintucService.getTintuc(),
+      comments: this.commentService.getCommentTinTuc(this.newsId)
+    }).subscribe(
+      ({ tintucById, allTintuc, comments }) => {
+        this.tintucs = tintucById;
+        this.tintucTop = allTintuc;
+        this.comments = comments;
   
+        console.log("Tin tức chi tiết:", this.tintucs);
+        console.log("Danh sách tất cả tin tức:", this.tintucTop);
+        console.log("Danh sách bình luận:", this.comments);
+      },
+      (error) => {
+        console.error("Lỗi khi gọi API:", error);
+      }
+    );
+  }
+
   
   
 
@@ -142,21 +166,7 @@ export class ViewDetailComponent implements OnInit{
   ngOnInit(): void {
     this.initForm();
     this.getNewId();
-    this.tintucTop = this.tintucService.getData();
     console.log("TinTucTop là:",this.tintucTop);
-    this.tintucService.getTintucById(this.newsId).subscribe(
-      (data) => {
-        this.tintucs = data;
-        console.log(this.tintucs);
-      }
-    )
-
-    this.commentService.getCommentTinTuc(this.newsId).subscribe(
-      (data) => {
-        this.comments = data;
-        console.log(this.comments);
-      }
-    )
-    console.log("Tin tức từ cha: ", this.tintucTop);
+    this.loadData();
   }
 }

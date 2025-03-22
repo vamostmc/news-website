@@ -9,6 +9,7 @@ import { log } from 'console';
 import { FacebookLoginProvider, GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { CookieStorageService } from '../service-client/cookie-service/cookie-storage.service';
 import { googleRequest } from '../models/googleRequest';
+import { PlatformService } from '../service-client/platform-service/platform.service';
 
 declare var google: any;
 declare var FB: any;
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit {
                 private authService: AuthenService,
                 private cookieService: CookieStorageService,
                 private oAthService: SocialAuthService,
-                private cdr: ChangeDetectorRef) {}
+                private cdr: ChangeDetectorRef,
+                private platformService: PlatformService) {}
 
     errorMessage: string | null = null;
     loading: boolean = true;
@@ -44,34 +46,58 @@ export class LoginComponent implements OnInit {
       remember: [false]
     });
 
-    // Hàm để khởi tạo Google Sign-In
-  initializeGoogleLogin(): void {
-    google.accounts.id.initialize({
-      client_id: '938095493121-gf602qo4lrm6r0bb0pgqu5aafsn1prrq.apps.googleusercontent.com', // Thay bằng client ID của bạn
-      callback: (response: any) => this.handleCredentialResponse(response), // Hàm callback khi đăng nhập thành công
-      ux_mode: 'popup',     // Hiển thị popup thay vì redirect
-      context: 'signin',    // Chỉ hiện nút đăng nhập, không gợi ý tài khoản
-      prompt_parent_id: "google-signin-btn",
-      auto_select: false,   // Không tự động chọn tài khoản
-      itp_support: true,
-      scope: 'profile email https://www.googleapis.com/auth/user.addresses.read https://www.googleapis.com/auth/user.birthday.read'
-    });
+    //Chờ Google API tải xong
+    loadGoogleSDK(): Promise<void> {
+      return new Promise((resolve, reject) => {
+        if (typeof google !== 'undefined' && google.accounts) {
+          resolve();
+        } else {
+          const script = document.createElement('script');
+          script.src = "https://accounts.google.com/gsi/client";
+          script.async = true;
+          script.defer = true;
+          script.onload = () => resolve();
+          script.onerror = () => reject("Lỗi khi tải Google API");
+          document.body.appendChild(script);
+        }
+      });
+    }
+    
 
-    // Render nút đăng nhập Google
-    google.accounts.id.renderButton(
-      document.getElementById("google-signin-btn"), // ID của phần tử nơi bạn muốn hiển thị nút
-      {
-        theme: "outline",  // Có thể thay đổi theme: "outline" hoặc "filled"
-        size: "large",     // Kích thước nút: "small", "medium", "large"
-      }
-    );
-  }
+    // Hàm để khởi tạo Google Sign-In
+    initializeGoogleLogin(): void {
+      this.loadGoogleSDK().then(() => {
+        if (typeof google !== 'undefined') {
+          google.accounts.id.initialize({
+            client_id: '938095493121-gf602qo4lrm6r0bb0pgqu5aafsn1prrq.apps.googleusercontent.com',
+            callback: (response: any) => this.handleCredentialResponse(response),
+            ux_mode: 'popup',
+            context: 'signin',
+            prompt_parent_id: "google-signin-btn",
+            auto_select: false,
+            itp_support: true,
+            scope: 'profile email https://www.googleapis.com/auth/user.addresses.read https://www.googleapis.com/auth/user.birthday.read'
+          });
+    
+          google.accounts.id.renderButton(
+            document.getElementById("google-signin-btn"),
+            {
+              theme: "outline",
+              size: "large"
+            }
+          );
+        } else {
+          console.error("Google API chưa sẵn sàng.");
+        }
+      }).catch((error) => console.error(error));
+    }
+    
+
+  
 
   // Hàm xử lý khi đăng nhập thành công
   handleCredentialResponse(response: any): void {
     console.log("Encoded JWT ID token: " + response.credential);
-    
-    // Debugging: kiểm tra authService và LoginGoogle
     const tokenrequest : googleRequest = {
       token: response.credential,
     }
@@ -102,7 +128,6 @@ export class LoginComponent implements OnInit {
   }
 
     
-
     signInWithGoogle(): void {
       this.oAthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(user => {
         this.user = user;
@@ -226,6 +251,8 @@ export class LoginComponent implements OnInit {
     
 
     ngOnInit(): void {
-      this.initializeGoogleLogin();
+      if(this.platformService.isBrowser()) {
+        this.initializeGoogleLogin();
+      }
     }
 }

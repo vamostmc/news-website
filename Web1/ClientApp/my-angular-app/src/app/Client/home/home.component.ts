@@ -9,6 +9,7 @@ import { error } from 'pdf-lib';
 import { TrendingViewComponent } from './trending-view/trending-view.component';
 import { ViewDetailComponent } from '../view-detail/view-detail.component';
 import { environment } from '../../../environments/environment.development';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -58,11 +59,10 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     console.log("Component Home khởi chạy!");
     this.loading = true;
-    // this.getDataNews();
     setTimeout(() => {
       this.getDataNews();
-      this.loading = false;
     }, 800);
+    
   }
 
   updateTinTuc() {
@@ -75,7 +75,11 @@ export class HomeComponent implements OnInit {
 
   getDataNews() {
     console.log("Gọi API getDataNews...");
-    this.tintucService.getTintuc().subscribe(
+    this.tintucService.getTintuc().pipe(
+      finalize(() => {
+        this.loading = false; // Tắt loading sau khi API chạy xong 
+      })
+    ).subscribe(
       (data) => {
         console.log("Dữ liệu API trả về:", data);
         this.tintucView = data;
@@ -145,15 +149,5 @@ export class HomeComponent implements OnInit {
     this.searchQuery = event.target.innerText;
   }
 
-  fetchWeather(): void {
-    this.authen.getWeatherForecast().subscribe(
-      (data) => {
-        this.weatherData = data;
-        console.log('Weather data:', data); // Hiển thị dữ liệu trong console
-      }, 
-      (error) => {
-        console.error("Lỗi khi gọi API:", error);
-      }
-    );
-  }
+  
 }

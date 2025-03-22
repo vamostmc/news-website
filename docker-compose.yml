@@ -1,8 +1,44 @@
-version: '3.4'
+﻿version: '3.4'
+
 
 services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Chien2003x."
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_volume:/var/opt/mssql  # Lưu trữ dữ liệu vĩnh viễn
+
   web1:
     image: ${DOCKER_REGISTRY-}web1
     build:
       context: .
       dockerfile: Web1/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80;https://+:443
+      - ConnectionStrings__TinTucDB=Server=mssql;Database=Study;User Id=sa;Password=Chien2003x.;TrustServerCertificate=True
+    ports:
+      - "443:443" 
+      - "8080:80"
+    depends_on:
+      - mssql
+
+ # Dịch vụ Frontend (Angular)
+  client:
+    build:
+      context: ./Web1/ClientApp/my-angular-app  # Chỉ định đúng thư mục chứa Dockerfile của Angular
+      dockerfile: Dockerfile
+    container_name: client-app
+    ports:
+      - "4200:4200"  
+    depends_on:
+      - web1  
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  sql_volume:  # Định nghĩa volume

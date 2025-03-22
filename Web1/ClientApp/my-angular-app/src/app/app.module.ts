@@ -1,15 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { LoginComponent } from '../app/Client/login/login.component';
-
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './Client/register/register-customer/register.component';
-
 import { FormsModule } from '@angular/forms';
 import { AdminComponent } from './admin/admin.component';
 import { AdminModule } from './admin/admin.module';
@@ -25,7 +21,6 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule, GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
-
 import { ViewDetailComponent } from './Client/view-detail/view-detail.component';
 import { TrendingViewComponent } from './Client/home/trending-view/trending-view.component';
 import { FooterComponent } from './Client/footer/footer.component';
@@ -69,6 +64,7 @@ import { NavbarAuthenComponent } from './Client/navbar/navbar-authen/navbar-auth
   ],
   providers: [
     provideClientHydration(),
+    provideHttpClient(withFetch()),
     OAuthService,
     { 
       provide: 'SocialAuthServiceConfig',

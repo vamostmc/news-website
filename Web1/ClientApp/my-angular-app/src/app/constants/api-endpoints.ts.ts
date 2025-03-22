@@ -51,5 +51,16 @@ export const API_ENDPOINTS = {
       logout: `${API_BASE}/Account/LogOut`,
       refreshToken: `${API_BASE}/Account/RefreshToken`,
       checkAdmin: `${API_BASE}/Account/Check-Admin`
+    },
+     
+    emailVerification: {
+      sendVerifyMail: (Id: string) => `${API_BASE}/ConfirmEmail/send-verify-mail/${Id}`,
+      checkVerifyCode: `${API_BASE}/ConfirmEmail/check-verify-code`
+    },
+
+    passwordReset: {
+      sendOtpPassword: (NameorEmail: string) => `${API_BASE}/Password/SendOtpPassword/${NameorEmail}`,
+      checkVerifyCodePassword: `${API_BASE}/Password/check-verify-code-password`,
+      resetPassword: `${API_BASE}/Password/Reset-password`
     }
   };

@@ -1,6 +1,8 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, PLATFORM_ID } from '@angular/core';
 import { AuthenService } from '../../service-client/authen-service/authen.service';
 import { Router } from '@angular/router';
+import { PlatformService } from '../../service-client/platform-service/platform.service';
+
 
 @Component({
   selector: 'app-navbar-authen',
@@ -10,13 +12,15 @@ import { Router } from '@angular/router';
 export class NavbarAuthenComponent implements OnInit {
 constructor(
                 private authService: AuthenService,
-                private router: Router) {}
+                private router: Router,
+                private platform: PlatformService) {}
 
     isDropdownOpen = false;
     userRole = ''; // Giả sử bạn đã lưu thông tin role của user
     today: Date = new Date();
     dayOfWeek: string = '';
     formattedDate: string = '';
+    username : string | null = null;
   
     // Toggle the menu when avatar is clicked
     toggleMenu(event: MouseEvent) {
@@ -36,11 +40,13 @@ constructor(
       this.userRole = 'Customer'; // Giả sử bạn đã có thông tin role của người dùng
     }
 
-    username : string | null = null;
+    
     checkUser(): boolean {
-      const tokenUser = localStorage.getItem("userName");
-      if(tokenUser != null) {
-        return true;
+      if(this.platform.isBrowser()) {
+        const tokenUser = localStorage.getItem("userName");
+        if(tokenUser != null) {
+          return true;
+        }
       }
       return false;
     }
@@ -50,14 +56,16 @@ constructor(
         this.authService.LogOut().subscribe(
           (data) => {
             console.log(data);
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('confirmEmail');
-            localStorage.removeItem('userName');
-            localStorage.removeItem('fullName');
-            localStorage.removeItem('userRoles');
-            this.username = ''; // Xóa thông tin username
-            window.location.reload();
-            this.router.navigate(['/']);
+            if(this.platform.isBrowser()) {
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('confirmEmail');
+              localStorage.removeItem('userName');
+              localStorage.removeItem('fullName');
+              localStorage.removeItem('userRoles');
+              this.username = ''; // Xóa thông tin username
+              window.location.reload();
+              this.router.navigate(['/']);
+            }
           }
         );
         
@@ -75,11 +83,13 @@ constructor(
     }
 
     ngOnInit(): void {
-      console.log(`Click : ${this.isDropdownOpen}`);
+      // console.log(`Click : ${this.isDropdownOpen}`);
       this.authService.currentUserName.subscribe(userName => {
-        this.username = userName;
-        this.username = localStorage.getItem("fullName");
-        this.userRole = this.authService.GetRoleUser();
+        if(this.platform.isBrowser()) {
+          this.username = userName;
+          this.username = localStorage.getItem("fullName");
+          this.userRole = this.authService.GetRoleUser();
+        }
       });
       this.getTodayInfo();
     }

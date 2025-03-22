@@ -80,9 +80,12 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 //Dang ki DBContext 
-builder.Services.AddDbContext<TinTucDbContext>( 
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("TinTucDB"))
+builder.Services.AddDbContext<TinTucDbContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("TinTucDB"),
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()
+    )
 );
+
 
 
 builder.Services.AddDistributedMemoryCache();  // Lưu session trong RAM

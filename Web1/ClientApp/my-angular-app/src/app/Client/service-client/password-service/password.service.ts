@@ -3,15 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { verifyCode } from '../../models/verifyCode';
 import { resetPassword } from '../../models/reset-password';
+import { API_ENDPOINTS } from '../../../constants/api-endpoints.ts';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PasswordService {
-
-  private UrlSendCodeToUser = "https://localhost:7233/api/Password/SendOtpPassword";
-  private UrlSendCodeToServer = "https://localhost:7233/api/Password/check-verify-code-password";
-  private UrlResetPassword = "https://localhost:7233/api/Password/Reset-password";
 
   constructor(private http: HttpClient) { }
 
@@ -24,15 +21,15 @@ export class PasswordService {
   }
 
   SendCodeToUser(NameOrEmail: string): Observable<any> {
-    const url = `${this.UrlSendCodeToUser}/${NameOrEmail}`
+    const url = API_ENDPOINTS.passwordReset.sendOtpPassword(NameOrEmail);
     return this.http.post<any>(url,NameOrEmail);
   }
 
   SendCodeToServer(verify: verifyCode): Observable<string> {
-    return this.http.post<string>(this.UrlSendCodeToServer, verify);
+    return this.http.post<string>(API_ENDPOINTS.passwordReset.checkVerifyCodePassword, verify);
   }
 
   ResetPassword(resetPassword: resetPassword): Observable<any> {
-    return this.http.post<any>(this.UrlResetPassword, resetPassword);
+    return this.http.post<any>(API_ENDPOINTS.passwordReset.resetPassword, resetPassword);
   }
 }

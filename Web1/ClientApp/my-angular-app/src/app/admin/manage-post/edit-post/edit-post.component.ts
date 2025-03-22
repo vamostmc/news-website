@@ -10,7 +10,7 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { async } from 'rxjs';
 import * as JSZip from 'jszip';
 import { environment } from '../../../../environments/environment.development';
-
+import { EditorComponent } from '@tinymce/tinymce-angular';
 
 
 
