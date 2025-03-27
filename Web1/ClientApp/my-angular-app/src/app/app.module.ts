@@ -26,6 +26,7 @@ import { TrendingViewComponent } from './Client/home/trending-view/trending-view
 import { FooterComponent } from './Client/footer/footer.component';
 import { NavbarClientComponent } from './Client/navbar/navbar-client/navbar-client.component';
 import { NavbarAuthenComponent } from './Client/navbar/navbar-authen/navbar-authen.component';
+import { ToastMessageComponent } from './Client/toast-message/toast-message.component';
 
 
 
@@ -45,6 +46,7 @@ import { NavbarAuthenComponent } from './Client/navbar/navbar-authen/navbar-auth
     FooterComponent,
     NavbarClientComponent,
     NavbarAuthenComponent,
+    ToastMessageComponent,
 
   ],
   imports: [

@@ -8,6 +8,7 @@ using Web1.Exceptions;
 using Web1.Helps;
 using Web1.Migrations.TinTucDb;
 using Web1.Models;
+using Web1.Service.Redis;
 
 namespace Web1.Repository
 {
@@ -16,12 +17,17 @@ namespace Web1.Repository
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TinTucDbContext _tinTuc;
+        private readonly IRedisService _redisService;
 
-        public CustomerRepository( UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, TinTucDbContext tinTuc) 
+        public CustomerRepository( UserManager<AppUser> userManager, 
+                                   RoleManager<IdentityRole> roleManager, 
+                                   TinTucDbContext tinTuc,
+                                   IRedisService redisService) 
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _tinTuc = tinTuc;
+            _redisService = redisService;
         }
         public async Task<int> TotalCustoms()
         {
@@ -171,6 +177,14 @@ namespace Web1.Repository
                 data.UserName = user.UserName;
                 data.DateUser = user.DateUser;
                 data.IsActive = user.IsActive;
+                if (data.IsActive == true)
+                {
+                    await _redisService.RemoveToRedisAsync(TypeKeyRedis.BLACKLIST_PREFIX, id);
+                }
+                else
+                {
+                    await _redisService.SetValueRedisAsync(TypeKeyRedis.BLACKLIST_PREFIX, id, "1", null);
+                }
 
                 await _userManager.UpdateAsync(data);
                 return data;
@@ -225,6 +239,14 @@ namespace Web1.Repository
                 }
 
                 data.IsActive = status;
+                if(data.IsActive == true)
+                {
+                    await _redisService.RemoveToRedisAsync(TypeKeyRedis.BLACKLIST_PREFIX,id);
+                }
+                else
+                {
+                    await _redisService.SetValueRedisAsync(TypeKeyRedis.BLACKLIST_PREFIX, id, "1", null);
+                }
                 await _userManager.UpdateAsync(data);
                 return await GetListUser();
             }

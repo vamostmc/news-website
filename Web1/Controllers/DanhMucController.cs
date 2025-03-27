@@ -5,6 +5,7 @@ using Web1.Repository;
 using Web1.Models;
 using Microsoft.AspNetCore.Authorization;
 using Web1.Helps;
+using Web1.Service.RabbitMq.Producer;
 
 namespace Web1.Controllers
 {
@@ -13,8 +14,14 @@ namespace Web1.Controllers
     public class DanhMucController : ControllerBase
     {
         private readonly IDanhMucRepository _danhMuc;
+        private readonly IRabbitMqProducer _producerService;
 
-        public DanhMucController( IDanhMucRepository danhMuc) { _danhMuc = danhMuc; }
+        public DanhMucController( IDanhMucRepository danhMuc,
+                                  IRabbitMqProducer producerService) 
+        {
+            _danhMuc = danhMuc;
+            _producerService = producerService;
+        }
 
         [HttpGet("GetDanhmuc")]
         //[Authorize(Roles = Role.Customer)]
@@ -26,7 +33,8 @@ namespace Web1.Controllers
         [HttpGet("GetDanhmuc/{id}")]
         public async Task<DanhMuc> GetDanhMucByID(int id)
         {
-            return await _danhMuc.GetDanhMucIDAsync(id);
+            var data = await _danhMuc.GetDanhMucIDAsync(id);
+            return data;
         }
 
         [HttpPost("AddDanhMuc")]

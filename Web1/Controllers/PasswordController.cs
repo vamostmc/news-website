@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Web1.Helps;
 using Web1.Models;
 using Web1.Service.Account;
+using Web1.Service.RabbitMq.Producer;
 
 namespace Web1.Controllers
 {
@@ -10,17 +13,21 @@ namespace Web1.Controllers
     public class PasswordController : ControllerBase
     {
         private readonly IForgotPasswordService _forgotPassword;
+        private readonly IRabbitMqProducer _producerService;
 
-        public PasswordController(IForgotPasswordService forgotPassword) 
+        public PasswordController(IForgotPasswordService forgotPassword,
+                                  IRabbitMqProducer producerService) 
         {
             _forgotPassword = forgotPassword;
+            _producerService = producerService;
         }
 
         [HttpPost("SendOtpPassword/{userNameOrEmail}")]
         public async Task<IActionResult> SendOtpPassword(string userNameOrEmail)
         {
-            var emailUser = await _forgotPassword.SendOtpResetPassword(userNameOrEmail);
-            return Ok(emailUser);
+            var user = await _forgotPassword.GetUserPassword(userNameOrEmail);
+            await _producerService.PublishEvent(KeyRabbit.FORGOT_PASSWORD_ROUTING, user);
+            return Ok(new Success { success = true, message = $"{user.Email}|{user.Id}" });
         }
 
         [HttpPost("check-verify-code-password")]

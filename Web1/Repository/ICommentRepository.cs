@@ -3,7 +3,7 @@ using Web1.Models;
 
 namespace Web1.Repository
 {
-    public interface ICommentRepository
+    public interface ICommentRepository 
     {
         public Task<List<BinhLuanDto>> GetAllComment();
 

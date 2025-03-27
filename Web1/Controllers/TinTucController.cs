@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.Drawing;
 using Web1.Data;
 using Web1.DataNew;
+using Web1.Helps;
 using Web1.Models;
 using Web1.Repository;
 
@@ -23,6 +25,7 @@ namespace Web1.Controllers
         }
 
         [HttpGet("TintucWithDanhmuc")]
+        [Authorize(Roles = Role.Customer)]
         public async Task<List<TinTucDto>> GetAllWithDm()
         {
             return await _tinTuc.GetTinTucDto();
@@ -34,7 +37,7 @@ namespace Web1.Controllers
             return await _tinTuc.GetDanhMuc();
         }
 
-        [HttpGet]
+        [HttpGet("AllTinTuc")]
         public async Task<List<TinTuc>> GetAll()
         {
             return await _tinTuc.GetALlTinTuc();

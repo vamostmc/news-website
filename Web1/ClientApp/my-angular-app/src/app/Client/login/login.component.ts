@@ -216,7 +216,7 @@ export class LoginComponent implements OnInit {
             if (data.success == false) {
               setTimeout(() => {
                 this.loading = true;
-                this.errorMessage = "Sai tài khoản hoặc mật khẩu";
+                this.errorMessage = data.message;
               }, 1000);
               
             } else {

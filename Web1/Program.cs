@@ -23,6 +23,10 @@ using Web1.Service.Account;
 using Web1.Service.AWS;
 using Web1.Service.Cookie;
 using Web1.Service.Mail;
+using Web1.Service.RabbitMq.Connection;
+using Web1.Service.RabbitMq.Consumer;
+using Web1.Service.RabbitMq.Producer;
+using Web1.Service.Redis;
 using Web1.Service.Session;
 
 
@@ -48,8 +52,23 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+
+// Cấu hình khởi tạo Redis
+var redisConfig = builder.Configuration.GetSection("Redis")["ConnectionString"];
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConfig));
+
+//Rabit
+builder.Services.AddHostedService<ForgotPasswordConsumer>();
+builder.Services.AddHostedService<ConfirmEmailConsumer>();
+
+builder.Services.AddSingleton<IRabbitMqProducer, RabbitMqProducer>();
+builder.Services.AddSingleton<RabbitMqConnection>();
+
+
+
 builder.Services.AddEndpointsApiExplorer();
+
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -118,8 +137,8 @@ builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
-builder.Services.AddScoped<IPasswordRepository, PasswordRepository>();
 builder.Services.AddScoped<IUploadAWSService, UploadAWSService>();
+builder.Services.AddSingleton<IRedisService, RedisService>();
 
 //Dang ki Identity 
 builder.Services.AddIdentity<AppUser, IdentityRole>( options =>
@@ -152,17 +171,18 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
     };
 })
-.AddCookie("CookieAuth", options =>
-{
-    options.ExpireTimeSpan = TimeSpan.FromDays(14);             // Thời gian lưu cookie
-    options.SlidingExpiration = true;                           // Gia hạn thời gian nếu người dùng còn hoạt động
-    options.Cookie.HttpOnly = true;                             // Cookie chỉ được truy cập bởi máy chủ
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Yêu cầu HTTPS cho cookie
-    options.Cookie.SameSite = SameSiteMode.None;               // Hỗ trợ cross-origin
-    /*options.Cookie.SecurePolicy = CookieSecurePolicy.Always;*/    // Yêu cầu HTTPS
-    //options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-    //options.Cookie.SameSite = SameSiteMode.Lax;               // Cho phép gửi cookie trong các yêu cầu cross-origin
-}).AddGoogle(googleOptions =>
+//.AddCookie("CookieAuth", options =>
+//{
+//    //options.ExpireTimeSpan = TimeSpan.FromDays(14);             // Thời gian lưu cookie
+//    //options.SlidingExpiration = true;                           // Gia hạn thời gian nếu người dùng còn hoạt động
+//    //options.Cookie.HttpOnly = true;                             // Cookie chỉ được truy cập bởi máy chủ
+//    //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Yêu cầu HTTPS cho cookie
+//    //options.Cookie.SameSite = SameSiteMode.None;               // Hỗ trợ cross-origin
+//    /*options.Cookie.SecurePolicy = CookieSecurePolicy.Always;*/    // Yêu cầu HTTPS
+//    //options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+//    //options.Cookie.SameSite = SameSiteMode.Lax;               // Cho phép gửi cookie trong các yêu cầu cross-origin
+//})
+.AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration["OAuth:Google:ClientId"]; 
     googleOptions.ClientSecret = builder.Configuration["OAuth:Google:ClientSecret"]; 

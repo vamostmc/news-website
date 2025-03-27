@@ -4,7 +4,7 @@ import { Tintuc } from '../models/tintuc';
 import { TinTucService } from '../service-client/tintuc-service/tin-tuc.service';
 import { DanhmucService } from '../service-client/danhmuc-service/danhmuc.service';
 import { Danhmuc } from '../models/danhmuc';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { error } from 'pdf-lib';
 import { TrendingViewComponent } from './trending-view/trending-view.component';
 import { ViewDetailComponent } from '../view-detail/view-detail.component';
@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit {
   dayOfWeek: string = '';
   formattedDate: string = '';
   fullName: string | null = null;
+  blockUser: boolean = false;
   
   
   categories = [
@@ -50,7 +51,7 @@ export class HomeComponent implements OnInit {
                private tintucService: TinTucService,
                private danhmucservice: DanhmucService,
                private route: ActivatedRoute,
-               
+               private router: Router
   ) {}
   
 
@@ -87,12 +88,17 @@ export class HomeComponent implements OnInit {
         this.filterNews(1);
       },
       (error) => {
-        console.error("Lỗi khi gọi API:", error);
+        if(error.status == 403) {
+          localStorage.clear();
+          this.blockUser = true;
+          console.log(this.blockUser)
+        }
+        
       }
     );
      
   }
-  
+
 
   filterNews(IdDanhMuc: number) {
     this.selectedCategory = IdDanhMuc; // Cập nhật danh mục đang chọn
@@ -148,6 +154,7 @@ export class HomeComponent implements OnInit {
   updateSearchQuery(event: any) {
     this.searchQuery = event.target.innerText;
   }
-
-  
 }
+
+
+

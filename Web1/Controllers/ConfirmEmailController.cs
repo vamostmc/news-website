@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.WebSockets;
+using Web1.Helps;
 using Web1.Models;
 using Web1.Service.Mail;
+using Web1.Service.RabbitMq.Producer;
 
 namespace Web1.Controllers
 {
@@ -10,17 +13,21 @@ namespace Web1.Controllers
     public class ConfirmEmailController : ControllerBase
     {
         private readonly IConfirmMailService _confirmMailService;
+        private readonly IRabbitMqProducer _producerService;
 
-        public ConfirmEmailController(IConfirmMailService confirmMailService) 
+        public ConfirmEmailController(IConfirmMailService confirmMailService, 
+                                      IRabbitMqProducer producerService) 
         {
             _confirmMailService = confirmMailService;
+            _producerService = producerService;
         }
 
         [HttpPost("send-verify-mail/{Id}")]
         public async Task<IActionResult> SendVerifyEmail(string Id)
         {
-            var result = await _confirmMailService.SendVerifyEmailAsync(Id);
-            return Ok(result);
+            var user = await _confirmMailService.GetInfoUserMail(Id);
+            await _producerService.PublishEvent(KeyRabbit.CONFIRM_EMAIL_ROUTING, user);
+            return Ok(new Success { success = true, message = user.Email});
         }
 
         [HttpPost("check-verify-code")]

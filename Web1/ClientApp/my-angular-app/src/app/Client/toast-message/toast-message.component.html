@@ -1,0 +1,9 @@
+<div class="block-overlay" *ngIf="blockUser">
+    <div class="block-container">
+      <h2 class="block-title">Tài khoản bị chặn</h2>
+      <p class="block-message">
+        Bạn không có quyền truy cập vào hệ thống. Vui lòng liên hệ quản trị viên để biết thêm chi tiết.
+      </p>
+      <button class="block-button" (click)="goLogin()">Quay về trang đăng nhập</button>
+    </div>
+  </div>

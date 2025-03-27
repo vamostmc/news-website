@@ -3,74 +3,76 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using NuGet.Common;
+using Web1.Helps;
 using Web1.Models;
 using Web1.Repository;
 using Web1.Service.Mail;
+using Web1.Service.Redis;
 
 namespace Web1.Service.Account
 {
     public class ForgotPasswordService : IForgotPasswordService
     {
-        private readonly IPasswordRepository _password;
+
         private readonly UserManager<AppUser> _userManager;
         private readonly IMemoryCache _memoryCache;
         private readonly ISendMailService _sendMailService;
+        private readonly IRedisService _redisService;
 
         public ForgotPasswordService(
-            IPasswordRepository password,
+            
             UserManager<AppUser> userManager,
             IMemoryCache memoryCache,
-            ISendMailService sendMailService)
+            ISendMailService sendMailService,
+            IRedisService redisService)
         {
-            _password = password;
+           
             _userManager = userManager;
             _memoryCache = memoryCache;
             _sendMailService = sendMailService;
+            _redisService = redisService;
         }
 
-        public async Task<Success> SendOtpResetPassword(string userNameOrEmail)
+        public async Task<AppUser> GetUserPassword(string userNameorEmail)
         {
-            try
+            AppUser user = null;
+            if (userNameorEmail.Contains("@"))
             {
-                AppUser user = null;
-                if (userNameOrEmail.Contains("@"))
-                {
-                    user = await _userManager.FindByEmailAsync(userNameOrEmail);
-                }
-                else
-                {
-                    user = await _userManager.FindByNameAsync(userNameOrEmail);
-                }
-
-                if (user == null)
-                {
-                    return new Success { success = false, message = "Người dùng không tồn tại" };
-                }
-
-                else
-                {
-                    var to = user.Email;
-                    var Id = user.Id;
-                    var newCode = GenerateOtp();
-                    _memoryCache.Set($"verify:{to}", newCode, TimeSpan.FromMinutes(5));
-
-                    string subject = "Mã xác nhận để đổi mật khẩu";
-                    string fullBody = $"<br>Mã xác nhận đổi mật khẩu của bạn là: <strong>{newCode}</strong>. Vui lòng nhập mã này trong vòng 3 phút.";
-
-                    var result = await _sendMailService.SetUpSendMail(to, subject, fullBody);
-                    if (result.success == true)
-                    {
-                        return new Success { success = true, message = $"{to}|{Id}" };
-                    }
-                    return new Success { success = false, message = "Lỗi khi gửi mail" };
-                }
+                user = await _userManager.FindByEmailAsync(userNameorEmail);
             }
-            catch (Exception ex)
+            else
             {
-                throw new Exception("Lỗi " + ex.Message, ex);
+                user = await _userManager.FindByNameAsync(userNameorEmail);
             }
 
+            if (user == null)
+            {
+                return null;
+            }
+            return user;
+        }
+
+
+        public async Task SendOtpResetPassword(AppUser user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentException("Người dùng không tồn tại.");
+            }
+
+            var newCode = GenerateOtp();
+            await _redisService.SetValueRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, user.Email, newCode, TimeSpan.FromMinutes(5));
+
+            string subject = "Mã xác nhận để đổi mật khẩu";
+            string fullBody = $"<br>Mã xác nhận đổi mật khẩu của bạn là: <strong>{newCode}</strong>. Vui lòng nhập mã này trong vòng 3 phút.";
+
+            var result = await _sendMailService.SetUpSendMail(user.Email, subject, fullBody);
+            if (!result.success)
+            {
+                throw new Exception("Lỗi khi gửi mail.");
+            }
         }
 
         private string GenerateOtp()
@@ -81,9 +83,10 @@ namespace Web1.Service.Account
 
         public async Task<Success> ResetPasswordAsync(ResetPasswordModel resetPassword)
         {
-            if (_memoryCache.TryGetValue($"resetToken:{resetPassword.userId}", out string storedToken))
-            {
-                if (storedToken == resetPassword.resetToken)
+            var value = await _redisService.GetValueRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, resetPassword.userId);
+            if (value != string.Empty) 
+                {
+                if (value == resetPassword.resetToken)
                 {
                     // Token hợp lệ, tiếp tục thực hiện reset mật khẩu
                     var user = await _userManager.FindByIdAsync(resetPassword.userId);
@@ -139,31 +142,33 @@ namespace Web1.Service.Account
 
             // Lưu thông tin người dùng
             await _userManager.UpdateAsync(user);
+            await _redisService.RemoveToRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, user.Id);
+            await _redisService.RemoveToRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, user.Email);
             return new Success { success = true };
         }
 
         public async Task<Success> CheckOtpCode(VerifyCodeDto verify)
         {
-            // Kiểm tra mã xác nhận trong MemoryCache
-            if (_memoryCache.TryGetValue($"verify:{verify.EmailUser}", out string storedCode))
+            var value = await _redisService.GetValueRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, verify.EmailUser);
+            if (value != string.Empty)
             {
-                if (storedCode == verify.Code)
-                {
-                    var user = await _userManager.FindByEmailAsync(verify.EmailUser);
-                    if (user != null)
+                    if (value == verify.Code)
                     {
-                        user.EmailConfirmed = true;
-                        await _userManager.UpdateAsync(user);
-                    }
+                        var user = await _userManager.FindByEmailAsync(verify.EmailUser);
+                        if (user != null)
+                        {
+                            user.EmailConfirmed = true;
+                            await _userManager.UpdateAsync(user);
+                        }
 
-                    var token = Guid.NewGuid().ToString();
-                    _memoryCache.Set($"resetToken:{user.Id}", token, TimeSpan.FromMinutes(5));
-                    return new Success { success = true, message = token };
-                }
-                else
-                {
-                    return new Success { success = false, message = "invalid" };
-                }
+                        var token = Guid.NewGuid().ToString();
+                        await _redisService.SetValueRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, user.Id, token, TimeSpan.FromMinutes(2));
+                        return new Success { success = true, message = token };
+                    }
+                    else
+                    {
+                        return new Success { success = false, message = "invalid" };
+                    }
             }
             else
             {

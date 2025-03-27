@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Azure.Core;
 using Web1.Service.Account;
+using Web1.Service.Redis;
 
 namespace Web1.Repository
 {
@@ -24,6 +25,7 @@ namespace Web1.Repository
         private readonly IHttpContextAccessor _httpContext;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IAccountService _accountService;
+        private readonly IRedisService _redisService;
 
         public AccountRepository(
                 UserManager<AppUser> userManager,
@@ -31,7 +33,7 @@ namespace Web1.Repository
                 IConfiguration configuration,
                 IHttpContextAccessor httpContext,
                 RoleManager<IdentityRole> roleManager,
-                
+                IRedisService redisService,
                 IAccountService accountService)
         {
             _userManager = userManager;
@@ -40,6 +42,7 @@ namespace Web1.Repository
             _httpContext = httpContext;
             _roleManager = roleManager;
             _accountService = accountService;
+            _redisService = redisService;
         }
 
         public async Task<LoginDto> LoginJWTAsync(Login login)
@@ -51,6 +54,11 @@ namespace Web1.Repository
 
             if (result == true)
             {
+                var checkBan = await _redisService.IsCheckListRedis(TypeKeyRedis.BLACKLIST_PREFIX,user.Id);
+                if(checkBan)
+                {
+                    return new LoginDto { Success = false, message = "Tài khoản đã bị khóa" };
+                }
                 var accessToken = await _accountService.CreateAccessToken(user);
                 if (login.Remember == true)
                 {
@@ -79,7 +87,7 @@ namespace Web1.Repository
                 };
                 return repo;
             }
-            return new LoginDto { Success = false};
+            return new LoginDto { Success = false , message = "Sai tài khoản hoặc mật khẩu"};
         }
 
 
@@ -120,27 +128,6 @@ namespace Web1.Repository
                     claims: Claims,
                     signingCredentials: credentials
                 );
-
-                // Tạo ClaimsIdentity
-                //var claimsIdentity = new ClaimsIdentity(Claims, "CookieAuth");
-
-                //// Tạo AuthenticationProperties cho cookie
-                //AuthenticationProperties authProperties = new AuthenticationProperties();
-                //if(login.Remember)
-                //{
-                //    authProperties.IsPersistent = true; // Lưu cookie lâu dài nếu "Remember Me" được chọn
-                //    authProperties.ExpiresUtc = DateTimeOffset.UtcNow.AddDays(login.Remember ? 14 : 1); // Cookie hết hạn sau 14 ngày nếu "Remember Me"
-                //                                                                                        // Tạo cookie cho người dùng
-                //    await _httpContext.HttpContext.SignInAsync("CookieAuth", new ClaimsPrincipal(claimsIdentity), authProperties);
-                //};
-
-                //_httpContext.HttpContext.Response.Cookies.Append("AuthToken", tokenUser, new CookieOptions
-                //{
-                //    HttpOnly = true,
-                //    Secure = true,
-                //    SameSite = SameSiteMode.Strict,
-                //    Expires = DateTimeOffset.UtcNow.AddMinutes(10)
-                //});
 
                 var refreshToken = Guid.NewGuid().ToString();
 

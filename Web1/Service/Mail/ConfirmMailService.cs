@@ -9,7 +9,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using MimeKit;
 using StackExchange.Redis;
+using Web1.Helps;
 using Web1.Models;
+using Web1.Service.Redis;
 
 namespace Web1.Service.Mail
 {
@@ -19,40 +21,46 @@ namespace Web1.Service.Mail
         private readonly IMemoryCache _memoryCache;
         private readonly UserManager<AppUser> _userManager;
         private readonly ISendMailService _sendMailService;
+        private readonly IRedisService _redisService;
 
         public ConfirmMailService(
             IOptions<MailSetting> mailSettings,
             IMemoryCache memoryCache,
             UserManager<AppUser> userManager,
-            ISendMailService sendMailService)
+            ISendMailService sendMailService,
+            IRedisService redisService)
         {
             _mailSettings = mailSettings.Value;
             _memoryCache = memoryCache;
             _userManager = userManager;
             _sendMailService = sendMailService;
+            _redisService = redisService;
         }
 
-        public async Task<Success> SendVerifyEmailAsync(string Id)
+        public async Task<AppUser> GetInfoUserMail(string id)
         {
-            var user = await _userManager.FindByIdAsync(Id);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
-                return new Success { success = false, message = "Lỗi người dùng không tồn tại" };
+                return null;
             }
+            return user;
+        }
 
+        public async Task SendVerifyEmailAsync(AppUser user)
+        {
             var to = user.Email;
             var newCode = GenerateOtp();
-            _memoryCache.Set($"verify:{to}", newCode, TimeSpan.FromMinutes(5));
+            await _redisService.SetValueRedisAsync(TypeKeyRedis.CONFIRM_EMAIL_PREFIX, to, newCode, TimeSpan.FromMinutes(5));
 
             string subject = "Mã xác nhận Email";
             string fullBody = $"<br>Mã xác nhận của bạn là: <strong>{newCode}</strong>. Vui lòng nhập mã này trong vòng 3 phút.";
 
             var result = await _sendMailService.SetUpSendMail(to, subject, fullBody);
-            if (result.success == true)
+            if (!result.success)
             {
-                return new Success { success = true, message = $"{to}" };
+                throw new Exception("Lỗi khi gửi mail.");
             }
-            return new Success { success = false, message = "Lỗi khi gửi mail" };
         }
 
         private string GenerateOtp()
@@ -63,16 +71,17 @@ namespace Web1.Service.Mail
 
         public async Task<string> CheckVerifyCode(VerifyCodeDto verify)
         {
-            // Kiểm tra mã xác nhận trong MemoryCache
-            if (_memoryCache.TryGetValue($"verify:{verify.EmailUser}", out string storedCode))
+            var value = await _redisService.GetValueRedisAsync(TypeKeyRedis.CONFIRM_EMAIL_PREFIX, verify.EmailUser);
+            if (value != string.Empty)
             {
-                if (storedCode == verify.Code)
+                if (value == verify.Code)
                 {
                     var user = await _userManager.FindByEmailAsync(verify.EmailUser);
                     if (user != null)
                     {
                         user.EmailConfirmed = true;
                         await _userManager.UpdateAsync(user);
+                        await _redisService.RemoveToRedisAsync(TypeKeyRedis.CONFIRM_EMAIL_PREFIX, verify.EmailUser);
                     }
                     return "valid";
                 }
@@ -80,7 +89,6 @@ namespace Web1.Service.Mail
                 {
                     return "invalid";
                 }
-
             }
             else
             {
