@@ -11,7 +11,7 @@ namespace Web1.Service.Redis
             _redisDb = redis.GetDatabase();
         }
 
-        public async Task<string> GetValueRedisAsync(string typeList, string key)
+        public async Task<string> GetStringRedisAsync(string typeList, string key)
         {
             var value = await _redisDb.StringGetAsync(typeList + key);
             return value.HasValue ? value.ToString() : string.Empty;
@@ -32,7 +32,30 @@ namespace Web1.Service.Redis
             await _redisDb.KeyDeleteAsync(typeList + key);
         }
 
-        public async Task SetValueRedisAsync(string typeList, string key, string value, TimeSpan? expiry = null)
+        public async Task SetAddRedisAsync(string typeList, string key, string value, TimeSpan? expiry = null)
+        {
+            if (expiry == null)
+            {
+                await _redisDb.SetAddAsync(typeList + key, value);
+            }
+            else
+            {
+                await _redisDb.KeyExpireAsync(typeList + key, expiry);
+            }
+        }
+
+        public async Task<List<string>> GetSetMembersAsync(string typeList, string key)
+        {
+            var members = await _redisDb.SetMembersAsync(typeList + key);
+            return members.Select(x => x.ToString()).ToList();
+        }
+
+        public async Task RemoveSetRedisAsync(string typeList, string key, string value)
+        {
+            await _redisDb.SetRemoveAsync(typeList + key, value);
+        }
+
+        public async Task SetStringRedisAsync(string typeList, string key, string value, TimeSpan? expiry = null)
         {
             if (expiry == null) 
             {

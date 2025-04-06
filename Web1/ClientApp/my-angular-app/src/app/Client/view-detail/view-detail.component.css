@@ -126,6 +126,10 @@
     font-size: 20px;
     cursor: pointer;
   }
+
+  .send-icon:hover {
+    transform: scale(1.2);
+  }
   
   .comment-list {
     display: flex;
@@ -139,8 +143,7 @@
     gap: 15px;
     padding: 15px;
     background: white;
-    border-radius: 10px;
-  }
+    }
 
 
   
@@ -159,25 +162,29 @@
   .comment-header {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
-    color: #666;
+    font-size: 14px; 
+    color: #999;
   }
   
   .comment-author {
     font-weight: bold;
     color: #333;
+    font-size: 14px;
   }
   
   .comment-text {
     margin: 8px 0;
-    font-size: 16px;
+    font-size: 14px; /* Kích thước chữ là 15px */
+    line-height: 1.5;
+    color: #444;
   }
   
   .comment-actions {
     display: flex;
-    gap: 15px;
-    font-size: 16px;
-    align-items: center;
+    gap: 18px;
+    font-size: 14px; /* Kích thước chữ là 14px */
+    color: #888;
+    margin-top: 8px;
   }
   
   .comment-actions i {
@@ -199,6 +206,13 @@
   .reply {
     background: white;
     box-shadow: none;
+  }
+
+  .reply-arrow {
+    font-size: 12px; /* Điều chỉnh kích thước icon mũi tên nhỏ hơn */
+    color: rgb(49, 34, 34); /* Màu sắc của mũi tên */
+    margin-left: 4px;
+    margin-right: 4px; /* Khoảng cách giữa tên người trả lời và mũi tên */
   }
   
   /* Thanh nhập phản hồi ẩn ban đầu */
@@ -225,7 +239,7 @@
     background: none;   /* Xóa nền */
     border: none;       /* Xóa viền */
     padding: 0;         /* Xóa khoảng cách thừa */
-    font-size: inherit; /* Giữ nguyên kích thước chữ */
+    font-size: 15px; /* Giữ nguyên kích thước chữ */
     color: inherit;     /* Giữ nguyên màu chữ */
     cursor: pointer;    /* Hiển thị con trỏ khi rê chuột */
     margin-top: 10px;

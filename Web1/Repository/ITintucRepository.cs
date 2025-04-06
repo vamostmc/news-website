@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Web1.Data;
-using Web1.DataNew;
 using Web1.Models;
 
 namespace Web1.Repository

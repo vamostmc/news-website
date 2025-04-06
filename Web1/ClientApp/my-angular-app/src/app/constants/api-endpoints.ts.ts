@@ -62,5 +62,13 @@ export const API_ENDPOINTS = {
       sendOtpPassword: (NameorEmail: string) => `${API_BASE}/Password/SendOtpPassword/${NameorEmail}`,
       checkVerifyCodePassword: `${API_BASE}/Password/check-verify-code-password`,
       resetPassword: `${API_BASE}/Password/Reset-password`
+    },
+
+    notification: {
+      getNotify: (id: string) => `${API_BASE}/Notification/GetNotify/${id}`,
+      TotalNotify: (id: string) => `${API_BASE}/Notification/TotalNotify/${id}`,
+      DeleteNotify: (id: number) => `${API_BASE}/Notification/DeleteNotify/${id}`,
+      UpdateStatusId: (id: number) => `${API_BASE}/Notification/UpdateStatusReadId/${id}`,
+      UpdateStatusAll: (userId: string) => `${API_BASE}/Notification/UpdateStatusAll/${userId}`,
     }
   };

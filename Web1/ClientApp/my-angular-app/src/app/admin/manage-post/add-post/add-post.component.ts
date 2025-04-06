@@ -262,7 +262,7 @@ export class AddPostComponent implements OnInit {
         next: (response) => {
           console.log('Thêm thành công', response);
           
-          this.dashboardservice.NotificationAddTinTuc(this.postForm.get('TieuDe')?.value);
+          // this.dashboardservice.NotificationAddTinTuc(this.postForm.get('TieuDe')?.value);
         },
         error: (error) => {
           console.error('Lỗi khi thêm tin tức', error);

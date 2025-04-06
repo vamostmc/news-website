@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AfterViewInit } from '@angular/core'; 
+import { SignalRService } from './Client/service-client/signalR-service/signal-r.service';
 
 
 declare var tinymce: any;

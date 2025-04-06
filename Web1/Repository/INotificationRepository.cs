@@ -5,16 +5,19 @@ namespace Web1.Repository
 {
     public interface INotificationRepository
     {
-        public Task<List<NotificationDto>> GetNotify(int IdNotify);
+        public Task<Notification> CreatForgotPasswordNotify(string UserId);
 
-        public Task<Notification> GetNotificationRepo(int id);
+        public Task<Notification> CreatCommentNotify(string UserId, string UserNameReply, string NameTinTuc);
 
-        public Task<NotifyBinhLuan> AddNotifyBinhLuanRepo(NotifyBinhLuan notifyBinhLuan);
+        public Task<Success> DeleteNotify(long id);
 
-        public Task<NotificationDto> AddNotifyTinTucRepo(NotificationDto notification);
+        public Task<List<NotificationDto>> GetNotifyUser (string userId);
 
-        public Task RemoveNotificationRepo(int id);
+        public Task<int> TotalNotify(string userId); 
 
-        public Task UpdateNotificationRepo(int id);
+        public Task<Success> UpdateReadStatusId(long id, bool statusRead);
+
+        public Task<Success> UpdateAllRead(string userId, bool statusRead);
+
     }
 }

@@ -1,6 +1,6 @@
 
 .silver-line1 {
-    margin: 0px;
+    margin: 0;
   }
   
   .date-bar {
@@ -11,12 +11,18 @@
   }
   
   .top-bar {
+    position: fixed; /* Giữ cố định ở đầu trang */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: white;
     color: white;
     padding: 10px 160px;
+    border-bottom: 1px solid #ccc;
   }
   
   .social-icons {
@@ -25,8 +31,8 @@
   }
   
   .icon {
-    width: 32px;
-    height: 32px;
+    width: 33px;
+    height: 33px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -74,8 +80,8 @@
   
   /* Avatar hình tròn */
   .user-avatar img {
-    width: 45px;
-    height: 40px;
+    width: 38px;
+    height: 36px;
     object-fit: cover;
     border-radius: 50%;
     border: 0.5px solid #ccc;
@@ -96,15 +102,16 @@
   
   /* Định dạng icon tròn */
   .circle-icon {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 36px;
     display: flex;
     justify-content: center;
     align-items: center;
     background: white; /* Nền trắng */
-    border: 2px solid #bbb; /* Viền xám */
+    border: 1px solid #bbb; /* Viền xám */
     border-radius: 50%;
     text-decoration: none;
+    position: relative;
     color: black;
     font-size: 18px;
     transition: 0.3s;
@@ -114,9 +121,71 @@
   .circle-icon:hover {
     background: #eee;
   }
+
+  .circle-bell {
+    width: 38px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white; /* Nền trắng */
+    border: 1px solid #bbb; /* Viền xám */
+    position: relative;
+    border-radius: 50%;
+    text-decoration: none;
+    color: black;
+    
+    font-size: 18px;
+    transition: 0.3s;
+  }
+
+  .circle-bell:hover {
+    background: #eee;
+  }
+
+  .notify-count {
+    position: absolute;
+    bottom: -3px; /* Đặt ở góc dưới */
+    right: -3px;  /* Đặt ở góc phải */
+    background-color: #e74c3c; /* Màu đỏ nổi bật */
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Thêm bóng nhẹ */
+  }
+
+  @keyframes ringAnimation {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-5deg);
+    }
+    50% {
+      transform: rotate(5deg);
+    }
+    75% {
+      transform: rotate(-5deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  
+  /* Khi có thông báo chưa đọc, áp dụng animation rung */
+  .circle-bell.ring {
+    animation: ringAnimation 0.5s ease-in-out infinite;
+  }
   
   
   .logo-container {
+      margin-top: 4.4rem;
       display: flex;
       justify-content: center;
       font-size: 24px;
@@ -224,4 +293,13 @@ ul li a:hover {
 ul:focus-within li:first-child + li a {
     color: #333;
 }
-  
+
+
+
+
+
+
+
+
+
+

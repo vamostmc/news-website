@@ -1,5 +1,6 @@
 ﻿using Web1.Helps;
 using Web1.Models;
+using Web1.Repository;
 using Web1.Service.Mail;
 using Web1.Service.RabbitMq.Connection;
 
@@ -7,7 +8,8 @@ namespace Web1.Service.RabbitMq.Consumer
 {
     public class ConfirmEmailConsumer : BaseRabbitMqConsumer<AppUser>
     {
-        public ConfirmEmailConsumer(RabbitMqConnection rabbitMqService, IServiceScopeFactory serviceScopeFactory) : 
+        public ConfirmEmailConsumer(RabbitMqConnection rabbitMqService, 
+                                    IServiceScopeFactory serviceScopeFactory) : 
             base(rabbitMqService, serviceScopeFactory)
         {
         }

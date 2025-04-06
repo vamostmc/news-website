@@ -17,6 +17,10 @@ namespace Web1.Helps
 
         public const string NOTIFICATION_QUEUE = "notification_queue";
 
+        public const string ADMIN_NOTIFICATION_QUEUE = "admin_notification_queue";
+
+        public const string USER_NOTIFICATION_QUEUE = "user_notification_queue";
+
         // Routing Key
 
         public const string FORGOT_PASSWORD_ROUTING = "forgot_password";
@@ -24,6 +28,10 @@ namespace Web1.Helps
         public const string CONFIRM_EMAIL_ROUTING = "confirm_email";
 
         public static string NOTIFICATION_ROUTING = "notification";
+
+        public const string ADMIN_NOTIFICATION_ROUTING = "admin_notification";
+
+        public const string USER_NOTIFICATION_ROUTING = "user_notification";
     }
 
 

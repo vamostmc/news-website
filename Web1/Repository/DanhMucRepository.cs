@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using Web1.Data;
 using Web1.Exceptions;
 using Web1.Models;
@@ -8,18 +10,20 @@ namespace Web1.Repository
     public class DanhMucRepository: IDanhMucRepository
     {
         private readonly TinTucDbContext _danhMuc;
+        private readonly IMapper _mapper;
 
-        public DanhMucRepository(TinTucDbContext danhMuc) { _danhMuc = danhMuc; }
+        public DanhMucRepository(TinTucDbContext danhMuc, 
+                                    IMapper mapper) 
+        { 
+            _danhMuc = danhMuc; 
+            _mapper = mapper; 
+        }
 
         public async Task<DanhMucDto> AddDanhMuc(DanhMucDto danhMuc)
         {
             try
             {
-                var dataNew = new DanhMuc
-                {
-                    TenDanhMuc = danhMuc.TenDanhMuc,
-                    TrangThai = danhMuc.TrangThai,
-                };
+                var dataNew = _mapper.Map<DanhMuc>(danhMuc);
                 await _danhMuc.DanhMucs.AddAsync(dataNew);
                 await _danhMuc.SaveChangesAsync();
                 return danhMuc;
@@ -62,17 +66,12 @@ namespace Web1.Repository
         public async Task<List<DanhMucDto>> GetDanhMuc()
         {
             var danhMucsWithTinTucs = await _danhMuc.DanhMucs
+                                                    .AsNoTracking()
                                                     .Include(t => t.TinTucs)
-                                                    .Select(t => new DanhMucDto
-                                                    {
-                                                        DanhmucId = t.DanhmucId,
-                                                        TenDanhMuc = t.TenDanhMuc,
-                                                        TrangThai = t.TrangThai,
-                                                        SoLuongTinTuc = t.TinTucs.Count()
-                                                    })
+                                                    .ProjectTo<DanhMucDto>(_mapper.ConfigurationProvider)
                                                     .ToListAsync();
 
-             return danhMucsWithTinTucs;
+            return danhMucsWithTinTucs;
         }
 
         public async Task<DanhMuc> GetDanhMucIDAsync(int id)

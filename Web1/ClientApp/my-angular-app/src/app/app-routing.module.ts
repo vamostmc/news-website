@@ -14,6 +14,8 @@ import { HomeComponent } from './Client/home/home.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { ViewDetailComponent } from './Client/view-detail/view-detail.component';
 import { APP_BASE_HREF, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { NotificationComponent } from './Client/notification/notification.component';
+import { ChatBoxComponent } from './Client/chat-box/chat-box.component';
 
 
 const routes: Routes = [
@@ -25,8 +27,10 @@ const routes: Routes = [
   { path : 'register', component: RegisterComponent},
   { path : 'success', component: SuccessComponent},
   { path : 'confirmEmail', component: ConfirmEmailComponent},
-  { path: 'forgotPassword',  component: ForgotPasswordComponent},
-  { path: 'resetPassword/:id/:resetToken',canActivate: [authResetToken], component: ResetPasswordComponent},
+  { path : 'forgotPassword',  component: ForgotPasswordComponent},
+  { path : 'notification', component: NotificationComponent},
+  { path : 'chatbox', component: ChatBoxComponent },
+  { path  : 'resetPassword/:id/:resetToken',canActivate: [authResetToken], component: ResetPasswordComponent},
   { path : 'admin' , canActivate: [authGuard], loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule)},
 ];
 

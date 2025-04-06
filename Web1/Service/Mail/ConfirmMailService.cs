@@ -51,7 +51,7 @@ namespace Web1.Service.Mail
         {
             var to = user.Email;
             var newCode = GenerateOtp();
-            await _redisService.SetValueRedisAsync(TypeKeyRedis.CONFIRM_EMAIL_PREFIX, to, newCode, TimeSpan.FromMinutes(5));
+            await _redisService.SetStringRedisAsync(TypeKeyRedis.CONFIRM_EMAIL_PREFIX, to, newCode, TimeSpan.FromMinutes(5));
 
             string subject = "Mã xác nhận Email";
             string fullBody = $"<br>Mã xác nhận của bạn là: <strong>{newCode}</strong>. Vui lòng nhập mã này trong vòng 3 phút.";
@@ -71,7 +71,7 @@ namespace Web1.Service.Mail
 
         public async Task<string> CheckVerifyCode(VerifyCodeDto verify)
         {
-            var value = await _redisService.GetValueRedisAsync(TypeKeyRedis.CONFIRM_EMAIL_PREFIX, verify.EmailUser);
+            var value = await _redisService.GetStringRedisAsync(TypeKeyRedis.CONFIRM_EMAIL_PREFIX, verify.EmailUser);
             if (value != string.Empty)
             {
                 if (value == verify.Code)

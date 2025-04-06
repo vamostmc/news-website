@@ -31,7 +31,7 @@ public partial class TinTucDbContext : IdentityDbContext<AppUser>
 
     public virtual DbSet<Notification> Notifications { get; set; }
 
-    public virtual DbSet<NotifyType> NotifyTypes { get; set; }
+    public virtual DbSet<NotificationType> NotificationTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,6 +54,7 @@ public partial class TinTucDbContext : IdentityDbContext<AppUser>
             entity.Property(e => e.TintucId).HasColumnName("TintucID");
             entity.Property(e => e.Likes).HasDefaultValue(0);
             entity.Property(e => e.TrangThai).HasDefaultValue(true);
+            entity.Property(e => e.ReplyToUserId).HasMaxLength(450);
             entity.Property(e => e.UserId).HasMaxLength(450);
             entity.HasOne(d => d.Parent).WithMany(p => p.InverseParent)
                .HasForeignKey(d => d.ParentId)
@@ -106,22 +107,30 @@ public partial class TinTucDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Notifica__3214EC0720B93E79");
+            entity.HasKey(e => e.Id).HasName("PK__Notifica__3214EC073F760215");
 
+            entity.HasIndex(e => e.CreatedAt, "IDX_Notification_CreatedAt").IsDescending();
+
+            entity.HasIndex(e => e.IsRead, "IDX_Notification_IsRead");
+
+            entity.HasIndex(e => e.TargetId, "IDX_Notification_TargetId");
+
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.IsRead).HasDefaultValue(false);
-            entity.Property(e => e.Message).HasMaxLength(255);
-            entity.Property(e => e.Timestamp)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.IsSystem).HasDefaultValue(false);
+            entity.Property(e => e.SenderId).HasMaxLength(450);
 
             entity.HasOne(d => d.Type).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.TypeId)
-                .HasConstraintName("FK_Notifications_NotifyTypes");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Notifications_Type");
         });
 
-        modelBuilder.Entity<NotifyType>(entity =>
+        modelBuilder.Entity<NotificationType>(entity =>
         {
-            entity.HasKey(e => e.TypeId).HasName("PK__NotifyTy__516F03B5067351CF");
+            entity.HasKey(e => e.TypeId).HasName("PK__Notifica__516F03B557B4ECEB");
+
+            entity.HasIndex(e => e.TypeName, "UQ__Notifica__D4E7DFA85869D994").IsUnique();
 
             entity.Property(e => e.TypeName).HasMaxLength(255);
         });

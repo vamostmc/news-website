@@ -1,0 +1,33 @@
+<div class="notification-panel" id="notification-panel" *ngIf="isPanelVisible">
+    <div class="notification-header">
+        <h3>Thông báo</h3>
+        <div class="header-actions">
+            <label class="select-all">
+                <input type="checkbox" id="select-all" title="Chọn tất cả để xóa"> All
+            </label>
+            <button class="action-btn" id="action-btn" title="Xóa các thông báo đã chọn">Xóa</button>
+            <button class="action-btn" id="action-btn" title="Đã đọc thông báo đã chọn" (click)="updateReadStatus()">Đã xem</button>
+            <span class="close-panel" (click)="togglePanel()">×</span>
+            
+        </div>
+    </div>
+    
+        <ul class="notification-list">
+          <li *ngFor="let notify of notifications"
+              class="notification-item" [class.unread]="!notify.isRead" [class.read]="notify.isRead"
+              (click)="markAsRead(notify.id)">
+            <input type="checkbox" class="select-item" title="Chọn để xóa">
+            <div class="notification-content">
+              <p>{{ notify.message }}</p>
+              <span class="notification-time">{{ getTimeAgo(notify.createdAt) }}</span>
+            </div>
+            <div class="notification-actions">
+              <button class="delete-btn" title="Xóa thông báo" (click)="DeleteDataNotification(notify.id); $event.stopPropagation()">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </li>
+        </ul>
+        <button (click)="sendMessage()">📤 Gửi tin nhắn</button>
+</div>
+

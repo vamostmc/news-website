@@ -25,6 +25,8 @@ public partial class BinhLuan
 
     public int? ParentId { get; set; }
 
+    public string? ReplyToUserId { get; set; }
+
     public int? Likes { get; set; }
 
     public virtual BinhLuan? Parent { get; set; }

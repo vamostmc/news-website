@@ -9,12 +9,12 @@
         <!-- Thanh nhập bình luận -->
         <div class="comment-input">
           <input type="text" placeholder="Viết bình luận..." class="input-box" formControlName="noiDung"/>
-          <i class="fa-solid fa-paper-plane send-icon" (click)="addCommentParent(0)"></i>
+          <i class="fa-solid fa-paper-plane send-icon" (click)="addCommentParent()"></i>
         </div>
       
         <!-- Danh sách bình luận -->
         <div class="comment-section-header">
-          <p class="total-comments"><strong>{{ tintucs.soLuongComment }} bình luận</strong></p>
+          <p class="total-comments"><strong>{{ TotalComment }} bình luận</strong></p>
           <div class="filter-dropdown">
               <button class="filter-button">Sắp xếp <i class="fas fa-chevron-down"></i></button>
               <ul class="filter-menu">
@@ -44,7 +44,7 @@
               <!-- Thanh nhập phản hồi -->
               <div *ngIf="activeReplyId === comment.binhluanId" class="reply-box">
                 <input type="text" placeholder="Viết phản hồi..." class="input-box" formControlName="noiDung" />
-                <i class="fa-solid fa-paper-plane send-icon" (click)="addCommentChild(comment.binhluanId)"></i>
+                <i class="fa-solid fa-paper-plane send-icon" (click)="addCommentChild(comment.userId ,comment.binhluanId)"></i>
               </div>
     
       
@@ -56,8 +56,14 @@
                   <img src="https://vntime.vn/wp-content/uploads/2024/10/avatar-mac-dinh-30xJKPDu.jpg" alt="Avatar" class="avatar" />
                   <div class="comment-content">
                     <div class="comment-header">
-                      <span class="comment-author">{{ reply.userName }}</span>
-                      <span class="comment-time">{{ getTimeAgo(comment.ngayGioBinhLuan) }}</span>
+                      <span class="comment-author">
+                        {{ reply.userName }}  
+                        <span class="reply-arrow">➤</span> <!-- Thêm lớp reply-arrow cho icon mũi tên -->
+                        <span *ngIf="reply.userReplyName">{{ reply.userReplyName }}</span>
+                        <span *ngIf="!reply.userReplyName">Ẩn danh</span>
+                      </span>
+                      
+                      <span class="comment-time">{{ getTimeAgo(reply.ngayGioBinhLuan) }}</span>
                     </div>
                     <p class="comment-text">{{ reply.noiDung }}</p>
                     <div class="comment-actions">
@@ -69,7 +75,7 @@
                     <!-- Thanh nhập phản hồi -->
                     <div *ngIf="activeReplyId === reply.binhluanId && reply.parentId" class="reply-box">
                       <input type="text" placeholder="Viết phản hồi..." class="input-box" formControlName="noiDung"/>
-                      <i class="fa-solid fa-paper-plane send-icon" (click)="addCommentChild(reply.parentId)"></i>
+                      <i class="fa-solid fa-paper-plane send-icon" (click)="addCommentChild(reply.userId ,reply.parentId)"></i>
                     </div>
       
                     <!-- Thanh nhập phản hồi ẩn -->
@@ -82,8 +88,8 @@
               </div> <!-- Kết thúc replies -->
             </div>
           </div> <!-- Kết thúc comment-item -->
-        </div>
       </div>
+  </div>
 
   <!-- Thanh line thẳng đứng -->
   <div class="article-divider"></div>

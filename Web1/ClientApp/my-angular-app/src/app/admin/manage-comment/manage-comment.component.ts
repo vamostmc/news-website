@@ -106,7 +106,7 @@ export class ManageCommentComponent implements OnInit {
       this.commentservice.PostComment(data).subscribe(
         (data) => {
           console.log("Thành công");
-          this.dashboardservice.NotifyAddBinhLuan(this.postForm.get('userId')?.value, this.postForm.get('tintucId')?.value);
+          // this.dashboardservice.NotifyAddBinhLuan(this.postForm.get('userId')?.value, this.postForm.get('tintucId')?.value);
           this.route.navigate(['/success']);
         },
         
@@ -123,7 +123,7 @@ export class ManageCommentComponent implements OnInit {
     this.commentservice.PutComment(this.editForm.get('binhluanId')?.value, data).subscribe(
       (data) => {
         console.log("Thành công");
-        this.dashboardservice.NotifyUpdateBinhLuan(this.editForm.get('userId')?.value, this.editForm.get('tintucId')?.value);
+        // this.dashboardservice.NotifyUpdateBinhLuan(this.editForm.get('userId')?.value, this.editForm.get('tintucId')?.value);
         this.route.navigate(['/success']);
       }
     )
@@ -145,7 +145,7 @@ export class ManageCommentComponent implements OnInit {
     }
     
     //Đợi cập nhật dữ liệu thông tin xóa ra bảng thông báo
-    await this.dashboardservice.NotifyRemoveBinhLuan(UserId,TinTucId);
+    // await this.dashboardservice.NotifyRemoveBinhLuan(UserId,TinTucId);
 
     this.commentservice.DeleteComment(id).subscribe(
       (data) => {

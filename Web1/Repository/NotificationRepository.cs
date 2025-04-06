@@ -1,176 +1,124 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Web1.Data;
 using Web1.DataNew;
 using Web1.Helps;
 using Web1.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Web1.Repository
 {
     public class NotificationRepository : INotificationRepository
     {
         private readonly TinTucDbContext _noti;
+        private readonly UserManager<AppUser> _userManager;
 
-        public NotificationRepository(TinTucDbContext noti) { _noti = noti; }
-
-        public async Task<NotificationDto> AddNotifyTinTucRepo(NotificationDto notification)
-        {
-            try
-            {
-                notification.Timestamp = LocalTime.GetLocalTime();
-                var data = new Notification
-                {
-                    Message = notification.Message,
-                    Timestamp = notification.Timestamp,
-                    TypeId = notification.TypeId,
-                };
-                await _noti.Notifications.AddAsync(data);
-                await _noti.SaveChangesAsync();
-                return notification;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Lỗi không thể thêm thông báo");
-            }
+        public NotificationRepository(TinTucDbContext noti, 
+                                      UserManager<AppUser> userManager) 
+        { 
+            _noti = noti;
+            _userManager = userManager;
         }
 
-        public async Task<List<NotificationDto>> GetNotify(int IdNotify)
+        public async Task<int> TotalNotify(string userId)
         {
-            //Với TypeId = 1 là thông báo phần tin tức
-            //Với TypeId = 2 là thông báo phần bình luận
-            var data = await _noti.Notifications.Where(t => t.TypeId == IdNotify)
-                                                .Select(t => new NotificationDto
-                                                {
-                                                    Id = t.Id,
-                                                    Timestamp = t.Timestamp,
-                                                    TypeId = t.TypeId,
-                                                    IsRead = t.IsRead,
-                                                    Message = t.Message,
-                                                }).ToListAsync();
+            var count = await _noti.Notifications.CountAsync(n => n.TargetId == userId && n.IsRead == false);
+            return count;
+        }
+
+        public async Task<Notification> CreatForgotPasswordNotify(string UserId)
+        {
+            var data = new Notification
+            {
+                IsRead = false,
+                CreatedAt = DateTime.Now,
+                TypeId = TypeNotification.TYPE_NOTIFICATION_FORGOTPASSWORD,
+                IsSystem = false,
+                Message = "Cảnh báo: Bạn vừa yêu cầu thầy đổi mật khẩu",
+                SenderId = null,
+                TargetId = UserId,
+            };
+
+            await _noti.AddAsync(data);
+            await _noti.SaveChangesAsync();
             return data;
         }
 
-        
-
-
-        public async Task<Notification> GetNotificationRepo(int id)
+        public async Task<Notification> CreatCommentNotify(string UserId, string UserNameReply, string NameTinTuc)
         {
-            try
+            var data = new Notification
             {
-                var data = await _noti.Notifications.FindAsync(id);
-                if (data == null)
-                {
-                    throw new Exception("Lỗi không tìm thấy");
-                }
+                IsRead = false,
+                CreatedAt = DateTime.Now,
+                TypeId = TypeNotification.TYPE_NOTIFICATION_COMMENT,
+                IsSystem = false,
+                Message = "Người dùng "+ UserNameReply + " vừa trả lời bình luận của bạn ở bài viết: " + NameTinTuc,
+                SenderId = null,
+                TargetId = UserId,
+            };
 
-                return data;
-            }
-            catch (Exception ex) 
-            {
-                throw new Exception("Lỗi không tìm thấy");
-            }
+            await _noti.AddAsync(data);
+            await _noti.SaveChangesAsync();
+            return data;
         }
 
-        public async Task RemoveNotificationRepo(int id)
+        public async Task<Success> DeleteNotify(long id)
         {
-            try
+            var data = await _noti.Notifications.FirstOrDefaultAsync(x => x.Id == id);
+            if (data == null) 
             {
-                var data = await _noti.Notifications.FindAsync(id);
-                if (data == null)
-                {
-                    throw new Exception("Lỗi không tìm thấy");
-                }
-
-                _noti.Remove(data);
-                await _noti.SaveChangesAsync();
+                return new Success { success = false, message = "Lỗi không tìm thấy id thông báo" };
             }
-            catch (Exception ex) 
-            {
-                throw new Exception("Lỗi không thể xóa");
-            }
+            _noti.Notifications.Remove(data);
+            await _noti.SaveChangesAsync();
+            return new Success { success = true };
         }
 
-        public async Task UpdateNotificationRepo(int id)
+        public async Task<List<NotificationDto>> GetNotifyUser(string userId)
         {
-            try
-            {
-                TimeZoneInfo hanoiBangkokTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
-                DateTime utcNow = DateTime.UtcNow; // Thời gian UTC hiện tại
-                DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, hanoiBangkokTimeZone); // Chuyển đổi sang giờ địa phương
-
-                // Tìm Notification dựa trên id
-                var notifications = await _noti.Notifications.ToListAsync();
-
-                foreach (var data in notifications)
-                {
-                    if (data == null)
-                    {
-                        throw new Exception("Lỗi không tìm thấy");
-                    }
-
-                    // Cập nhật các trường của Notification
-                    data.IsRead = false; // Hoặc giá trị nào đó mà bạn muốn gán
-                    data.Timestamp = localTime;
-
-                    // Nếu có bài viết liên quan, cập nhật Message
-                    
-
-                    // Đặt TintucId và Tintuc thành null
-                    
-                }
-
-                _noti.Notifications.UpdateRange(notifications);
-                await _noti.SaveChangesAsync();
-                
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Lỗi không thể xóa", ex);
-            }
+            var data = await _noti.Notifications.Where(t => t.TargetId == userId)
+                                                 .Select(t => new NotificationDto {
+                                                     Id = t.Id,
+                                                     TargetId= t.TargetId,
+                                                     CreatedAt= t.CreatedAt,
+                                                     IsRead = t.IsRead,
+                                                     IsSystem = t.IsSystem,
+                                                     Message = t.Message,
+                                                     TypeId = t.TypeId,
+                                                     SenderId = t.SenderId,
+                                                 })
+                                                 .ToListAsync();
+            return data;
         }
 
-        public async Task<NotifyBinhLuan> AddNotifyBinhLuanRepo(NotifyBinhLuan notifyBinhLuan)
+        public async Task<Success> UpdateReadStatusId(long id, bool statusRead)
         {
-            try
+            var dataNotify = await _noti.Notifications.FindAsync(id);
+            if (dataNotify == null)
             {
-                var user = await _noti.Users.FindAsync(notifyBinhLuan.UserId);
-                var news = await _noti.TinTucs.FindAsync(notifyBinhLuan.TinTucId);
-
-                if (user == null || news == null)
-                {
-                    throw new Exception("Lỗi người dùng hoặc bài viết không tồn tại");
-                }
-
-                var DataNew = new Notification
-                {
-                    IsRead = false,
-                    Timestamp = LocalTime.GetLocalTime(),
-                    TypeId = 2,
-                };
-
-                if(notifyBinhLuan.Action == "Add")
-                {
-                   DataNew.Message = $"Người dùng: {user.UserName} thêm mới bình luận ở bài viết {news.TieuDe}";
-                }    
-                
-                if(notifyBinhLuan.Action == "Edit")
-                {
-                    DataNew.Message = $"Người dùng: {user.UserName} sửa bình luận ở bài viết {news.TieuDe}";
-                }
-
-                if (notifyBinhLuan.Action == "Delete")
-                {
-                    DataNew.Message = $"Người dùng: {user.UserName} xóa bình luận ở bài viết {news.TieuDe}";
-                }
-
-                await _noti.AddAsync(DataNew);
-                await _noti.SaveChangesAsync();
-                return notifyBinhLuan;
+                return new Success { success = false, message = "Không tìm thấy id thông báo" };
             }
-            catch (Exception ex)
+            dataNotify.IsRead = true;
+            await _noti.SaveChangesAsync();
+            return new Success { success = true };
+        }
+
+        public async Task<Success> UpdateAllRead(string userId,bool statusRead)
+        {
+            var notifications = await _noti.Notifications
+                                .Where(n => n.TargetId == userId)
+                                .ToListAsync();
+            if (notifications == null)
             {
-                throw new Exception("Lỗi không thể thêm thông báo bình luận", ex);
+                return new Success { success = false, message = "Không tìm thấy id người dùng" };
             }
+            foreach (var notification in notifications)
+            {
+                notification.IsRead = true;    
+            }
+            await _noti.SaveChangesAsync();
+            return new Success { success = true };
         }
     }
 }

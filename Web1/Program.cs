@@ -14,6 +14,7 @@ using StackExchange.Redis;
 using System.Configuration;
 using System.Text;
 using System.Text.Json.Serialization;
+using Web1.AutoMap;
 using Web1.Data;
 using Web1.DataNew;
 using Web1.Middleware;
@@ -28,6 +29,8 @@ using Web1.Service.RabbitMq.Consumer;
 using Web1.Service.RabbitMq.Producer;
 using Web1.Service.Redis;
 using Web1.Service.Session;
+using Web1.Service.SignalR;
+using Web1.Service.SignalR.SignalRNotification;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +46,7 @@ builder.Services.AddTransient<ISessionService, SessionService>();
 builder.Services.AddTransient<IOAuthService, OAuthService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<ICookieService, CookieService>();
+
 
 // Tạo một bộ nhớ cache
 builder.Services.AddMemoryCache();
@@ -61,11 +65,15 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 //Rabit
 builder.Services.AddHostedService<ForgotPasswordConsumer>();
 builder.Services.AddHostedService<ConfirmEmailConsumer>();
+builder.Services.AddHostedService<UserNotificationConsumer>();
+
 
 builder.Services.AddSingleton<IRabbitMqProducer, RabbitMqProducer>();
 builder.Services.AddSingleton<RabbitMqConnection>();
 
-
+//SignalR
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<ISignalRNotificationService, SignalRNotificationService>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -120,7 +128,10 @@ builder.Services.AddSingleton<IAmazonS3>(sp =>
     );
 });
 
+// Auto Mapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+//Session
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = "TMC";
@@ -170,18 +181,25 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["JWT:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            // SignalR gửi access_token qua query string, không phải header
+            var accessToken = context.Request.Query["access_token"];
+
+            // Đảm bảo chỉ xử lý cho request đến Hub
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) &&
+                path.StartsWithSegments("/notificationHub"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 })
-//.AddCookie("CookieAuth", options =>
-//{
-//    //options.ExpireTimeSpan = TimeSpan.FromDays(14);             // Thời gian lưu cookie
-//    //options.SlidingExpiration = true;                           // Gia hạn thời gian nếu người dùng còn hoạt động
-//    //options.Cookie.HttpOnly = true;                             // Cookie chỉ được truy cập bởi máy chủ
-//    //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;  // Yêu cầu HTTPS cho cookie
-//    //options.Cookie.SameSite = SameSiteMode.None;               // Hỗ trợ cross-origin
-//    /*options.Cookie.SecurePolicy = CookieSecurePolicy.Always;*/    // Yêu cầu HTTPS
-//    //options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-//    //options.Cookie.SameSite = SameSiteMode.Lax;               // Cho phép gửi cookie trong các yêu cầu cross-origin
-//})
 .AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration["OAuth:Google:ClientId"]; 
@@ -232,6 +250,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.UseSession();
 

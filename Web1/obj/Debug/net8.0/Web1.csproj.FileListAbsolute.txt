@@ -264,6 +264,14 @@ C:\Users\PC\source\repos\Web1\Web1\obj\Debug\net8.0\refint\Web1.dll
 C:\Users\PC\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.pdb
 C:\Users\PC\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.genruntimeconfig.cache
 C:\Users\PC\source\repos\Web1\Web1\obj\Debug\net8.0\ref\Web1.dll
+D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.csproj.AssemblyReference.cache
+D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.GeneratedMSBuildEditorConfig.editorconfig
+D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.AssemblyInfoInputs.cache
+D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.AssemblyInfo.cs
+D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.csproj.CoreCompileInputs.cache
+D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.MvcApplicationPartsAssemblyInfo.cs
+D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.MvcApplicationPartsAssemblyInfo.cache
+D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.sourcelink.json
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\appsettings.Development.json
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\appsettings.json
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\ClientApp\my-angular-app\angular.json
@@ -277,6 +285,10 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\Web1.deps.json
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Web1.runtimeconfig.json
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Web1.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Web1.pdb
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\AutoMapper.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\AWSSDK.Core.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\AWSSDK.S3.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Azure.Core.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Azure.Identity.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
@@ -326,6 +338,7 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstract
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Microsoft.Identity.Client.dll
@@ -361,6 +374,7 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\NuGet.ProjectModel.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\NuGet.Protocol.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\NuGet.Versioning.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\RabbitMQ.Client.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\StackExchange.Redis.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
@@ -378,6 +392,7 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Private.Windows.Core.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Management.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Memory.Data.dll
+D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Reflection.MetadataLoadContext.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Runtime.Caching.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
@@ -536,14 +551,6 @@ D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtim
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 D:\source\repos\Web1\Web1\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
-D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.csproj.AssemblyReference.cache
-D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.GeneratedMSBuildEditorConfig.editorconfig
-D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.AssemblyInfoInputs.cache
-D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.AssemblyInfo.cs
-D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.csproj.CoreCompileInputs.cache
-D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.MvcApplicationPartsAssemblyInfo.cs
-D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.MvcApplicationPartsAssemblyInfo.cache
-D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.sourcelink.json
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\staticwebassets.build.json
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\staticwebassets.development.json
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\staticwebassets\msbuild.Web1.Microsoft.AspNetCore.StaticWebAssets.props
@@ -558,6 +565,3 @@ D:\source\repos\Web1\Web1\obj\Debug\net8.0\refint\Web1.dll
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.pdb
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\Web1.genruntimeconfig.cache
 D:\source\repos\Web1\Web1\obj\Debug\net8.0\ref\Web1.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\AWSSDK.Core.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\AWSSDK.S3.dll
-D:\source\repos\Web1\Web1\bin\Debug\net8.0\RabbitMQ.Client.dll

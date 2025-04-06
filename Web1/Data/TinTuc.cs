@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Web1.Data;
 
-namespace Web1.DataNew;
+namespace Web1.Data;
 
 public partial class TinTuc
 {

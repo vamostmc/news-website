@@ -62,12 +62,12 @@
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item notification-item" *ngFor="let noti of notificationsTinTuc | paginate: { itemsPerPage: 4, currentPage: pTinTuc }">
                       <div class="notification-header">
-                        {{ noti.message }}
-                        <span class="time-ago">(Cách đây: {{ getTimeAgo(noti.timestamp) }})</span>
+                        <!-- {{ noti.message }} -->
+                        <!-- <span class="time-ago">(Cách đây: {{ getTimeAgo(noti.timestamp) }})</span> -->
                       </div>
                       <div class="notification-footer">
                         
-                        <span class="notification-timestamp">Cập nhật lúc: {{ noti.timestamp | date:'hh:mm a, yyyy-MM-dd' }}</span>
+                        <!-- <span class="notification-timestamp">Cập nhật lúc: {{ noti.timestamp | date:'hh:mm a, yyyy-MM-dd' }}</span> -->
                       </div>
                     </li>
                     <div class="pagination-controls">
@@ -94,12 +94,12 @@
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item notification-item" *ngFor="let noti of notificationsBinhLuan | paginate: { itemsPerPage: 4, currentPage: pBinhLuan }">
                       <div class="notification-header">
-                        {{ noti.message }}
-                        <span class="time-ago">(Cách đây: {{ getTimeAgo(noti.timestamp) }})</span>
+                        <!-- {{ noti.message }} -->
+                        <!-- <span class="time-ago">(Cách đây: {{ getTimeAgo(noti.timestamp) }})</span> -->
                       </div>
                       <div class="notification-footer">
                         
-                        <span class="notification-timestamp">Cập nhật lúc: {{ noti.timestamp | date:'hh:mm a, yyyy-MM-dd' }}</span>
+                        <!-- <span class="notification-timestamp">Cập nhật lúc: {{ noti.timestamp | date:'hh:mm a, yyyy-MM-dd' }}</span> -->
                       </div>
                     </li>
                     <div class="pagination-controls">

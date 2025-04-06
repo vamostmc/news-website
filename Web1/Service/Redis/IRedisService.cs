@@ -8,8 +8,15 @@ namespace Web1.Service.Redis
 
         public Task RemoveToRedisAsync(string typeList, string key);
 
-        public Task SetValueRedisAsync(string typeList ,string key, string value, TimeSpan? expiry = null);
+        public Task SetStringRedisAsync(string typeList, string key, string value, TimeSpan? expiry = null);
 
-        public Task<string> GetValueRedisAsync(string typeList, string key);
+        public Task<string> GetStringRedisAsync(string typeList, string key);
+
+        public Task SetAddRedisAsync(string typeList, string key, string value, TimeSpan? expiry = null);
+
+        public Task<List<string>> GetSetMembersAsync(string typeList, string key);
+
+        public Task RemoveSetRedisAsync(string typeList, string key, string value);
+
     }
 }

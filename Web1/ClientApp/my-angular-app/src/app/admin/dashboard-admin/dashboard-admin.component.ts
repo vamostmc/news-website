@@ -4,7 +4,7 @@ import { TinTucService } from '../../Client/service-client/tintuc-service/tin-tu
 import { CustomerService } from '../../Client/service-client/customer-service/customer.service';
 import { CommentService } from '../../Client/service-client/comment-service/comment.service';
 import { DashboardService } from '../../Client/service-client/dashboard-service/dashboard.service';
-import { Notification } from '../../Client/models/notification';
+import { NotificationModel } from '../../Client/models/notification';
 import { Comment } from '../../Client/models/comment';
 import { forkJoin } from 'rxjs';
 
@@ -53,25 +53,25 @@ export class DashboardAdminComponent implements OnInit {
   
 
     //Hiển thị ngày và giờ hành động
-    getTimeAgo(timestamp: string): string {
-      const now = new Date();
-      const timeDiff = now.getTime() - new Date(timestamp).getTime();
+    // getTimeAgo(timestamp: string): string {
+    //   const now = new Date();
+    //   const timeDiff = now.getTime() - new Date(timestamp).getTime();
       
-      const seconds = Math.floor(timeDiff / 1000);
-      const minutes = Math.floor(seconds / 60);
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
+    //   const seconds = Math.floor(timeDiff / 1000);
+    //   const minutes = Math.floor(seconds / 60);
+    //   const hours = Math.floor(minutes / 60);
+    //   const days = Math.floor(hours / 24);
       
-      if (seconds < 60) {
-        return `${seconds} giây trước`;
-      } else if (minutes < 60) {
-        return `${minutes} phút trước`;
-      } else if (hours < 24) {
-        return `${hours} giờ trước`;
-      } else {
-        return `${days} ngày trước`;
-      }
-    }
+    //   if (seconds < 60) {
+    //     return `${seconds} giây trước`;
+    //   } else if (minutes < 60) {
+    //     return `${minutes} phút trước`;
+    //   } else if (hours < 24) {
+    //     return `${hours} giờ trước`;
+    //   } else {
+    //     return `${days} ngày trước`;
+    //   }
+    // }
 
     ngOnInit(): void {
       forkJoin({

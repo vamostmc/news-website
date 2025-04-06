@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing;
 using Web1.Data;
-using Web1.DataNew;
 using Web1.Helps;
 using Web1.Models;
 using Web1.Repository;
@@ -25,7 +24,7 @@ namespace Web1.Controllers
         }
 
         [HttpGet("TintucWithDanhmuc")]
-        [Authorize(Roles = Role.Customer)]
+        //[Authorize(Roles = Role.Customer)]
         public async Task<List<TinTucDto>> GetAllWithDm()
         {
             return await _tinTuc.GetTinTucDto();

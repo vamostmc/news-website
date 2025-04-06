@@ -1,45 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 using Web1.Data;
 using Web1.Exceptions;
+using Web1.Helps;
 using Web1.Models;
+using Web1.Service.RabbitMq.Producer;
 
 namespace Web1.Repository
 {
     public class CommentRepository : ICommentRepository
     {
         private readonly TinTucDbContext _binhLuan;
+        private readonly INotificationRepository _notificationRepository;
+        private readonly IRabbitMqProducer _rabbitMqProducer;
 
-        public CommentRepository(TinTucDbContext binhLuan) { _binhLuan = binhLuan; }
-
-        public async Task<BinhLuan> AddComment(BinhLuan comment)
-        {
-            try
-            {
-                var checkUser = await _binhLuan.AppUsers.FindAsync(comment.UserId);
-                if (checkUser == null)
-                {
-                    throw new RepositoryException("Id user người dùng tồn tại");
-                }
-
-                var checkTinTuc = await _binhLuan.TinTucs.FindAsync(comment.TintucId);
-                if (checkTinTuc == null)
-                {
-                    throw new RepositoryException("Id tin tức tồn tại");
-                }
-
-                comment.User = checkUser;
-                comment.Tintuc = checkTinTuc;
-
-                await _binhLuan.AddAsync(comment);
-                await _binhLuan.SaveChangesAsync();
-                return comment;
-            }
-            catch (RepositoryException ex)
-            {
-                // Xử lý ngoại lệ
-                throw new RepositoryException("Có lỗi xảy ra khi thêm bình luận.", ex);
-            }
+        public CommentRepository(TinTucDbContext binhLuan,
+                                 INotificationRepository notificationRepository,
+                                 IRabbitMqProducer rabbitMqProducer) 
+        { 
+            _binhLuan = binhLuan;
+            _notificationRepository = notificationRepository;
+            _rabbitMqProducer = rabbitMqProducer;
         }
 
         public async Task<BinhLuanDto> AddCommentNew(BinhLuanDto comment)
@@ -53,28 +35,43 @@ namespace Web1.Repository
                     { 
                         throw new RepositoryException("Không tồn tại bình luận cha"); 
                     }
-
-                    else
-                    {
-                        var checkTinTucId = await _binhLuan.TinTucs.FindAsync(comment.TintucId);
-                    }
                 }
-                    
+
+                var tintucs = await _binhLuan.TinTucs.FindAsync(comment.TintucId);
+                if(tintucs == null)
+                {
+                    throw new RepositoryException("Không tồn tại bài viết bình luận");
+                }
 
                 var dataNew = new BinhLuan
                 {
-                    NgayGioBinhLuan = comment.NgayGioBinhLuan,
+                    NgayGioBinhLuan = DateTime.Now,
                     NoiDung = comment.NoiDung,
                     UserId = comment.UserId,
                     TintucId = comment.TintucId,
                     Likes = comment.Likes,
                     ParentId = comment.ParentId,
+                    ReplyToUserId = comment.ReplyToUserId
                 };
-
-
 
                 await _binhLuan.AddRangeAsync(dataNew);
                 await _binhLuan.SaveChangesAsync();
+
+                if(comment.ReplyToUserId != null)
+                {
+                    var ReplyUser = await _binhLuan.Users.FirstOrDefaultAsync(c => c.Id == comment.ReplyToUserId);
+                    comment.UserReplyName = ReplyUser.UserName;
+
+                    var UserComment = await _binhLuan.Users.FirstOrDefaultAsync(c => c.Id == comment.UserId);
+
+                    var data = await _notificationRepository.CreatCommentNotify(comment.ReplyToUserId, UserComment.UserName, tintucs.TieuDe);
+                    await _rabbitMqProducer.PublishEvent(KeyRabbit.USER_NOTIFICATION_ROUTING, data);
+                }
+                else
+                {
+                    comment.UserReplyName = null;
+                }
+
                 return comment;
                     
             }
@@ -120,6 +117,7 @@ namespace Web1.Repository
                                                     TieuDeTinTuc = t.Tintuc.TieuDe,
                                                     UserName = t.User.UserName,
                                                     UserId = t.UserId,
+                                                    ReplyToUserId = t.ReplyToUserId,
                                                     TrangThai = t.TrangThai,
                                                     ParentId = t.ParentId,
                                                     Likes = t.Likes,
@@ -143,6 +141,7 @@ namespace Web1.Repository
                                                         NoiDung = t.NoiDung,
                                                         TieuDeTinTuc = t.Tintuc.TieuDe,
                                                         UserName = t.User.UserName,
+                                                        ReplyToUserId = t.ReplyToUserId,
                                                         UserId = t.UserId,
                                                         TrangThai = t.TrangThai,
                                                         ParentId = t.ParentId,
@@ -181,6 +180,7 @@ namespace Web1.Repository
                     NoiDung = blg.NoiDung,
                     UserName = blg.User != null ? blg.User.UserName : "Ẩn danh",
                     TieuDeTinTuc = blg.Tintuc.TieuDe,
+                    ReplyToUserId = blg.ReplyToUserId,
                     TrangThai = blg.TrangThai,
                     ParentId = blg.ParentId,
                     Likes = blg.Likes ?? 0,
@@ -194,10 +194,14 @@ namespace Web1.Repository
                             NgayGioBinhLuan = reply.NgayGioBinhLuan,
                             NoiDung = reply.NoiDung,
                             UserName = reply.User != null ? reply.User.UserName : "Ẩn danh",
+                            ReplyToUserId = reply.ReplyToUserId,
                             TieuDeTinTuc = reply.Tintuc.TieuDe,
                             TrangThai = reply.TrangThai,
                             ParentId = reply.ParentId,
-                            Likes = reply.Likes ?? 0
+                            Likes = reply.Likes ?? 0,
+                            UserReplyName = reply.ReplyToUserId != null
+                                ? comments.FirstOrDefault(c => c.UserId == reply.ReplyToUserId)?.User.UserName
+                                : null
                         })
                         .ToList()
                 }).ToList();
@@ -232,6 +236,7 @@ namespace Web1.Repository
                     data.Tintuc = checkTinTuc;
                     data.Likes = comment.Likes;
                     data.ParentId = comment.ParentId;
+                    data.ReplyToUserId = comment.ReplyToUserId;
 
                     // Lưu thay đổi
                     _binhLuan.BinhLuans.Update(data);

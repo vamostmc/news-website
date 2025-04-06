@@ -241,7 +241,7 @@ export class EditPostComponent {
       this.tintucservice.updateTintuc(formData, tintucId).subscribe({
         next: (response) => {
           console.log('Cập nhật thành công', response);
-          this.dashboardservice.NotificationUpdateTinTuc(this.postForm.get('TieuDe')?.value);
+          // this.dashboardservice.NotificationUpdateTinTuc(this.postForm.get('TieuDe')?.value);
         },
         error: (error) => {
           console.error('Lỗi khi cập nhật tin tức', error);

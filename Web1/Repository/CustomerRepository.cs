@@ -183,7 +183,7 @@ namespace Web1.Repository
                 }
                 else
                 {
-                    await _redisService.SetValueRedisAsync(TypeKeyRedis.BLACKLIST_PREFIX, id, "1", null);
+                    await _redisService.SetStringRedisAsync(TypeKeyRedis.BLACKLIST_PREFIX, id, "1", null);
                 }
 
                 await _userManager.UpdateAsync(data);
@@ -245,7 +245,7 @@ namespace Web1.Repository
                 }
                 else
                 {
-                    await _redisService.SetValueRedisAsync(TypeKeyRedis.BLACKLIST_PREFIX, id, "1", null);
+                    await _redisService.SetStringRedisAsync(TypeKeyRedis.BLACKLIST_PREFIX, id, "1", null);
                 }
                 await _userManager.UpdateAsync(data);
                 return await GetListUser();

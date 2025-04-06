@@ -18,6 +18,7 @@ export class ViewDetailComponent implements OnInit{
   tintucs !: Tintuc;
   tintucTop: Tintuc[] = [];
   checkToken: boolean = false;
+  TotalComment !: number;
   comments : Comment[] = [];
   replies: Comment[] = [];
   activeReplyId !: number;
@@ -64,12 +65,12 @@ export class ViewDetailComponent implements OnInit{
       noiDung: ['', Validators.required],
       userName: [''],
       parentId: [''],
-      trangThai: [false, Validators.required]
+      trangThai: [false, Validators.required],
+      replyToUserId: ['']
     });
   }
 
-  addCommentParent(commentId: number) {
-    console.log(commentId);
+  addCommentParent() {
     if(this.postForm.value['noiDung'] != null) {
       this.postForm.patchValue({
         binhluanId: [0],
@@ -79,6 +80,7 @@ export class ViewDetailComponent implements OnInit{
         parentId: '',
         trangThai: true,
         userName: localStorage.getItem('userName'),
+        replyToUserId: ''
       })
     }
     const data = this.commentService.SendFormPost(this.postForm);
@@ -86,12 +88,13 @@ export class ViewDetailComponent implements OnInit{
       (data) => {
         this.comments.unshift(data);
         this.postForm.reset();
+        this.TotalComment++;
         console.log(data);
       }
     )
   }
 
-  addCommentChild(commentId: number) {
+  addCommentChild(replyUserID: string ,commentId: number) {
     if(this.postForm.value['noiDung'] != null) {
       this.postForm.patchValue({
         binhluanId: [0],
@@ -101,14 +104,17 @@ export class ViewDetailComponent implements OnInit{
         parentId: commentId,
         trangThai: true,
         userName: localStorage.getItem('userName'),
+        replyToUserId: replyUserID
       })
     }
     const data = this.commentService.SendFormPost(this.postForm);
+    console.log("Giá trị trong data là: ",data);
     this.commentService.PostComment(data).subscribe(
       (data) => {
         this.comments.find(t => t.binhluanId === commentId)?.replies?.push(data);
+        this.TotalComment++;
         this.postForm.reset();
-        console.log(data);
+        
       }
     )
   }
@@ -118,23 +124,32 @@ export class ViewDetailComponent implements OnInit{
     console.log("Tin tức từ cha: ", this.tintucTop);
   }
 
-  getTimeAgo(dateInput: string | Date): string {
-    const commentDate = dateInput instanceof Date ? dateInput : new Date(dateInput);
-    const now = new Date();
-    const diffMs = now.getTime() - commentDate.getTime();
-    const diffSec = Math.floor(diffMs / 1000);
-    const diffMin = Math.floor(diffSec / 60);
-    const diffHours = Math.floor(diffMin / 60);
-    const diffDays = Math.floor(diffHours / 24);
-    const diffMonths = Math.floor(diffDays / 30); 
-    const diffYears = Math.floor(diffDays / 365); 
+  getTimeAgo(timestamp: string): string {
+    const now = new Date();  // Thời gian hiện tại
+    const commentTime = new Date(timestamp);  // Thời gian bình luận
   
-    if (diffSec < 60) return `${diffSec} giây trước`;
-    if (diffMin < 60) return `${diffMin} phút trước`;
-    if (diffHours < 24) return `${diffHours} giờ trước`;
-    if (diffDays < 30) return `${diffDays} ngày trước`;
-    if (diffMonths < 12) return `${diffMonths} tháng trước`;
-    return `${diffYears} năm trước`;
+    const timeDiff = now.getTime() - commentTime.getTime();
+  
+    const seconds = Math.floor(timeDiff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(months / 12);
+  
+    if (seconds < 60) {
+      return `${seconds} giây trước`;
+    } else if (minutes < 60) {
+      return `${minutes} phút trước`;
+    } else if (hours < 24) {
+      return `${hours} giờ trước`;
+    } else if (days < 30) {
+      return `${days} ngày trước`;
+    } else if (months < 12) {
+      return `${months} tháng trước`;
+    } else {
+      return `${years} năm trước`;
+    }
   }
 
   loadData() {
@@ -146,6 +161,7 @@ export class ViewDetailComponent implements OnInit{
       ({ tintucById, allTintuc, comments }) => {
         this.tintucs = tintucById;
         this.tintucTop = allTintuc;
+        this.TotalComment = this.tintucs.soLuongComment;
         this.comments = comments;
   
         console.log("Tin tức chi tiết:", this.tintucs);
@@ -161,12 +177,12 @@ export class ViewDetailComponent implements OnInit{
   
   
 
-  
 
   ngOnInit(): void {
     this.initForm();
     this.getNewId();
     console.log("TinTucTop là:",this.tintucTop);
     this.loadData();
+    
   }
 }

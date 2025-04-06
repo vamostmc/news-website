@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System;
 using Web1.Data;
 using Web1.Models;
 using Web1.Repository;
@@ -13,48 +16,48 @@ namespace Web1.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly INotificationRepository _noti;
+        private readonly TinTucDbContext _context;
 
-        public NotificationController(INotificationRepository noti ) { _noti = noti; }
+        public NotificationController(INotificationRepository noti,
+                                      TinTucDbContext context) { _noti = noti; _context = context; }
 
-        [HttpGet("GetNotify/{idNotify}")]
-        public async Task<List<NotificationDto>> GetNotifyTinTuc(int idNotify) 
+        [HttpGet("GetNoti")]
+        public async Task<IActionResult> GetAllNotifications()
         {
-           return await _noti.GetNotify(idNotify);
+            var notifications = await _context.Notifications
+                .ToListAsync();
+            return Ok(notifications);
         }
 
-        [HttpGet("GetNotification/{id}")]
-        public async Task<Notification> GetNotification(int id)
+        [HttpGet("GetNotify/{id}")]
+        public async Task<List<NotificationDto>> GetNotifyTinTuc(string id) 
         {
-            return await _noti.GetNotificationRepo(id);
+            return await _noti.GetNotifyUser(id);
         }
 
-        [HttpPost("AddNotificationTinTuc")]
-        public async Task<NotificationDto> AddNotificationTinTuc([FromBody] NotificationDto newNoti)
+
+        [HttpGet("TotalNotify/{id}")]
+        public async Task<int> GetTotalNotify(string id)
         {
-            return await _noti.AddNotifyTinTucRepo(newNoti);
+            return await _noti.TotalNotify(id);
         }
 
-        //Post Notification
-        [HttpPost("AddNotificationBinhLuan")]
-        public async Task<NotifyBinhLuan> AddNotificationBinhLuan([FromBody] NotifyBinhLuan notifyBinhLuan)
+        [HttpDelete("DeleteNotify/{id}")]
+        public async Task<Success> DeleteNotification(long id)
         {
-            return await _noti.AddNotifyBinhLuanRepo(notifyBinhLuan);
+            return await _noti.DeleteNotify(id);
         }
 
-        //Delete Notification
-        [HttpDelete("RemoveNotification")]
-        public async Task<IActionResult> DeleteNotification(int id) 
+        [HttpPut("UpdateStatusReadId/{id}")]
+        public Task<Success> UpdateStatusId(long id, [FromBody] bool statusRead)
         {
-            await _noti.RemoveNotificationRepo(id);
-            return Ok("OK");
+            return _noti.UpdateReadStatusId(id,statusRead);
         }
 
-        //Update Notify
-        [HttpPut("EditNoti")]
-        public async Task<IActionResult> UpdateNotification(int id) 
+        [HttpPut("UpdateStatusAll/{userId}")]
+        public Task<Success> UpdateStatusAll(string userId, [FromBody] bool statusRead)
         {
-            await _noti.UpdateNotificationRepo(id);
-            return Ok("OK");
+            return _noti.UpdateAllRead(userId,statusRead);
         }
 
     }

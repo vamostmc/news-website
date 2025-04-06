@@ -20,6 +20,10 @@ namespace Web1.Models
 
         public bool? TrangThai {  get; set; }
 
+        public string? ReplyToUserId { get; set; }
+
+        public string? UserReplyName { get; set; }
+
         public int? ParentId { get; set; }
 
         public int? Likes { get; set; }

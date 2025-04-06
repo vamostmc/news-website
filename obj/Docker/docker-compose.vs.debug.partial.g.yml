@@ -3,7 +3,7 @@ version: '3.4'
 services:
   web1:
     image: web1:dev
-    container_name: "Web1_2"
+    container_name: "Web1"
     build:
       args:
         BUILD_CONFIGURATION: Debug

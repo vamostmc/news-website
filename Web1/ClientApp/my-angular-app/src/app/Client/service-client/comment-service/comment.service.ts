@@ -54,6 +54,7 @@ export class CommentService {
     formData.append("noiDung", postForm.get("noiDung")?.value);
     formData.append("userName", postForm.get("userName")?.value);
     formData.append("trangThai", postForm.get("trangThai")?.value);
+    formData.append("replyToUserId", postForm.get("replyToUserId")?.value);
     return formData;
   }
 
@@ -67,6 +68,7 @@ export class CommentService {
     formData.append("ngayGioBinhLuan", postForm.get("ngayGioBinhLuan")?.value);
     formData.append("noiDung", postForm.get("noiDung")?.value);
     formData.append("trangThai", postForm.get("trangThai")?.value);
+    formData.append("replyToUserId", postForm.get("replyToUserId")?.value);
     return formData;
   }
   constructor(private http: HttpClient) { }

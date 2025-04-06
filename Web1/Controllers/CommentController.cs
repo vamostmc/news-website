@@ -49,25 +49,6 @@ namespace Web1.Controllers
         }
 
 
-        [HttpPost("AddComment")]
-        public async Task<IActionResult> AddComment([FromForm] BinhLuan NewComment)
-        {
-            try
-            {
-                // Thêm comment mới vào DB
-                await _binhLuan.AddComment(NewComment);
-
-                Console.WriteLine("Dữ liệu đã được chèn thành công vào SQL Server.");
-                return Ok(NewComment);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Lỗi khi chèn dữ liệu: {ex.Message}");
-                return BadRequest("Lỗi khi thêm bình luận.");
-            }
-        }
-
-
         [HttpPut]
         [Route("EditCommnent/{id}")]
         public async Task<IActionResult> UpdateComment(int id, [FromForm] BinhLuanDto binhLuan)

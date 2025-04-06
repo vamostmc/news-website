@@ -27,6 +27,8 @@ import { FooterComponent } from './Client/footer/footer.component';
 import { NavbarClientComponent } from './Client/navbar/navbar-client/navbar-client.component';
 import { NavbarAuthenComponent } from './Client/navbar/navbar-authen/navbar-authen.component';
 import { ToastMessageComponent } from './Client/toast-message/toast-message.component';
+import { NotificationComponent } from './Client/notification/notification.component';
+import { ChatBoxComponent } from './Client/chat-box/chat-box.component';
 
 
 
@@ -47,6 +49,8 @@ import { ToastMessageComponent } from './Client/toast-message/toast-message.comp
     NavbarClientComponent,
     NavbarAuthenComponent,
     ToastMessageComponent,
+    NotificationComponent,
+    ChatBoxComponent,
 
   ],
   imports: [

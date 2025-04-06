@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Web1.Data;
-using Web1.DataNew;
 using Web1.Models;
 using Web1.Service.AWS;
 using static System.Runtime.InteropServices.JavaScript.JSType;

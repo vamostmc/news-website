@@ -21,13 +21,19 @@
         <span class="user-name">{{ fullName }}</span>
         <div class="icon-group">
           <a href="#" class="circle-icon"><i class="fas fa-envelope"></i></a> <!-- Tin nhắn -->
-          <a href="#" class="circle-icon"><i class="fas fa-bell"></i></a>  <!-- Thông báo -->
+          <div class="circle-bell" (click)="toggleNotifications(); getAllNotify()" [ngClass]="{'ring': isRinging}">
+            <i class="fas fa-bell"></i>
+            <span class="notify-count" *ngIf="totalNotify > 0">{{ totalNotify }}</span>
+          </div>
         </div>
       </div>
     </ng-template>
   </div>
+
+  <app-notification (totalNotifyChange)="onTotalNotifyChange($event)">
+  </app-notification>
+
   
-  <hr class="silver-line1">
       <div class="logo-container">
         <h2>THE NEWS</h2>
         <div class="logo-image">

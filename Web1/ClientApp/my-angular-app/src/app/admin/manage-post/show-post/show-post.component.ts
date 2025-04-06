@@ -110,7 +110,7 @@ export class ShowPostComponent implements OnInit  {
         TieuDe = "Tiêu đề không tìm thấy"; // Nếu không tìm thấy, gán giá trị mặc định
     }
     //Đưa hành động này đến bảng thông báo dashboard
-    await this.dashboardservice.NotificationRemoveTinTuc(TieuDe);
+    // await this.dashboardservice.NotificationRemoveTinTuc(TieuDe);
     
     //Xóa bài tin tức đó
     this.tintucs = await firstValueFrom(this.tintucservice.deleteTintuc(id));

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using NuGet.Common;
+using Web1.Data;
 using Web1.Helps;
 using Web1.Models;
 using Web1.Repository;
@@ -20,19 +21,22 @@ namespace Web1.Service.Account
         private readonly IMemoryCache _memoryCache;
         private readonly ISendMailService _sendMailService;
         private readonly IRedisService _redisService;
+        private readonly INotificationRepository _notificationRepo;
 
         public ForgotPasswordService(
             
             UserManager<AppUser> userManager,
             IMemoryCache memoryCache,
             ISendMailService sendMailService,
-            IRedisService redisService)
+            IRedisService redisService,
+            INotificationRepository notificationRepo)
         {
            
             _userManager = userManager;
             _memoryCache = memoryCache;
             _sendMailService = sendMailService;
             _redisService = redisService;
+            _notificationRepo = notificationRepo;
         }
 
         public async Task<AppUser> GetUserPassword(string userNameorEmail)
@@ -63,12 +67,14 @@ namespace Web1.Service.Account
             }
 
             var newCode = GenerateOtp();
-            await _redisService.SetValueRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, user.Email, newCode, TimeSpan.FromMinutes(5));
+            await _redisService.SetStringRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, user.Email, newCode, TimeSpan.FromMinutes(5));
 
             string subject = "Mã xác nhận để đổi mật khẩu";
             string fullBody = $"<br>Mã xác nhận đổi mật khẩu của bạn là: <strong>{newCode}</strong>. Vui lòng nhập mã này trong vòng 3 phút.";
 
             var result = await _sendMailService.SetUpSendMail(user.Email, subject, fullBody);
+
+
             if (!result.success)
             {
                 throw new Exception("Lỗi khi gửi mail.");
@@ -83,7 +89,7 @@ namespace Web1.Service.Account
 
         public async Task<Success> ResetPasswordAsync(ResetPasswordModel resetPassword)
         {
-            var value = await _redisService.GetValueRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, resetPassword.userId);
+            var value = await _redisService.GetStringRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, resetPassword.userId);
             if (value != string.Empty) 
                 {
                 if (value == resetPassword.resetToken)
@@ -149,7 +155,7 @@ namespace Web1.Service.Account
 
         public async Task<Success> CheckOtpCode(VerifyCodeDto verify)
         {
-            var value = await _redisService.GetValueRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, verify.EmailUser);
+            var value = await _redisService.GetStringRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, verify.EmailUser);
             if (value != string.Empty)
             {
                     if (value == verify.Code)
@@ -162,7 +168,7 @@ namespace Web1.Service.Account
                         }
 
                         var token = Guid.NewGuid().ToString();
-                        await _redisService.SetValueRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, user.Id, token, TimeSpan.FromMinutes(2));
+                        await _redisService.SetStringRedisAsync(TypeKeyRedis.FORGOT_PASSWORD_PREFIX, user.Id, token, TimeSpan.FromMinutes(2));
                         return new Success { success = true, message = token };
                     }
                     else

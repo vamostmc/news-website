@@ -182,6 +182,10 @@ namespace Web1.Migrations.TinTucDb
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ReplyToUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int?>("TintucId")
                         .HasColumnType("int")
                         .HasColumnName("TintucID");
@@ -254,39 +258,58 @@ namespace Web1.Migrations.TinTucDb
 
             modelBuilder.Entity("Web1.Data.Notification", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<bool?>("IsRead")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<bool?>("IsSystem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Timestamp")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
+                    b.Property<string>("SenderId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("TypeId")
+                    b.Property<string>("TargetId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id")
-                        .HasName("PK__Notifica__3214EC0720B93E79");
+                        .HasName("PK__Notifica__3214EC073F760215");
 
                     b.HasIndex("TypeId");
+
+                    b.HasIndex(new[] { "CreatedAt" }, "IDX_Notification_CreatedAt")
+                        .IsDescending();
+
+                    b.HasIndex(new[] { "IsRead" }, "IDX_Notification_IsRead");
+
+                    b.HasIndex(new[] { "TargetId" }, "IDX_Notification_TargetId");
 
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("Web1.Data.NotifyType", b =>
+            modelBuilder.Entity("Web1.Data.NotificationType", b =>
                 {
                     b.Property<int>("TypeId")
                         .ValueGeneratedOnAdd()
@@ -300,12 +323,15 @@ namespace Web1.Migrations.TinTucDb
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("TypeId")
-                        .HasName("PK__NotifyTy__516F03B5067351CF");
+                        .HasName("PK__Notifica__516F03B557B4ECEB");
 
-                    b.ToTable("NotifyTypes");
+                    b.HasIndex(new[] { "TypeName" }, "UQ__Notifica__D4E7DFA85869D994")
+                        .IsUnique();
+
+                    b.ToTable("NotificationTypes");
                 });
 
-            modelBuilder.Entity("Web1.DataNew.TinTuc", b =>
+            modelBuilder.Entity("Web1.Data.TinTuc", b =>
                 {
                     b.Property<int>("TintucId")
                         .ValueGeneratedOnAdd()
@@ -501,7 +527,7 @@ namespace Web1.Migrations.TinTucDb
                         .HasForeignKey("ParentId")
                         .HasConstraintName("FK_BinhLuan_ParentID");
 
-                    b.HasOne("Web1.DataNew.TinTuc", "Tintuc")
+                    b.HasOne("Web1.Data.TinTuc", "Tintuc")
                         .WithMany("BinhLuans")
                         .HasForeignKey("TintucId")
                         .HasConstraintName("FK__BinhLuan__Tintuc__73BA3083");
@@ -519,15 +545,16 @@ namespace Web1.Migrations.TinTucDb
 
             modelBuilder.Entity("Web1.Data.Notification", b =>
                 {
-                    b.HasOne("Web1.Data.NotifyType", "Type")
+                    b.HasOne("Web1.Data.NotificationType", "Type")
                         .WithMany("Notifications")
                         .HasForeignKey("TypeId")
-                        .HasConstraintName("FK_Notifications_NotifyTypes");
+                        .IsRequired()
+                        .HasConstraintName("FK_Notifications_Type");
 
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("Web1.DataNew.TinTuc", b =>
+            modelBuilder.Entity("Web1.Data.TinTuc", b =>
                 {
                     b.HasOne("Web1.Data.DanhMuc", "Danhmuc")
                         .WithMany("TinTucs")
@@ -548,12 +575,12 @@ namespace Web1.Migrations.TinTucDb
                     b.Navigation("TinTucs");
                 });
 
-            modelBuilder.Entity("Web1.Data.NotifyType", b =>
+            modelBuilder.Entity("Web1.Data.NotificationType", b =>
                 {
                     b.Navigation("Notifications");
                 });
 
-            modelBuilder.Entity("Web1.DataNew.TinTuc", b =>
+            modelBuilder.Entity("Web1.Data.TinTuc", b =>
                 {
                     b.Navigation("BinhLuans");
                 });
