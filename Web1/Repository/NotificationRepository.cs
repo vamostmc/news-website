@@ -36,7 +36,7 @@ namespace Web1.Repository
                 TypeId = TypeNotification.TYPE_NOTIFICATION_FORGOTPASSWORD,
                 IsSystem = false,
                 Message = "Cảnh báo: Bạn vừa yêu cầu thầy đổi mật khẩu",
-                SenderId = null,
+                SenderId = null, // Do hệ thống gửi thông báo cho riêng user này
                 TargetId = UserId,
             };
 
@@ -120,5 +120,7 @@ namespace Web1.Repository
             await _noti.SaveChangesAsync();
             return new Success { success = true };
         }
+
+
     }
 }

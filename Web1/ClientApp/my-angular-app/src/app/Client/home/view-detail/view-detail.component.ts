@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TinTucService } from '../service-client/tintuc-service/tin-tuc.service';
+import { TinTucService } from '../../service-client/tintuc-service/tin-tuc.service';
 import { ActivatedRoute } from '@angular/router';
-import { Tintuc } from '../models/tintuc';
-import { Comment } from '../models/comment';
+import { Tintuc } from '../../models/tintuc';
+import { Comment } from '../../models/comment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommentService } from '../service-client/comment-service/comment.service';
+import { CommentService } from '../../service-client/comment-service/comment.service';
 import { forkJoin } from 'rxjs';
 
 @Component({

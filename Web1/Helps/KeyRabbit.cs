@@ -9,6 +9,7 @@ namespace Web1.Helps
 
         public const string nameExchange = "user_events_exchange";
 
+
         // Queue
 
         public const string FORGOT_PASSWORD_QUEUE = "forgot_password_queue";
@@ -21,6 +22,9 @@ namespace Web1.Helps
 
         public const string USER_NOTIFICATION_QUEUE = "user_notification_queue";
 
+        public const string CHAT_BOX_QUEUE = "chat_box_queue";
+
+
         // Routing Key
 
         public const string FORGOT_PASSWORD_ROUTING = "forgot_password";
@@ -32,6 +36,8 @@ namespace Web1.Helps
         public const string ADMIN_NOTIFICATION_ROUTING = "admin_notification";
 
         public const string USER_NOTIFICATION_ROUTING = "user_notification";
+
+        public const string CHAT_BOX_ROUTING = "chat_box";
     }
 
 

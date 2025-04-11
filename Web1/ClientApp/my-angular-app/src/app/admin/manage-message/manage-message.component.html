@@ -1,0 +1,71 @@
+<app-navbar-admin></app-navbar-admin>
+
+<div class="chat-container">
+  <!-- Sidebar -->
+  <div class="chat-sidebar">
+    <div class="chat-item" *ngFor="let conversation of conversations" 
+                            (click)="selectConversation(conversation)"
+                            [ngClass]="{ 'active-conversation': selectedConversation?.id === conversation.id }">
+      <img src="../../../assets/avatar_default.jpg" alt="Avatar" class="avatar" />
+      <div class="chat-info">
+        <div class="chat-name">{{ conversation.userName }}</div>
+        <div class="chat-last-message">{{ conversation.lastMessage }}</div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <!-- Main Chat -->
+  <div class="chat-main">
+    <div class="chat-header" *ngIf="selectedConversation">
+      <div class="chat-header-left">
+        <img src="../../../assets/avatar_default.jpg" alt="Avatar" class="avatar" />
+        <div class="chat-name">{{ selectedConversation.userName }}</div>
+      </div>
+      <div class="chat-header-actions">
+        <button><i class="fa-solid fa-circle-info"></i> Thông tin</button>
+        <button><i class="fa-solid fa-gear"></i> Cài đặt</button>
+      </div>
+    </div>
+
+    <div class="chat-messages" *ngIf="selectedConversation" #scrollContainer (scroll)="onScroll()">
+      <div class="loading-spinner" *ngIf="isLoadingOlderMessages">
+        <div class="spinner"></div>
+        <div>Đang tải tin nhắn cũ...</div>
+      </div>
+      <div *ngFor="let msg of messages">
+        
+        <!-- Hiển thị ngày -->
+        <div *ngIf="msg.type === 'time'" class="chat-date-divider">
+          <span class="line"></span>
+          <span class="date-text">
+            {{ getVietnameseDayName(msg.timestamp) }}, {{ msg.timestamp | date:'d/M/y' }}
+          </span>
+          <span class="line"></span>
+        </div>
+    
+        <!-- Hiển thị tin nhắn -->
+      <div *ngIf="msg.type === 'message'" >
+        <div 
+          class="message-bubble"
+          [ngClass]="{ 'admin-msg': msg.from === 'admin', 'user-msg': msg.from === 'user' }">
+      
+          <div>{{ msg.text }}</div>
+          <div class="message-time">
+            {{ msg.timestamp | date: 'shortTime' }}
+          </div>
+        </div>
+      </div>
+      
+    
+      </div>
+    </div>
+    
+
+    <div class="chat-input" *ngIf="selectedConversation">
+      <input [(ngModel)]="newMessage" (keydown.enter)="sendMessage()" placeholder="Nhập tin nhắn..." />
+      <button (click)="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+</div>

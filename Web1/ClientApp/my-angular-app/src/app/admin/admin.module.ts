@@ -20,6 +20,7 @@ import { EditPostComponent } from './manage-post/edit-post/edit-post.component';
 import { ShowPostComponent } from './manage-post/show-post/show-post.component';
 import { SearchFilterPostComponent } from './manage-post/search-filter-post/search-filter-post.component';
 import { RouterModule } from '@angular/router';
+import { ManageMessageComponent } from './manage-message/manage-message.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { RouterModule } from '@angular/router';
     EditPostComponent,
     ShowPostComponent,
     SearchFilterPostComponent,
+    ManageMessageComponent,
   ],
   imports: [
     CommonModule,

@@ -2,10 +2,12 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { AuthenService } from '../../service-client/authen-service/authen.service';
 import { TinTucService } from '../../service-client/tintuc-service/tin-tuc.service';
 import { DanhmucService } from '../../service-client/danhmuc-service/danhmuc.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationComponent } from '../../notification/notification.component';
 import { NotificationService } from '../../service-client/notification-service/notification.service';
 import { SignalRService } from '../../service-client/signalR-service/signal-r.service';
+import { ChatBoxComponent } from '../../chat-box/chat-box.component';
+import { PlatformService } from '../../service-client/platform-service/platform.service';
 
 @Component({
   selector: 'app-navbar-client',
@@ -14,6 +16,7 @@ import { SignalRService } from '../../service-client/signalR-service/signal-r.se
 })
 export class NavbarClientComponent implements OnInit {
   @ViewChild(NotificationComponent) notificationComponent!: NotificationComponent;
+  @ViewChild(ChatBoxComponent) chatboxComponent!: ChatBoxComponent;
 
   today: Date = new Date();
   dayOfWeek: string = '';
@@ -24,12 +27,14 @@ export class NavbarClientComponent implements OnInit {
   isRinging = false;
 
   constructor(
-    private authen: AuthenService,
     private tintucService: TinTucService,
     private danhmucservice: DanhmucService,
     private route: ActivatedRoute,
     private notificationService: NotificationService,
-    private signalRService: SignalRService
+    private signalRService: SignalRService,
+    private authService: AuthenService,
+    private router: Router,
+    private platform: PlatformService
   ) {
 
   }
@@ -37,7 +42,9 @@ export class NavbarClientComponent implements OnInit {
   ngOnInit(): void {
     this.signalRService.startConnection();
     this.getTodayInfo();
-    this.fullName = localStorage.getItem('fullName');
+    if (this.platform.isBrowser()) {
+      this.fullName = localStorage.getItem('fullName');
+    }
     this.InitTotalUnread();
 
     this.signalRService.totalNotifyChange
@@ -48,15 +55,40 @@ export class NavbarClientComponent implements OnInit {
     });
   }
 
+  logOut() {
+    this.authService.LogOut().subscribe(
+      (data) => {
+        console.log(data);
+        if(this.platform.isBrowser()) {
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('confirmEmail');
+          localStorage.removeItem('userName');
+          localStorage.removeItem('fullName');
+          localStorage.removeItem('userRoles');
+          this.fullName = ''; // Xóa thông tin username
+          window.location.reload();
+          this.router.navigate(['/']);
+        }
+      }
+    );
+  }
+
+  toggleChatBox() {
+    this.chatboxComponent.toggleChat();
+  }
+
+
+
   InitTotalUnread() {
-    this.userId = localStorage.getItem('userId') || 'defaultUserId';
-    this.notificationService.getUnreadCount(this.userId).subscribe(
-    (data) => {
-      this.totalNotify = data;
-      console.log("Tổng");
-      console.log(this.totalNotify);
-      this.toggleBellRingEffect();
-    })
+    if (this.platform.isBrowser()) {
+      this.userId = localStorage.getItem('userId') || 'defaultUserId';
+      this.notificationService.getUnreadCount(this.userId).subscribe((data) => {
+        this.totalNotify = data;
+        console.log('Tổng');
+        console.log(this.totalNotify);
+        this.toggleBellRingEffect();
+      });
+    }
   }
 
 
@@ -78,8 +110,10 @@ export class NavbarClientComponent implements OnInit {
   }
 
   getAllNotify() {
-    this.userId = localStorage.getItem('userId') || 'defaultUserId';
-    this.notificationComponent.GetDataNotification(this.userId);
+    if (this.platform.isBrowser()) {
+      this.userId = localStorage.getItem('userId') || 'defaultUserId';
+      this.notificationComponent.GetDataNotification(this.userId);
+    }
   }
 
 

@@ -21,7 +21,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule, GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
-import { ViewDetailComponent } from './Client/view-detail/view-detail.component';
+import { ViewDetailComponent } from './Client/home/view-detail/view-detail.component';
 import { TrendingViewComponent } from './Client/home/trending-view/trending-view.component';
 import { FooterComponent } from './Client/footer/footer.component';
 import { NavbarClientComponent } from './Client/navbar/navbar-client/navbar-client.component';

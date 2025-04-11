@@ -11,11 +11,55 @@
     </div>
   
     <div class="chat-body" [ngClass]="{'open': isOpen}">
-      <div class="chat-messages">
-        <div *ngFor="let message of messages" [ngClass]="{'admin-msg': message.from === 'admin', 'user-msg': message.from === 'user'}" class="message-bubble">
-          <div class="message-time">{{ message.timestamp | date:'shortTime' }}</div>
-          <div>{{ message.text }}</div>
+      <div class="chat-messages" #scrollContainer (scroll)="onScroll()">
+        <!-- Loader khi cuộn lên đầu để lấy tin nhắn cũ -->
+        <div class="loading-spinner" *ngIf="isLoadingOlderMessages">
+          <div class="spinner"></div>
+          <div>Đang tải tin nhắn cũ...</div>
         </div>
+        <!-- Nếu chưa bắt đầu, hiển thị nút bắt đầu -->
+        <div *ngIf="!hasStarted" class="start-chat">
+          <div class="start-text">Nhấn <strong>Bắt đầu</strong> để chat với admin trực tiếp ngay bây giờ!</div>
+          <button class="start-button" (click)="startChat()">Bắt đầu</button>
+        </div>
+  
+        <!-- Nếu đã bắt đầu thì hiển thị tin nhắn -->
+        <ng-container *ngIf="hasStarted">
+          <div *ngFor="let message of messages">
+            <div *ngIf="message.type === 'time'" class="chat-date-divider">
+              <span class="line"></span>
+              <span class="date-text">
+                {{ getVietnameseDayName(message.timestamp) }}, {{ message.timestamp | date:'d/M/y' }}
+              </span>
+              <span class="line"></span>
+            </div>
+            
+        
+            <div *ngIf="message.type === 'message'">
+              <div 
+                [ngClass]="{'admin-msg': message.from === 'admin', 'user-msg': message.from === 'user'}" 
+                class="message-bubble">
+                <strong>{{ message.from === 'admin' ? 'Admin' : '' }}</strong>
+                <div class="message-time">
+                  
+                </div>
+                <div>{{ message.text }}</div>
+              </div>
+            
+              <!-- Thời gian nằm ngoài khung tin nhắn, căn phải tùy theo người gửi -->
+              <div 
+                class="timestamp-outside" 
+                [ngClass]="{
+                  'timestamp-right': message.from === 'user', 
+                  'timestamp-left': message.from === 'admin'
+                }">
+                {{ message.timestamp | date:'shortTime' }}
+              </div>
+            </div>
+            
+          </div>
+        </ng-container>
+        
       </div>
   
       <div class="chat-input">

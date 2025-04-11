@@ -1,27 +1,21 @@
 ﻿using Amazon;
 using Amazon.S3;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
-using System.Configuration;
 using System.Text;
 using System.Text.Json.Serialization;
 using Web1.AutoMap;
 using Web1.Data;
-using Web1.DataNew;
 using Web1.Middleware;
 using Web1.Models;
 using Web1.Repository;
 using Web1.Service.Account;
 using Web1.Service.AWS;
+using Web1.Service.ChatBox;
 using Web1.Service.Cookie;
 using Web1.Service.Mail;
 using Web1.Service.RabbitMq.Connection;
@@ -46,7 +40,9 @@ builder.Services.AddTransient<ISessionService, SessionService>();
 builder.Services.AddTransient<IOAuthService, OAuthService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<ICookieService, CookieService>();
-
+builder.Services.AddScoped<IUploadAWSService, UploadAWSService>();
+builder.Services.AddSingleton<IRedisService, RedisService>();
+builder.Services.AddTransient<IChatService, ChatService>();
 
 // Tạo một bộ nhớ cache
 builder.Services.AddMemoryCache();
@@ -66,7 +62,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 builder.Services.AddHostedService<ForgotPasswordConsumer>();
 builder.Services.AddHostedService<ConfirmEmailConsumer>();
 builder.Services.AddHostedService<UserNotificationConsumer>();
-
+builder.Services.AddHostedService<ChatBoxConsumer>();
 
 builder.Services.AddSingleton<IRabbitMqProducer, RabbitMqProducer>();
 builder.Services.AddSingleton<RabbitMqConnection>();
@@ -148,8 +144,8 @@ builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
-builder.Services.AddScoped<IUploadAWSService, UploadAWSService>();
-builder.Services.AddSingleton<IRedisService, RedisService>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+
 
 //Dang ki Identity 
 builder.Services.AddIdentity<AppUser, IdentityRole>( options =>
@@ -222,6 +218,7 @@ builder.Services.AddCors(options =>
                    .AllowAnyHeader()
                    .AllowAnyMethod()
                    .AllowCredentials();  // Cho phép gửi cookie
+
         });
 });
 
@@ -251,7 +248,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapHub<NotificationHub>("/notificationHub");
+app.MapHub<NotificationHub>("/notificationHub").RequireCors("AllowAll");
 
 app.UseSession();
 

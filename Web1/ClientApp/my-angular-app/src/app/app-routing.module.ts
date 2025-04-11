@@ -12,14 +12,14 @@ import { ForgotPasswordComponent } from './Client/password/forgot-password/forgo
 import { ResetPasswordComponent } from './Client/password/reset-password/reset-password.component';
 import { HomeComponent } from './Client/home/home.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
-import { ViewDetailComponent } from './Client/view-detail/view-detail.component';
+import { ViewDetailComponent } from './Client/home/view-detail/view-detail.component';
 import { APP_BASE_HREF, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { NotificationComponent } from './Client/notification/notification.component';
 import { ChatBoxComponent } from './Client/chat-box/chat-box.component';
 
 
 const routes: Routes = [
-  { path : '', redirectTo: 'login', pathMatch: 'full' },
+  { path : '', redirectTo: 'home', pathMatch: 'full' },
   { path : 'home', component: HomeComponent},
   { path : 'error-page', component: ErrorPageComponent },
   { path : 'login', component: LoginComponent },
@@ -35,7 +35,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

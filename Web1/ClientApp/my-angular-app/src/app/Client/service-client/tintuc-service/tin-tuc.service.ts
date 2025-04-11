@@ -21,7 +21,7 @@ export class TinTucService {
   }
 
   getTintuc(): Observable<Tintuc[]> {
-    return this.http.get<Tintuc[]>(API_ENDPOINTS.tinTuc.manage, { withCredentials: true });
+    return this.http.get<Tintuc[]>(API_ENDPOINTS.tinTuc.manage);
   }
 
   getTintucById(id: number): Observable<Tintuc> {

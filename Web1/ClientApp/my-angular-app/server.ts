@@ -6,6 +6,7 @@ import { dirname, join, resolve } from 'node:path';
 import AppServerModule from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
+
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));

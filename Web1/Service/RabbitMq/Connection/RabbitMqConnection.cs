@@ -31,12 +31,14 @@ namespace Web1.Service.RabbitMq.Connection
             _channel.QueueDeclare(KeyRabbit.CONFIRM_EMAIL_QUEUE, durable: true, exclusive: false, autoDelete: false);
             _channel.QueueDeclare(KeyRabbit.ADMIN_NOTIFICATION_QUEUE, durable: true, exclusive: false, autoDelete: false);
             _channel.QueueDeclare(KeyRabbit.USER_NOTIFICATION_QUEUE, durable: true, exclusive: false, autoDelete: false);
+            _channel.QueueDeclare(KeyRabbit.CHAT_BOX_QUEUE, durable: true, exclusive: false, autoDelete: false);
 
             // Bind Queue với Exchange
             _channel.QueueBind(KeyRabbit.FORGOT_PASSWORD_QUEUE, KeyRabbit.nameExchange, KeyRabbit.FORGOT_PASSWORD_ROUTING);
             _channel.QueueBind(KeyRabbit.CONFIRM_EMAIL_QUEUE, KeyRabbit.nameExchange, KeyRabbit.CONFIRM_EMAIL_ROUTING);
             _channel.QueueBind(KeyRabbit.USER_NOTIFICATION_QUEUE, KeyRabbit.nameExchange, KeyRabbit.USER_NOTIFICATION_ROUTING);
             _channel.QueueBind(KeyRabbit.ADMIN_NOTIFICATION_QUEUE, KeyRabbit.nameExchange, KeyRabbit.ADMIN_NOTIFICATION_ROUTING);
+            _channel.QueueBind(KeyRabbit.CHAT_BOX_QUEUE, KeyRabbit.nameExchange, KeyRabbit.CHAT_BOX_ROUTING);
         }
 
         public IModel GetChannel() => _channel;

@@ -6,5 +6,7 @@
         public const string CONFIRM_EMAIL_PREFIX = "confirm-email:";
         public const string FORGOT_PASSWORD_PREFIX = "forgot-password:";
         public const string CONNECTION_USER_ID_PREFIX = "connection-user-id:";
+        public const string CONNECTION_MANAGER_ID_PREFIX = "connection-manager-id:";
+        public const string MESSAGE_PREFIX = "message:";
     }
 }

@@ -39,5 +39,29 @@ namespace Web1.Service.SignalR.SignalRNotification
             }
         }
 
+        public async Task SendMessageChat(string userId, MessageDto message)
+        {
+            try
+            {
+                var connectionIds = await _redisService.GetSetMembersAsync(
+                    userId == "Manager" ? TypeKeyRedis.CONNECTION_MANAGER_ID_PREFIX : TypeKeyRedis.CONNECTION_USER_ID_PREFIX,
+                    userId) ?? new List<string>();
+
+
+                foreach (var connectionId in connectionIds)
+                {
+                    await _hubContext.Clients.Client(connectionId).SendAsync("ReceiveChatMessage", message);
+                }
+
+                Console.WriteLine($"Message sent to user {userId} successfully.");
+            }
+            catch (Exception ex)
+            {
+
+                Console.Error.WriteLine($"Error sending notification to user {userId}: {ex.Message}");
+
+            }
+        }
+
     }
 }

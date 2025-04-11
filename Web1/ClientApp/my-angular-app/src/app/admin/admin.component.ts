@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SignalRService } from '../Client/service-client/signalR-service/signal-r.service';
 
 @Component({
   selector: 'app-admin',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './admin.component.css'
 })
 export class AdminComponent {
-    
+
 }

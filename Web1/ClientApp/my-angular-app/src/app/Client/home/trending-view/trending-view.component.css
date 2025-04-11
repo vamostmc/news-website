@@ -38,8 +38,8 @@
   
   .views {
     position: absolute;
-    left: 300px; /* Cách ngày đăng 20px */
-    top: 56px;
+    left: 76%; 
+    top: 60%;
     white-space: nowrap; /* Giữ nguyên không bị xuống dòng */
     font-weight: bold;
   }

@@ -118,13 +118,6 @@ export class NotificationComponent implements OnInit {
     this.totalNotifyChange.emit(this.totalNotify); 
   }
 
-  sendMessage() {
-    // const userId = "user123"; // Thay userId bằng user đang đăng nhập
-    // const message = "🔔 Đây là tin nhắn thử nghiệm từ client!";
-    // this.signalRService.sendMessageToUser(userId, message);
-  }
-
-  
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {

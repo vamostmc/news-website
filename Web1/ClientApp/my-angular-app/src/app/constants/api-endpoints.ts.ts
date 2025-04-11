@@ -70,5 +70,13 @@ export const API_ENDPOINTS = {
       DeleteNotify: (id: number) => `${API_BASE}/Notification/DeleteNotify/${id}`,
       UpdateStatusId: (id: number) => `${API_BASE}/Notification/UpdateStatusReadId/${id}`,
       UpdateStatusAll: (userId: string) => `${API_BASE}/Notification/UpdateStatusAll/${userId}`,
+    },
+
+    chatbox: {
+      CreateConversation: `${API_BASE}/ChatBox/CreateConver`,
+      CheckCoversation: (userId: string) => `${API_BASE}/ChatBox/CheckCover/${userId}`,
+      GetAllConversation: `${API_BASE}/ChatBox/GetAllConversation`,
+      GetMessages: (id: string) => `${API_BASE}/ChatBox/MessageAll/${id}`
+
     }
   };

@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
 import { googleRequest } from '../../models/googleRequest';
 import { API_ENDPOINTS } from '../../../constants/api-endpoints.ts';
+import { PlatformService } from '../platform-service/platform.service';
 
 
 
@@ -17,45 +18,54 @@ import { API_ENDPOINTS } from '../../../constants/api-endpoints.ts';
 export class AuthenService {
 
   constructor(private http: HttpClient,
-              private oauthService: OAuthService) {  }
+              private oauthService: OAuthService,
+              private platformService: PlatformService) {  }
 
   private userNameSource = new BehaviorSubject<string | null>(null);
   currentUserName = this.userNameSource.asObservable();
 
   setUserName(userName: string) {
     this.userNameSource.next(userName);
-    localStorage.setItem('userName', userName);
+    if (this.platformService.isBrowser()) {
+      localStorage.setItem('userName', userName);
+    }
   }
 
-  getUserName(): string | null {
-    return localStorage.getItem('userName');
+  getUserName(key: string): string {
+    if (this.platformService.isBrowser()) {
+      return localStorage.getItem('userName') || '';
+    }
+    return '';
   }
 
   isLoggedIn(): Observable<boolean> {
     console.log('Kiểm tra trạng thái login');
   
-    // Kiểm tra token và role là "Manager"
-    const hasToken = localStorage.getItem('accessToken');
-    const isManager = this.GetRoleUser() === "Manager";
+    let hasToken = false;
+    let isManager = false;
+  
+    if (this.platformService.isBrowser()) {
+      hasToken = !!localStorage.getItem('accessToken');
+      isManager = this.GetRoleUser() === "Manager";
+    }
   
     console.log('Has token:', hasToken);
     console.log('Is Manager:', isManager);
   
     if (hasToken && isManager) {
       console.log('Điều kiện đã thỏa mãn, gọi checkAdmin');
-  
-      // Kiểm tra quyền admin
       return this.checkAdmin().pipe(
         map(isAdmin => {
           console.log('Phản hồi từ checkAdmin:', isAdmin);
-          return isAdmin.success === true; // Trả về true nếu là admin
+          return isAdmin.success === true;
         })
       );
     } else {
-      console.log('Điều kiện không thỏa mãn (không có token hoặc không phải Manager)');
-      return of(false); // Nếu không có token hoặc không phải Manager, trả về false
+      console.log('Không đủ điều kiện');
+      return of(false);
     }
   }
+  
   
 
   checkAdmin(): Observable<any> {
@@ -78,15 +88,12 @@ export class AuthenService {
   
   //Giải mã token
   GetRoleUser(): any {
-    const roles = localStorage.getItem("userRoles");
-    if(roles)
-    {
-      const rolesArray = JSON.parse(roles);
-      if (rolesArray.includes('Manager')) {
-        return "Manager";
-      } 
-      if (rolesArray.includes('Customer')) {
-        return "Customer";
+    if (this.platformService.isBrowser()) {
+      const roles = localStorage.getItem("userRoles");
+      if (roles) {
+        const rolesArray = JSON.parse(roles);
+        if (rolesArray.includes('Manager')) return "Manager";
+        if (rolesArray.includes('Customer')) return "Customer";
       }
     }
     return null;
@@ -127,18 +134,19 @@ export class AuthenService {
   }
 
   getHeaderToken(): HttpHeaders {
-    const accessToken = localStorage.getItem('accessToken');
     let headers = new HttpHeaders();
-    if (accessToken == null) {
-      headers = new HttpHeaders(
-        'No AccessToken'
-      );
+  
+    if (!this.platformService.isBrowser()) {
+      return headers.append('No-Access', 'Server-Side');
     }
-    else {
-      headers = new HttpHeaders({
-        'Authorization': `Bearer ${accessToken}`
-      });
+  
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      headers = headers.set('Authorization', `Bearer ${accessToken}`);
+    } else {
+      headers = headers.set('No-AccessToken', 'true');
     }
+  
     return headers;
   }
 

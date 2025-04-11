@@ -211,6 +211,31 @@ namespace Web1.Migrations.TinTucDb
                     b.ToTable("BinhLuan", (string)null);
                 });
 
+            modelBuilder.Entity("Web1.Data.Conversation", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool?>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id")
+                        .HasName("PK__Conversa__3214EC07A709CEB1");
+
+                    b.HasIndex(new[] { "UserId" }, "IX_Conversations_UserId");
+
+                    b.ToTable("Conversations");
+                });
+
             modelBuilder.Entity("Web1.Data.DanhMuc", b =>
                 {
                     b.Property<int>("DanhmucId")
@@ -254,6 +279,54 @@ namespace Web1.Migrations.TinTucDb
                     b.HasKey("KhachhangId");
 
                     b.ToTable("KhachHangs");
+                });
+
+            modelBuilder.Entity("Web1.Data.Message", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ConversationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool?>("IsRead")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("ReceiverId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("SentAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasDefaultValue("active");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id")
+                        .HasName("PK__Messages__3214EC07E17481E4");
+
+                    b.HasIndex(new[] { "ConversationId", "SentAt" }, "IX_Messages_ConversationId_SentAt")
+                        .IsDescending(false, true);
+
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Web1.Data.Notification", b =>
@@ -543,6 +616,17 @@ namespace Web1.Migrations.TinTucDb
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Web1.Data.Message", b =>
+                {
+                    b.HasOne("Web1.Data.Conversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Messages_Conversations");
+
+                    b.Navigation("Conversation");
+                });
+
             modelBuilder.Entity("Web1.Data.Notification", b =>
                 {
                     b.HasOne("Web1.Data.NotificationType", "Type")
@@ -568,6 +652,11 @@ namespace Web1.Migrations.TinTucDb
             modelBuilder.Entity("Web1.Data.BinhLuan", b =>
                 {
                     b.Navigation("InverseParent");
+                });
+
+            modelBuilder.Entity("Web1.Data.Conversation", b =>
+                {
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Web1.Data.DanhMuc", b =>

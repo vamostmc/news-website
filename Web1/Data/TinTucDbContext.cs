@@ -29,6 +29,10 @@ public partial class TinTucDbContext : IdentityDbContext<AppUser>
 
     public virtual DbSet<TinTuc> TinTucs { get; set; }
 
+    public virtual DbSet<Message> Messages { get; set; }
+
+    public virtual DbSet<Conversation> Conversations { get; set; }
+
     public virtual DbSet<Notification> Notifications { get; set; }
 
     public virtual DbSet<NotificationType> NotificationTypes { get; set; }
@@ -75,6 +79,37 @@ public partial class TinTucDbContext : IdentityDbContext<AppUser>
             entity.Property(e => e.DanhmucId).HasColumnName("DanhmucID");
             entity.Property(e => e.TenDanhMuc).HasMaxLength(255);
             entity.Property(e => e.TrangThai);
+        });
+
+        modelBuilder.Entity<Conversation>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Conversa__3214EC07A709CEB1");
+
+            entity.HasIndex(e => e.UserId, "IX_Conversations_UserId");
+
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+        });
+
+        modelBuilder.Entity<Message>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Messages__3214EC07E17481E4");
+
+            entity.HasIndex(e => new { e.ConversationId, e.SentAt }, "IX_Messages_ConversationId_SentAt").IsDescending(false, true);
+
+            entity.Property(e => e.IsRead).HasDefaultValue(false);
+            entity.Property(e => e.ReceiverId).HasMaxLength(450);
+            entity.Property(e => e.SenderId).HasMaxLength(450);
+            entity.Property(e => e.SentAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .HasDefaultValue("active");
+
+            entity.HasOne(d => d.Conversation).WithMany(p => p.Messages)
+                .HasForeignKey(d => d.ConversationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Messages_Conversations");
         });
 
         modelBuilder.Entity<TinTuc>(entity =>

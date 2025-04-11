@@ -56,6 +56,7 @@
   .chat-messages {
     padding: 15px 10px;
     overflow-y: auto;
+    overscroll-behavior: contain;
     flex: 1;
     gap: 10px;
   }
@@ -80,6 +81,7 @@
     border-top-left-radius: 0;
     border-top-right-radius: 20px;
     position: relative;
+    margin-bottom: 0px;
   }
   
   .user-msg {
@@ -91,16 +93,23 @@
     margin-left: auto; /* Đẩy tin nhắn của người dùng sang phía bên phải */
     max-width: 75%; /* Tin nhắn người dùng có chiều rộng phù hợp với nội dung */
     position: relative;
+    margin-bottom: 0px;
   }
 
-  .message-time {
-    font-size: 12px;
-    color: #007bff;;
-    margin-bottom: 5px;
-    text-align: left; /* Căn trái cho thời gian */
-    position: absolute;
-    top: -18px; /* Đưa thời gian lên trên */
-    left: 10px; /* Canh trái cho thời gian */
+  
+
+  .timestamp-outside {
+    font-size: 0.7rem;
+    color: #888;
+    margin: 2px 10px 10px;
+  }
+  
+  .timestamp-right {
+    text-align: right;
+  }
+  
+  .timestamp-left {
+    text-align: left;
   }
   
   .chat-input {
@@ -132,4 +141,89 @@
   .chat-input button:hover {
     background: #0056b3;
   }
+
+  .start-chat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .start-text {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .start-button {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  .start-button:hover {
+    background: linear-gradient(135deg, #0056b3, #004494);
+    transform: translateY(-2px);
+  }
+  
+
+  .chat-date-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    font-size: 13px;
+    color: #999;
+    font-weight: bold;
+  }
+  
+  .chat-date-divider .line {
+    flex: 1;
+    height: 0.5px;
+    background-color: #ccc;
+    margin: 0 10px;
+  }
+  
+  .chat-date-divider .date-text {
+    white-space: nowrap;
+  }
+  
+
+  .loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px 0;
+    color: #555;
+    font-size: 13px;
+  }
+  
+  .spinner {
+    width: 25px;
+    height: 25px;
+    border: 2px solid #ccc;
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 5px;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  
   

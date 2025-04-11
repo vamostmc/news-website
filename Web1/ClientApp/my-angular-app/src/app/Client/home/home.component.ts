@@ -7,9 +7,10 @@ import { Danhmuc } from '../models/danhmuc';
 import { ActivatedRoute, Router } from '@angular/router';
 import { error } from 'pdf-lib';
 import { TrendingViewComponent } from './trending-view/trending-view.component';
-import { ViewDetailComponent } from '../view-detail/view-detail.component';
+import { ViewDetailComponent } from './view-detail/view-detail.component';
 import { environment } from '../../../environments/environment.development';
-import { finalize } from 'rxjs';
+import { catchError, finalize, of, timeout } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -17,8 +18,8 @@ import { finalize } from 'rxjs';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  @ViewChild(TrendingViewComponent) trendingView!: TrendingViewComponent;
-  @ViewChild(ViewDetailComponent) viewDetail!: ViewDetailComponent;
+   @ViewChild(TrendingViewComponent) trendingView!: TrendingViewComponent;
+   @ViewChild(ViewDetailComponent) viewDetail!: ViewDetailComponent;
 
   weatherData: any;
   searchVisible = false;
@@ -51,7 +52,8 @@ export class HomeComponent implements OnInit {
                private tintucService: TinTucService,
                private danhmucservice: DanhmucService,
                private route: ActivatedRoute,
-               private router: Router
+               private router: Router,
+               private http: HttpClient
   ) {}
   
 
@@ -99,7 +101,6 @@ export class HomeComponent implements OnInit {
      
   }
 
-
   filterNews(IdDanhMuc: number) {
     this.selectedCategory = IdDanhMuc; // Cập nhật danh mục đang chọn
     if (!this.tintucView) return;
@@ -107,7 +108,6 @@ export class HomeComponent implements OnInit {
     this.currentPage = 1;
     console.log("Tin tức nổi bật", this.tintucProminent);
   }
-
 
     // Tính tổng số trang
   get totalPages(): number {

@@ -12,6 +12,7 @@ import { ManageUserComponent } from './manage-user/manage-user.component';
 import { ManageCommentComponent } from './manage-comment/manage-comment.component';
 import { AddPostComponent } from './manage-post/add-post/add-post.component';
 import { EditPostComponent } from './manage-post/edit-post/edit-post.component';
+import { ManageMessageComponent } from './manage-message/manage-message.component';
 
 
 const routes: Routes = [
@@ -24,6 +25,7 @@ const routes: Routes = [
   {path: 'Comment', component: ManageCommentComponent},
   {path: 'ManagePost/AddPost', component: AddPostComponent},
   {path: 'ManagePost/EditPost/:id', component: EditPostComponent},
+  {path: 'admin/messages', component: ManageMessageComponent},
 ];
 
 @NgModule({

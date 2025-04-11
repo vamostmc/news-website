@@ -1,5 +1,5 @@
 <app-navbar-client></app-navbar-client>
-    <div class="news-container">
+     <div class="news-container">
         <div class="news-item large" *ngIf="tintucView.length > 0">
           <a routerLink="/detail/{{tintucView[0].tintucId}}">
             <img [src]="getFullImageUrl(tintucView[0].hinhAnh)" alt="Bài viết 1">
@@ -33,8 +33,8 @@
         </div>
     </div>
 
-    <div class="container">
-      <!-- Bên trái -->
+     <div class="container">
+     
       
       <div class="left-content">
         <div class="highlight-box">
@@ -61,7 +61,7 @@
           <p class="summary">{{ tintuc.moTaNgan.length > 100 ? (tintuc.moTaNgan | slice:0:100) + '...' : tintuc.moTaNgan }}</p>
         </div>
 
-        <!-- Phân trang -->
+        
         <div class="pagination-box">
           <div class="pagination-header">
             <button (click)="prevPage()" [disabled]="currentPage === 1">«</button>
@@ -79,19 +79,20 @@
       </div>
       <div class="divider"></div>
     
-      <!-- Bên phải -->
+      
       <app-trending-view *ngIf="tintucView.length > 0" [tintucs]="tintucView"></app-trending-view>
-    </div>
+    </div> 
 
 
     <!-- Loading -->
+     
     <div *ngIf="loading" class="loading-overlay">
       <div class="spinner-container">
         <div class="spinner"></div>
         <p>Vui lòng chờ ...</p>
       </div>
     </div>
-
+      
 
     
     

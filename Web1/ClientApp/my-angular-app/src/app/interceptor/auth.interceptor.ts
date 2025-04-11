@@ -3,18 +3,33 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { AuthenService } from '../Client/service-client/authen-service/authen.service';
+import { PlatformService } from '../Client/service-client/platform-service/platform.service';
 
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private authService: AuthenService) {}
+  constructor(private authService: AuthenService, 
+              private platformService: PlatformService
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('accessToken');
-    const clonedRequest = token 
-      ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
-      : req;
+    let clonedRequest = req;
+
+    if (this.platformService.isBrowser()) {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        clonedRequest = req.clone({
+          setHeaders: { Authorization: `Bearer ${token}` }
+        });
+      }
+    }
+
+
+    // const token = localStorage.getItem('accessToken');
+    // const clonedRequest = token 
+    //   ? req.clone({ setHeaders: { Authorization: Bearer ${token} } })
+    //   : req;
 
     return next.handle(clonedRequest).pipe(
       catchError((error: HttpErrorResponse) => {

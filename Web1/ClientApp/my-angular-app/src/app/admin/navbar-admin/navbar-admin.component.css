@@ -96,4 +96,35 @@
     background-color: #ff4d4d;
     color: white;
   }
+
+  .nav-link {
+    position: relative;
+    transition: color 0.3s;
+    color: #ccc !important; /* mặc định màu xám */
+    font-weight: 500;
+  }
+  
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    bottom: 1px;
+    width: 0;
+    height: 3px;
+    background-color: #e0340e;
+    transition: width 0.3s;
+  }
+  
+  .nav-link:hover {
+    color: #fff !important;
+  }
+  
+  .nav-link:hover::after,
+  .nav-link.active-link::after {
+    width: 100%;
+  }
+  
+  .active-link {
+    color: #ffffff !important; /* màu sáng khi đang active */
+  }
   

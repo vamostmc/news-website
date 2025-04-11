@@ -15,12 +15,27 @@
     <!-- Nếu đã đăng nhập, hiển thị avatar + icon -->
     <ng-template #userLoggedIn>
       <div class="user-container">
-        <div class="user-avatar">
-          <img src="https://vntime.vn/wp-content/uploads/2024/10/avatar-mac-dinh-30xJKPDu.jpg" alt="Avatar">
-        </div>
+        <ul class="navbar-nav ms-auto userAdmin">
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#" id="navbarUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <div class="user-avatar">
+                <img src="../../../assets/avatar_default.jpg" alt="Avatar" />
+              </div>
+            </a>
+        
+            <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarUser">
+              <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Thông tin</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear"></i> Cài đặt</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fa-solid fa-lock"></i> Password</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item logout" (click)="logOut()"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a></li>
+            </ul>
+          </li>
+        </ul>
+        
         <span class="user-name">{{ fullName }}</span>
         <div class="icon-group">
-          <a href="#" class="circle-icon"><i class="fas fa-envelope"></i></a> <!-- Tin nhắn -->
+          <div class="circle-icon" (click)="toggleChatBox()"><i class="fas fa-envelope"></i></div> <!-- Tin nhắn -->
           <div class="circle-bell" (click)="toggleNotifications(); getAllNotify()" [ngClass]="{'ring': isRinging}">
             <i class="fas fa-bell"></i>
             <span class="notify-count" *ngIf="totalNotify > 0">{{ totalNotify }}</span>
@@ -33,11 +48,13 @@
   <app-notification (totalNotifyChange)="onTotalNotifyChange($event)">
   </app-notification>
 
+  <app-chat-box></app-chat-box>
+
   
       <div class="logo-container">
         <h2>THE NEWS</h2>
         <div class="logo-image">
-            <img src="https://static-images.vnncdn.net/files/publish/2022/8/23/emag-cover-desk-849.jpg" alt="logo-image">
+            <img src="../../../../assets/logo-container.jpg" alt="logo-image">
         </div>
       </div>
       <hr class="silver-line2">
