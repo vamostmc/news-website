@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Web1.Helps;
@@ -43,26 +44,73 @@ namespace Web1.Service.Account
                 Audience = new[] { _configuration["OAuth:Google:ClientId"] }  // Lấy từ appsettings.json
             };
 
+            // Log kiểm tra Audience
+            if (settings.Audience == null)
+            {
+                Console.WriteLine("Warning: Audience is null or empty!");
+            }
+            else
+            {
+                Console.WriteLine("Audience values:");
+                foreach (var aud in settings.Audience)
+                {
+                    Console.WriteLine($" - {aud}");
+                }
+            }
+
+            // Log thời gian backend hiện tại
+            Console.WriteLine($"Backend time (UTC): {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}");
+
+            // Decode token trước để log thông tin dù token expired
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+
+                // Lấy claim exp
+                var expClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "exp")?.Value;
+                DateTime? expTimeUtc = null;
+                if (expClaim != null && long.TryParse(expClaim, out var expSeconds))
+                {
+                    expTimeUtc = DateTimeOffset.FromUnixTimeSeconds(expSeconds).UtcDateTime;
+                }
+
+                Console.WriteLine($"Token expires at (UTC): {expTimeUtc:yyyy-MM-dd HH:mm:ss}");
+                Console.WriteLine($"Payload decoded (pre-verify): Sub={jwtToken.Subject}, Email={jwtToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Warning: Failed to decode token before verify: " + ex.Message);
+            }
+
+            // Thực hiện verify chính thức
             try
             {
                 var payload = await GoogleJsonWebSignature.ValidateAsync(token, settings);
+                Console.WriteLine($"Token verified successfully: Email={payload.Email}, Sub={payload.Subject}");
                 return payload;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unexpected Error: " + ex.Message);
+                Console.WriteLine("Unexpected Error during verify: " + ex.Message);
                 return null;
             }
         }
 
         public async Task<LoginDto> ExternalLoginGoogle(GoogleJsonWebSignature.Payload payload, string token)
         {
+            Console.WriteLine($"ExternalLoginGoogle called for Email={payload.Email}, Sub={payload.Subject}");
+
             var user = await _userManager.FindByEmailAsync(payload.Email);
+
+            Console.WriteLine(user == null ? "User not found, creating new." : $"User exists. UserId={user.Id}");
+
             var (address, birthday) = await GetUserInfoAsync(token);
+            Console.WriteLine($"User info from Google People API: Address={address}, Birthday={birthday}");
+
             if (user == null)
             {
-                // Nếu người dùng chưa từng đăng nhập
-                var NewUser = new AppUser
+                var newUser = new AppUser
                 {
                     Email = payload.Email,
                     FullName = payload.Name,
@@ -74,24 +122,30 @@ namespace Web1.Service.Account
                     DateUser = DateTime.TryParse(birthday, out var parsedBirthday) ? parsedBirthday : DateTime.MinValue,
                 };
 
-                var check = await _userManager.CreateAsync(NewUser);
-                if (!check.Succeeded)
+                var checkCreate = await _userManager.CreateAsync(newUser);
+                if (!checkCreate.Succeeded)
                 {
+                    Console.WriteLine("Failed to create new user.");
                     return new LoginDto { Success = false };
                 }
-                await _userManager.AddToRoleAsync(NewUser, Role.Customer);
+
+                await _userManager.AddToRoleAsync(newUser, Role.Customer);
                 var userLoginInfo = new UserLoginInfo("Google", payload.Subject, "Google");
-                await _userManager.AddLoginAsync(NewUser, userLoginInfo);
-                return await CreateExternalToken(NewUser);
+                await _userManager.AddLoginAsync(newUser, userLoginInfo);
+
+                Console.WriteLine("New user created successfully.");
+                return await CreateExternalToken(newUser);
             }
-            else    // Nếu người dùng tồn tại
+            else
             {
-                // Nếu người dùng từng đăng kí qua google trước đó lưu vào bảng UserLogin
                 var userLogin = await _userManager.FindByLoginAsync(LoginProvider.Google, payload.Subject);
                 if (userLogin == null)
                 {
+                    Console.WriteLine("User exists but no Google login linked.");
                     return new LoginDto { Success = false };
                 }
+
+                Console.WriteLine("User exists and Google login linked. Creating token...");
                 return await CreateExternalToken(user);
             }
         }

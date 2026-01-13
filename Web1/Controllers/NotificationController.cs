@@ -9,6 +9,7 @@ using Web1.Data;
 using Web1.Models;
 using Web1.Repository;
 
+
 namespace Web1.Controllers
 {
     [Route("api/[controller]")]
@@ -20,6 +21,7 @@ namespace Web1.Controllers
 
         public NotificationController(INotificationRepository noti,
                                       TinTucDbContext context) { _noti = noti; _context = context; }
+
 
         [HttpGet("GetNoti")]
         public async Task<IActionResult> GetAllNotifications()

@@ -62,41 +62,70 @@ namespace Web1.Controllers
         }
 
         [HttpPost("Login-Google")]
-        public async Task<LoginDto>LoginGoogle([FromBody] GoogleRequest request)
+        public async Task<LoginDto> LoginGoogle([FromBody] GoogleRequest request)
         {
+            Console.WriteLine("Login-Google called with token length: " + (request?.Token?.Length ?? 0));
+
             var payload = await _oAuthService.VerifyGoogleToken(request.Token);
             if (payload == null)
             {
+                Console.WriteLine("VerifyGoogleToken returned null. Token invalid or expired.");
                 return new LoginDto { Success = false };
             }
-            else
+
+            Console.WriteLine($"VerifyGoogleToken succeeded. Email: {payload.Email}, Name: {payload.Name}, Sub: {payload.Subject}");
+
+            var check = await _oAuthService.ExternalLoginGoogle(payload, request.Token);
+
+            if (check?.Token?.RefreshToken != null)
             {
-                var check = await _oAuthService.ExternalLoginGoogle(payload, request.Token);
-                if(check?.Token?.RefreshToken != null)
-                {
-                    await _cookieService.SetCookie(TimeZoneInfo.ConvertTimeToUtc(LocalTime.GetLocalTime().AddDays(7)),
-                    check.Token.RefreshToken);
-                }
-                return check;
+                Console.WriteLine("Refresh token created, setting cookie...");
+                await _cookieService.SetCookie(
+                    TimeZoneInfo.ConvertTimeToUtc(LocalTime.GetLocalTime().AddDays(7)),
+                    check.Token.RefreshToken
+                );
             }
+
+            Console.WriteLine("ExternalLoginGoogle result Success: " + check?.Success);
+            return check;
         }
+
 
         [HttpGet("LogOut")]
         public async Task<IActionResult> LogOut()
         {
-            var authorizationHeader = Request.Headers["Authorization"].ToString();
-            if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
-            {
-                return NotFound();
-            }
             var refreshToken = Request.Cookies["refreshToken"];
-            var accessToken = authorizationHeader.Substring("Bearer ".Length).Trim();
-            var user = await _accountService.GetInfo(accessToken);
-            await _accountService.RemoveRefreshToken(user, refreshToken);
-            await _cookieService.SetCookie(TimeZoneInfo.ConvertTimeToUtc(LocalTime.GetLocalTime().AddDays(-1)),
-                string.Empty);
-            return Ok(user);
+
+            // Nếu không có refresh token → coi như đã logout
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return Ok(new { message = "Already logged out" });
+            }
+
+            string? accessToken = null;
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+
+            if (!string.IsNullOrEmpty(authorizationHeader) &&
+                authorizationHeader.StartsWith("Bearer "))
+            {
+                accessToken = authorizationHeader.Substring("Bearer ".Length).Trim();
+            }
+
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                var user = await _accountService.GetInfo(accessToken);
+                if (user != null)
+                {
+                    await _accountService.RemoveRefreshToken(user, refreshToken);
+                }
+            }
+
+            // Xóa cookie luôn
+            Response.Cookies.Delete("refreshToken");
+
+            return Ok(new { message = "Logout success" });
         }
+
 
 
         [HttpGet("Unauthorized")]

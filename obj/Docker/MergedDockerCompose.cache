@@ -1,8 +1,8 @@
-name: dockercompose6951411703743368746
+name: dockercompose7267656686748100077
 services:
   client:
     build:
-      context: D:\source\repos\Web1\Web1\ClientApp\my-angular-app
+      context: C:\Users\Trinh Minh Chien\Source\Repos\news-website\Web1\ClientApp\my-angular-app
       dockerfile: Dockerfile
     container_name: client-app
     depends_on:
@@ -37,7 +37,7 @@ services:
         volume: {}
   web1:
     build:
-      context: D:\source\repos\Web1
+      context: C:\Users\Trinh Minh Chien\Source\Repos\news-website
       dockerfile: Web1/Dockerfile
     depends_on:
       mssql:
@@ -69,20 +69,20 @@ services:
         protocol: tcp
     volumes:
       - type: bind
-        source: C:\Users\PC\AppData\Roaming/Microsoft/UserSecrets
+        source: C:\Users\Trinh Minh Chien\AppData\Roaming/Microsoft/UserSecrets
         target: /home/app/.microsoft/usersecrets
         read_only: true
         bind:
           create_host_path: true
       - type: bind
-        source: C:\Users\PC\AppData\Roaming/ASP.NET/Https
+        source: C:\Users\Trinh Minh Chien\AppData\Roaming/ASP.NET/Https
         target: /home/app/.aspnet/https
         read_only: true
         bind:
           create_host_path: true
 networks:
   default:
-    name: dockercompose6951411703743368746_default
+    name: dockercompose7267656686748100077_default
 volumes:
   sql_volume:
-    name: dockercompose6951411703743368746_sql_volume
+    name: dockercompose7267656686748100077_sql_volume

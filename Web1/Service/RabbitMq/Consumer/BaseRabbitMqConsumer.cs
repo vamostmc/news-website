@@ -27,7 +27,7 @@ namespace Web1.Service.RabbitMq.Consumer
         {
             return Task.Run(() =>
             {
-                var consumer = new EventingBasicConsumer(_channel);
+                var consumer = new AsyncEventingBasicConsumer(_channel);
 
                 consumer.Received += async (model, ea) =>
                 {

@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
                 private router: Router,
                 private authService: AuthenService,
                 private cookieService: CookieStorageService,
-                private oAthService: SocialAuthService,
+                
                 private cdr: ChangeDetectorRef,
                 private platformService: PlatformService) {}
 
@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit {
           if(data.success == true) {
             console.log(data);
             this.SaveLocalStorage(data);
-            window.location.reload();
+            this.router.navigate(["/home"]);
           }
           else {
             console.log(data);
@@ -126,27 +126,6 @@ export class LoginComponent implements OnInit {
       console.error('authService or LoginGoogle is undefined');
     }
   }
-
-    
-    signInWithGoogle(): void {
-      this.oAthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(user => {
-        this.user = user;
-        this.isLogginGoogle = true;
-        console.log('Đăng nhập thành công:', user);
-      }).catch(error => {
-        console.error('Đăng nhập thất bại:', error);
-      });
-    }
-
-    loginWithFacebook(): void {
-      this.oAthService.signIn(FacebookLoginProvider.PROVIDER_ID).then((userData) => {
-        this.user = userData;
-        console.log('Facebook User:', this.user);
-      }).catch((error) => {
-        console.error('Facebook login error:', error);
-      });
-    }
-
     
 
     SaveLocalStorage(data: any) {

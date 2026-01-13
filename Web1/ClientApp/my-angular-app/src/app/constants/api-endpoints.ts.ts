@@ -77,6 +77,7 @@ export const API_ENDPOINTS = {
       CheckCoversation: (userId: string) => `${API_BASE}/ChatBox/CheckCover/${userId}`,
       GetAllConversation: `${API_BASE}/ChatBox/GetAllConversation`,
       GetMessages: (id: string) => `${API_BASE}/ChatBox/MessageAll/${id}`
-
     }
+
+    
   };

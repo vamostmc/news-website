@@ -1,44 +1,71 @@
 ﻿version: '3.4'
 
-
 services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
     environment:
-      SA_PASSWORD: "Chien2003x."
       ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+    env_file:
+      - .env
     ports:
       - "1433:1433"
     volumes:
-      - sql_volume:/var/opt/mssql  # Lưu trữ dữ liệu vĩnh viễn
+      - sql_volume:/var/opt/mssql
+    networks:
+      - news-network
+
+  redis:
+    image: redis:8.0.3
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - news-network
+
+  rabbitmq:
+    image: rabbitmq:3.13.7-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - news-network
 
   web1:
-    image: ${DOCKER_REGISTRY-}web1
     build:
       context: .
       dockerfile: Web1/Dockerfile
+    container_name: web1
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80;https://+:443
-      - ConnectionStrings__TinTucDB=Server=mssql;Database=Study;User Id=sa;Password=Chien2003x.;TrustServerCertificate=True
+      - ASPNETCORE_URLS=http://+:80;
+    env_file:
+      - .env
     ports:
-      - "443:443" 
-      - "8080:80"
+      - "8000:80"
     depends_on:
       - mssql
+      - redis
+      - rabbitmq
+    networks:
+      - news-network
 
- # Dịch vụ Frontend (Angular)
-  client:
+  frontend1:
     build:
-      context: ./Web1/ClientApp/my-angular-app  # Chỉ định đúng thư mục chứa Dockerfile của Angular
+      context: ./Web1/ClientApp/my-angular-app
       dockerfile: Dockerfile
-    container_name: client-app
+    container_name: frontend1
     ports:
-      - "4200:4200"  
+      - "8080:80"
     depends_on:
-      - web1  
-    environment:
-      - NODE_ENV=development
+      - web1
+    networks:
+      - news-network
 
 volumes:
-  sql_volume:  # Định nghĩa volume
+  sql_volume:
+
+networks:
+  news-network:
+    driver: bridge

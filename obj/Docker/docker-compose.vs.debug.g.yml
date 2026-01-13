@@ -1,11 +1,9 @@
-version: '3.4'
-
 services:
   web1:
     image: web1:dev
-    container_name: "Web1"
     build:
       args:
+        LAUNCHING_FROM_VS: true
         BUILD_CONFIGURATION: Debug
       target: base
       labels:
@@ -14,23 +12,24 @@ services:
     environment:
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS=true
-      - NUGET_FALLBACK_PACKAGES=
+      - NUGET_FALLBACK_PACKAGES=/.nuget/fallbackpackages
     volumes:
-      - D:\source\repos\Web1\Web1:/app:rw
-      - D:\source\repos\Web1:/src:rw
-      - C:\Users\PC\vsdbg\vs2017u5:/remote_debugger:rw
-      - C:\Users\PC\.nuget\packages:/.nuget/packages:ro
-      - C:\Users\PC\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
-      - C:\Users\PC\AppData\Roaming\ASP.NET\Https:/home/app/.aspnet/https:ro
-      - C:\Users\PC\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
-      - C:\Users\PC\AppData\Roaming\Microsoft\UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - D:\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\linux-x64\net8.0:/VSTools:ro
-      - D:\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload:/HotReloadAgent:ro
+      - C:\Users\Trinh Minh Chien\source\repos\news-website\Web1:/app:rw
+      - C:\Users\Trinh Minh Chien\Source\Repos\news-website:/src:rw
+      - C:\Users\Trinh Minh Chien\vsdbg\vs2017u5:/remote_debugger:rw
+      - C:\Users\Trinh Minh Chien\.nuget\packages:/.nuget/packages:ro
+      - C:\Program Files (x86)\Microsoft Visual Studio\NuGetPackages:/.nuget/fallbackpackages:ro
+      - C:\Users\Trinh Minh Chien\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+      - C:\Users\Trinh Minh Chien\AppData\Roaming\ASP.NET\Https:/home/app/.aspnet/https:ro
+      - C:\Users\Trinh Minh Chien\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+      - C:\Users\Trinh Minh Chien\AppData\Roaming\Microsoft\UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - D:\Visual Studio Product\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\linux-x64\net8.0:/VSTools:ro
+      - D:\Visual Studio Product\Common7\IDE\CommonExtensions\Microsoft\HotReload:/HotReloadAgent:ro
 
     entrypoint: "dotnet --roll-forward Major /VSTools/DistrolessHelper/DistrolessHelper.dll --wait"
     labels:
       com.microsoft.visualstudio.debuggee.program: "dotnet"
-      com.microsoft.visualstudio.debuggee.arguments: " --additionalProbingPath /.nuget/packages  \"/app/bin/Debug/net8.0/Web1.dll\""
+      com.microsoft.visualstudio.debuggee.arguments: " --additionalProbingPath /.nuget/packages --additionalProbingPath /.nuget/fallbackpackages  \"/app/bin/Debug/net8.0/Web1.dll\""
       com.microsoft.visualstudio.debuggee.workingdirectory: "/app"
       com.microsoft.visualstudio.debuggee.killprogram: "dotnet --roll-forward Major /VSTools/DistrolessHelper/DistrolessHelper.dll --stop dotnet"
     tty: true

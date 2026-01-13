@@ -6,6 +6,7 @@ import { CustomerService } from '../customer-service/customer.service';
 import { TinTucService } from '../tintuc-service/tin-tuc.service';
 import { User } from '../../models/user';
 import { NotifyComment } from '../../models/notifyComment';
+import { API_ENDPOINTS } from '../../../constants/api-endpoints.ts';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class DashboardService {
   private apiUrl = 'https://localhost:7233/api/Notification/GetNotify';
   private PostUrl = 'https://localhost:7233/api/Notification/AddNotificationTinTuc';
   private PostCommentUrl = 'https://localhost:7233/api/Notification/AddNotificationBinhLuan';
+
 
   getNotifyTinTuc(): Observable<Notification[]> {
     const url = `${this.apiUrl}/1`;

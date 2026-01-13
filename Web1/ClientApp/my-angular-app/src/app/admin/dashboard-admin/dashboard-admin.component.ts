@@ -7,6 +7,7 @@ import { DashboardService } from '../../Client/service-client/dashboard-service/
 import { NotificationModel } from '../../Client/models/notification';
 import { Comment } from '../../Client/models/comment';
 import { forkJoin } from 'rxjs';
+import { NotificationService } from '../../Client/service-client/notification-service/notification.service';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -17,14 +18,15 @@ export class DashboardAdminComponent implements OnInit {
     constructor(private tintucservice: TinTucService, 
                 private customerservice: CustomerService,
                 private commentservice: CommentService,
-                private dashboardservice: DashboardService) {}
+                private dashboardservice: DashboardService,
+                private notificationservice: NotificationService) {}
     
     tintucs: Tintuc[] = []
     selectedTintuc: Tintuc | null = null;
     totalCustomer : number | null = null;
     comments : Comment[] = [];
-    notificationsTinTuc: Notification[] = [];
-    notificationsBinhLuan: Notification[] = [];
+    notificationsTinTuc: NotificationModel[] = [];
+    notificationsBinhLuan: NotificationModel[] = [];
 
     itemsPerPage: number = 4;
     pTinTuc: number = 1; // Biến để lưu số trang hiện tại
@@ -78,8 +80,8 @@ export class DashboardAdminComponent implements OnInit {
         tintucs: this.tintucservice.getTintuc(),
         totalCustomer: this.customerservice.getTotalCustomer(),
         comments: this.commentservice.getAllComment(),
-        notificationsTinTuc: this.dashboardservice.getNotifyTinTuc(),
-        notificationsBinhLuan: this.dashboardservice.getNotifyBinhLuan()
+        notificationsTinTuc: this.notificationservice.GetNotify("1"),
+        notificationsBinhLuan: this.notificationservice.GetNotify("1")
       }).subscribe((results) => {
         this.tintucs = results.tintucs;
         this.totalCustomer = results.totalCustomer;

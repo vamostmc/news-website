@@ -1,27 +1,25 @@
-version: '3.4'
-
 services:
   web1:
-    container_name: "Web1"
     build:
       args:
-        BUILD_CONFIGURATION: Release
+        LAUNCHING_FROM_VS: true
+        BUILD_CONFIGURATION: Debug
       labels:
         com.microsoft.created-by: "visual-studio"
         com.microsoft.visual-studio.project-name: "Web1"
     volumes:
-      - C:\Users\PC\vsdbg\vs2017u5:/remote_debugger:rw
-      - C:\Users\PC\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
-      - C:\Users\PC\AppData\Roaming\ASP.NET\Https:/home/app/.aspnet/https:ro
-      - C:\Users\PC\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
-      - C:\Users\PC\AppData\Roaming\Microsoft\UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - D:\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\linux-x64\net8.0:/VSTools:ro
-      - D:\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload:/HotReloadAgent:ro
+      - C:\Users\Trinh Minh Chien\vsdbg\vs2017u5:/remote_debugger:rw
+      - C:\Users\Trinh Minh Chien\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+      - C:\Users\Trinh Minh Chien\AppData\Roaming\ASP.NET\Https:/home/app/.aspnet/https:ro
+      - C:\Users\Trinh Minh Chien\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+      - C:\Users\Trinh Minh Chien\AppData\Roaming\Microsoft\UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - D:\Visual Studio Product\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\linux-x64\net8.0:/VSTools:ro
+      - D:\Visual Studio Product\Common7\IDE\CommonExtensions\Microsoft\HotReload:/HotReloadAgent:ro
 
     entrypoint: "dotnet --roll-forward Major /VSTools/DistrolessHelper/DistrolessHelper.dll --wait"
     labels:
       com.microsoft.visualstudio.debuggee.program: "dotnet"
-      com.microsoft.visualstudio.debuggee.arguments: " --additionalProbingPath /.nuget/packages  \"/app/Web1.dll\""
+      com.microsoft.visualstudio.debuggee.arguments: " --additionalProbingPath /.nuget/packages --additionalProbingPath /.nuget/fallbackpackages  \"/app/Web1.dll\""
       com.microsoft.visualstudio.debuggee.workingdirectory: "/app"
       com.microsoft.visualstudio.debuggee.killprogram: "dotnet --roll-forward Major /VSTools/DistrolessHelper/DistrolessHelper.dll --stop dotnet"
       com.microsoft.visual-studio.project-name: "Web1"
